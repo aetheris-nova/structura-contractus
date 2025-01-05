@@ -1,3 +1,5 @@
 @contracts/=src/contracts/
+@eveworld/=node_modules/@eveworld/
 @latticexyz/=node_modules/@latticexyz/
+@mud/=.mud/codegen/
 forge-std/=dependencies/forge-std-1.9.5/src/
