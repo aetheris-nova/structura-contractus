@@ -2,6 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE } from '@eveworld/common-constants/src/constants.sol';
+import { EphemeralInvItemTableData, EphemeralInvItemTable } from '@eveworld/world/src/codegen/tables/EphemeralInvItemTable.sol';
 import { AccessModified } from '@eveworld/world/src/modules/access/systems/AccessModified.sol';
 import { InventoryLib } from '@eveworld/world/src/modules/inventory/InventoryLib.sol';
 import { InventoryItem, TransferItem } from '@eveworld/world/src/modules/inventory/types.sol';
@@ -26,6 +27,7 @@ contract SmartStorageUnitSystem is System {
   using InventoryLib for InventoryLib.World;
 
   error InvalidSSUError(uint256 ssuID);
+  error NotEnoughOfItemError(uint256 itemID);
   error UnknownDepositMethodError(uint256 itemID);
 
   /**
@@ -49,6 +51,8 @@ contract SmartStorageUnitSystem is System {
    */
   function subscribe(uint256 ssuID, uint256 itemID, uint256 quantity) public {
     PortaeAstralesDepositMethodsData memory depositMethod;
+    EphemeralInvItemTableData memory ephemeralItems;
+    InventoryLib.World memory inventory;
     address owner = SmartObjectUtils.ownerOf(ssuID);
 
     if (owner == address(0)) {
@@ -60,5 +64,20 @@ contract SmartStorageUnitSystem is System {
     if (!depositMethod.active) {
       revert UnknownDepositMethodError(itemID);
     }
+
+    if (quantity < depositMethod.requiredQuantity) {
+      revert NotEnoughOfItemError(itemID);
+    }
+
+    ephemeralItems = EphemeralInvItemTable.get(ssuID, itemID, msg.sender);
+
+    if (ephemeralItems.quantity < depositMethod.requiredQuantity) {
+      revert NotEnoughOfItemError(itemID);
+    }
+
+    //    inventory = _inventoryLib();
+
+    // transfer the deposited items to the
+    //    _inventoryLib().ephemeralToInventoryTransfer(ssuID, inItems);
   }
 }

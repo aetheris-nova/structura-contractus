@@ -16,6 +16,9 @@ import { EntityRecordData, WorldPosition, SmartObjectData, Coord } from '@evewor
 import { ResourceId } from '@latticexyz/world/src/WorldResourceId.sol';
 import { MudTest } from '@latticexyz/world/test/MudTest.t.sol';
 
+// constants
+import { DEFAULT_DEPOSIT_METHOD_DURATION } from '@contracts/constants/Durations.sol';
+
 // contracts
 import { SmartStorageUnitSystem } from '@contracts/SmartStorageUnitSystem.sol';
 
@@ -44,6 +47,8 @@ contract SmartStorageUintSystemTest is MudTest {
   IWorld private _world;
 
   function setUp() public override {
+    uint256 deployerPrivateKey = vm.envUint('PRIVATE_KEY');
+
     super.setUp();
 
     _entityRecord = EntityRecordLib.World({
@@ -51,7 +56,7 @@ contract SmartStorageUintSystemTest is MudTest {
       namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
     });
     _namespace = bytes14(bytes(vm.envString('NAMESPACE')));
-    _owner = vm.addr(vm.envUint('PRIVATE_KEY'));
+    _owner = vm.addr(deployerPrivateKey);
     _smartCharacter = SmartCharacterLib.World({
       iface: IBaseWorld(worldAddress),
       namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
@@ -79,6 +84,11 @@ contract SmartStorageUintSystemTest is MudTest {
     }
 
     _createAnchorAndOnline(_ssuID, _owner);
+
+    // add the default item to the deposit methods table
+    vm.startBroadcast(deployerPrivateKey);
+    PortaeAstralesDepositMethods.set(_itemID, true, DEFAULT_DEPOSIT_METHOD_DURATION, uint256(128));
+    vm.stopBroadcast();
   }
 
   /**
@@ -122,5 +132,31 @@ contract SmartStorageUintSystemTest is MudTest {
 
     // act
     _world.call(_systemId, abi.encodeCall(SmartStorageUnitSystem.subscribe, (_ssuID, invalidItemID, quantity)));
+  }
+
+  function test_SubscribeWithNotEnoughQuantitySupplied() public {
+    // arrange
+    PortaeAstralesDepositMethodsData memory depositMethod = PortaeAstralesDepositMethods.get(_itemID);
+    uint256 quantity = depositMethod.requiredQuantity / 2;
+
+    // assert
+    vm.expectRevert(abi.encodeWithSelector(SmartStorageUnitSystem.NotEnoughOfItemError.selector, _itemID));
+
+    // act
+    _world.call(_systemId, abi.encodeCall(SmartStorageUnitSystem.subscribe, (_ssuID, _itemID, quantity)));
+  }
+
+  function test_SubscribeWithNotEnoughItems() public {
+    // arrange
+    PortaeAstralesDepositMethodsData memory depositMethod = PortaeAstralesDepositMethods.get(_itemID);
+
+    // assert
+    vm.expectRevert(abi.encodeWithSelector(SmartStorageUnitSystem.NotEnoughOfItemError.selector, _itemID));
+
+    // act
+    _world.call(
+      _systemId,
+      abi.encodeCall(SmartStorageUnitSystem.subscribe, (_ssuID, _itemID, depositMethod.requiredQuantity))
+    );
   }
 }
