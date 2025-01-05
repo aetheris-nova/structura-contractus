@@ -17,33 +17,31 @@
   "scripts": {
     "build": "pnpm build:contracts && pnpm build:client",
     "build:client": "pnpm run clean:client && vite build",
-    "build:contracts": "pnpm clean:contracts && pnpm generate:mud && forge build",
+    "build:contracts": "pnpm clean:contracts && mud build",
     "build:dependencies": "exit 0",
     "clean": "shx rm -rf dist/client && shx rm -rf tsconfig.*.tsbuildinfo",
     "clean:client": "shx rm -rf dist/client && shx rm -rf tsconfig.*.tsbuildinfo",
-    "clean:contracts": "forge clean && shx rm -rf dist/contracts",
+    "clean:contracts": "forge clean && shx rm -rf dist/contracts .mud/codegen",
     "deploy": "./scripts/deploy.sh",
-    "generate:index": "tsx ./scripts/generate-index.ts",
-    "generate:mud": "mud build",
     "lint": "concurrently --names \"CLIENT,CONTRACTS\" -c \"yellow.bold,magenta.bold\" \"pnpm lint:client\" \"pnpm lint:contracts\"",
     "lint:client": "eslint .",
     "lint:contracts": "solhint --config .solhint.json \"src/**/*.sol\"",
     "postinstall": "./scripts/postinstall.sh",
     "prettier": "prettier --write \"**/*.{js,json,sol,ts}\"",
     "test": "pnpm test:contracts && pnpm test:client",
-    "test:client": "pnpm -F @aetherisnova/sigillum build && pnpm build:contracts && vitest run --config vitest.config.ts",
-    "test:contracts": "forge test --fork-url http://localhost:8545 -vv"
+    "test:client": "pnpm -F @aetherisnova/portae-astrales build && pnpm build:contracts && vitest run --config vitest.config.ts",
+    "test:contracts": "shx cp .env.test .env && pnpm run deploy && forge test --fork-url http://127.0.0.1:8545 -vv"
   },
   "dependencies": {
+    "@eveworld/common-constants": "0.0.13",
+    "@eveworld/world": "0.0.17",
     "@latticexyz/cli": "2.2.14",
+    "@latticexyz/explorer": "2.2.14",
     "@latticexyz/schema-type": "2.2.14",
     "@latticexyz/store": "2.2.14",
     "@latticexyz/store-indexer": "2.2.14",
-    "@latticexyz/explorer": "2.2.14",
     "@latticexyz/world": "2.2.14",
-    "@latticexyz/world-modules": "2.2.14",
-    "@eveworld/common-constants": "0.0.13",
-    "@eveworld/world": "0.0.17"
+    "@latticexyz/world-modules": "2.2.14"
   },
   "devDependencies": {
     "@types/node": "^22.10.1",
