@@ -1,15 +1,15 @@
 <p align="center">
-  <a href="https://kibis.is">
+  <a href="https://aetherisnova.org">
     <img alt="An ornate golden compass surrounded by orbs" src="../../.assets/aetheris_nova_emblem@128x128.png" style="padding-top: 15px" height="128" />
   </a>
 </p>
 
 <h1 align="center">
-  Regimen Contractus - Arbiter
+  Structura Contractus - Portae Astrales
 </h1>
 
 <p align="center">
-  The Arbiter schema facilitates the submission of proposals and allows for members of an Ordo to pledge their support.
+  The Portae Astrales schema allows the construction of a great Porta of Aetheris Nova facilitating safe traversal of the Aether.
 </p>
 
 ### Table Of Contents
@@ -43,11 +43,12 @@ TODO.
 
 ### 3.1. Useful Commands
 
-| Command         | Description                   |
-|-----------------|-------------------------------|
-| `pnpm build`    | Builds the contract.          |
-| `pnpm lint`     | Lints all the `.sol` files.   |
-| `pnpm prettier` | Formats all the `.sol` files. |
+| Command             | Description                              |
+|---------------------|------------------------------------------|
+| `pnpm build`        | Builds the contract.                     |
+| `pnpm generate:mud` | Generates the MUD source code files to . |
+| `pnpm lint`         | Lints all the `.sol` files.              |
+| `pnpm prettier`     | Formats all the `.sol` files.            |
 
 <sup>[Back to top ^][table-of-contents]</sup>
 
