@@ -9,6 +9,8 @@ services:
       retries: 5
       start_period: 20s
     image: ghcr.io/foundry-rs/foundry:latest
+    networks:
+      - structuracontractus_network
     platform: linux/amd64
     ports:
       - "8545:8545"
@@ -20,5 +22,11 @@ services:
       anvil:
         condition: service_healthy
     image: ghcr.io/projectawakening/world-chain-deployer-image:0.0.17
+    networks:
+      - structuracontractus_network
     platform: linux/amd64
     tty: true
+
+networks:
+  structuracontractus_network:
+    name: structuracontractus_network

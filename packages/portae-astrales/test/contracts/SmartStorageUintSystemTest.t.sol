@@ -30,10 +30,10 @@ import { IWorld } from '@mud/world/IWorld.sol';
 import { SmartObjectUtils } from '@contracts/utils/SmartObjectUtils.sol';
 
 contract SmartStorageUintSystemTest is MudTest {
-  using SmartDeployableLib for SmartDeployableLib.World;
-  using SmartStorageUnitLib for SmartStorageUnitLib.World;
   using EntityRecordLib for EntityRecordLib.World;
   using SmartCharacterLib for SmartCharacterLib.World;
+  using SmartDeployableLib for SmartDeployableLib.World;
+  using SmartStorageUnitLib for SmartStorageUnitLib.World;
 
   EntityRecordLib.World private _entityRecord;
   uint256 private _itemID = uint256(70505200487489129491533272716910408603753256595363780714882065332876101173161); // salt (83839)
@@ -101,7 +101,7 @@ contract SmartStorageUintSystemTest is MudTest {
       _smartDeployable.globalResume();
     }
 
-    //Create, anchor the ssu and bring online
+    // create, anchor the ssu and bring online
     _smartStorageUnit.createAndAnchorSmartStorageUnit(
       ssuID,
       EntityRecordData({ typeId: 7888, itemId: 111, volume: 10 }),
@@ -122,41 +122,32 @@ contract SmartStorageUintSystemTest is MudTest {
    * subscribe()
    */
 
+  function test_SubscribeWithNoKnownCharacter() public {
+    // arrange
+    // assert
+    vm.expectRevert(SmartStorageUnitSystem.CharacterDoesNotExistError.selector);
+
+    // act
+    _world.call(_systemId, abi.encodeCall(SmartStorageUnitSystem.subscribe, (_ssuID, _itemID, 1)));
+  }
+
   function test_SubscribeWithUnknownItem() public {
     // arrange
     uint256 invalidItemID = uint256(112603025077760770783264636189502217226733230421932850697496331082050661822826); // lens 3x (77518)
-    uint256 quantity = uint256(4);
 
     // assert
     vm.expectRevert(abi.encodeWithSelector(SmartStorageUnitSystem.UnknownDepositMethodError.selector, invalidItemID));
 
     // act
-    _world.call(_systemId, abi.encodeCall(SmartStorageUnitSystem.subscribe, (_ssuID, invalidItemID, quantity)));
-  }
-
-  function test_SubscribeWithNotEnoughQuantitySupplied() public {
-    // arrange
-    PortaeAstralesDepositMethodsData memory depositMethod = PortaeAstralesDepositMethods.get(_itemID);
-    uint256 quantity = depositMethod.requiredQuantity / 2;
-
-    // assert
-    vm.expectRevert(abi.encodeWithSelector(SmartStorageUnitSystem.NotEnoughOfItemError.selector, _itemID));
-
-    // act
-    _world.call(_systemId, abi.encodeCall(SmartStorageUnitSystem.subscribe, (_ssuID, _itemID, quantity)));
+    _world.call(_systemId, abi.encodeCall(SmartStorageUnitSystem.subscribe, (_ssuID, invalidItemID, 1)));
   }
 
   function test_SubscribeWithNotEnoughItems() public {
     // arrange
-    PortaeAstralesDepositMethodsData memory depositMethod = PortaeAstralesDepositMethods.get(_itemID);
-
     // assert
     vm.expectRevert(abi.encodeWithSelector(SmartStorageUnitSystem.NotEnoughOfItemError.selector, _itemID));
 
     // act
-    _world.call(
-      _systemId,
-      abi.encodeCall(SmartStorageUnitSystem.subscribe, (_ssuID, _itemID, depositMethod.requiredQuantity))
-    );
+    _world.call(_systemId, abi.encodeCall(SmartStorageUnitSystem.subscribe, (_ssuID, _itemID, 1)));
   }
 }
