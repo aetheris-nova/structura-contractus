@@ -291,3 +291,7 @@ out/
 ### Soldeer
 
 dependencies/
+
+### MUD
+.mud
+deploys/
