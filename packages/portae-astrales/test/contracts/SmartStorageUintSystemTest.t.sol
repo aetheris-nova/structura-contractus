@@ -4,8 +4,10 @@ pragma solidity ^0.8.24;
 import 'forge-std/Test.sol';
 import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE, SMART_STORAGE_UNIT_SYSTEM_NAME } from '@eveworld/common-constants/src/constants.sol';
 import { CharactersByAddressTable } from '@eveworld/world/src/codegen/tables/CharactersByAddressTable.sol';
+import { EphemeralInvItemTableData, EphemeralInvItemTable } from '@eveworld/world/src/codegen/tables/EphemeralInvItemTable.sol';
 import { GlobalDeployableState } from '@eveworld/world/src/codegen/tables/GlobalDeployableState.sol';
 import { IBaseWorld } from '@eveworld/world/src/codegen/world/IWorld.sol';
+import { InventoryItem } from '@eveworld/world/src/modules/inventory/types.sol';
 import { SmartDeployableLib } from '@eveworld/world/src/modules/smart-deployable/SmartDeployableLib.sol';
 import { SmartStorageUnitLib } from '@eveworld/world/src/modules/smart-storage-unit/SmartStorageUnitLib.sol';
 import { EntityRecordData, WorldPosition, SmartObjectData, Coord } from '@eveworld/world/src/modules/smart-storage-unit/types.sol';
@@ -19,7 +21,9 @@ import { DEFAULT_DEPOSIT_METHOD_DURATION } from '@contracts/constants/Durations.
 import { SmartStorageUnitSystem } from '@contracts/SmartStorageUnitSystem.sol';
 
 // mud
+import { PortaeAstralesDeposits, PortaeAstralesDepositsData } from '@mud/tables/PortaeAstralesDeposits.sol';
 import { PortaeAstralesDepositMethods, PortaeAstralesDepositMethodsData } from '@mud/tables/PortaeAstralesDepositMethods.sol';
+import { PortaeAstralesSubscriptions } from '@mud/tables/PortaeAstralesSubscriptions.sol';
 import { IWorld } from '@mud/world/IWorld.sol';
 
 // utils
@@ -61,8 +65,6 @@ contract SmartStorageUintSystemTest is MudTest {
     _systemId = SmartObjectUtils.resourceID(_namespace, SMART_STORAGE_UNIT_SYSTEM_NAME);
     _world = IWorld(worldAddress);
 
-    console.logAddress(worldAddress);
-
     // create characters
     SmartCharacterUtils.createCharacter(_ownerCharacterID, _owner, 'owner', worldAddress);
     SmartCharacterUtils.createCharacter(_playerCharacterID, _player, 'player', worldAddress);
@@ -79,6 +81,21 @@ contract SmartStorageUintSystemTest is MudTest {
   /**
    * helper functions
    */
+
+  function _addItemsToEphemeralInventory(uint256 itemID, address owner, uint256 quantity) private {
+    InventoryItem[] memory items = new InventoryItem[](1);
+
+    items[0] = InventoryItem({
+      inventoryItemId: itemID,
+      owner: owner,
+      itemId: 2,
+      typeId: 24,
+      volume: 10,
+      quantity: quantity
+    });
+
+    _smartStorageUnit.createAndDepositItemsToEphemeralInventory(_ssuID, _player, items);
+  }
 
   function _createAnchorAndOnline(uint256 ssuID, address owner) private {
     // check global state and resume if needed
@@ -136,5 +153,33 @@ contract SmartStorageUintSystemTest is MudTest {
     // act
     vm.prank(_player);
     _world.call(_systemId, abi.encodeCall(SmartStorageUnitSystem.subscribe, (_ssuID, _itemID, 1)));
+  }
+
+  function test_SubscribeWithRequiredQuantity() public {
+    // arrange
+    PortaeAstralesDepositMethodsData memory depositMethod = PortaeAstralesDepositMethods.get(_itemID);
+    EphemeralInvItemTableData memory items;
+    //  PortaeAstralesDepositsData memory deposit;
+    uint256 subscriptionTime;
+
+    _addItemsToEphemeralInventory(_itemID, _player, depositMethod.requiredQuantity);
+
+    items = EphemeralInvItemTable.get(_ssuID, _itemID, _player);
+
+    assertTrue(items.quantity == depositMethod.requiredQuantity, 'expect ephemeral items to be deposited');
+
+    // act
+    vm.prank(_player);
+    _world.call(_systemId, abi.encodeCall(SmartStorageUnitSystem.subscribe, (_ssuID, _itemID, 1)));
+
+    // assert
+    //    deposit = PortaeAstralesDeposits.get(PortaeAstralesDepositsData(_playerCharacterID, depositMethod.requiredQuantity, _ssuID, block.timestamp));
+    subscriptionTime = PortaeAstralesSubscriptions.get(_playerCharacterID);
+
+    assertTrue(subscriptionTime > block.timestamp, 'expected subscription time to be greater than now');
+
+    vm.startBroadcast(_deployerPrivateKey);
+    PortaeAstralesSubscriptions.deleteRecord(_playerCharacterID);
+    vm.stopBroadcast();
   }
 }

@@ -19,9 +19,9 @@ contract SmartGateSystem is System {
    * @return True if the character can use the gate, false otherwise.
    */
   function canJump(uint256 characterId, uint256 sourceGateId, uint256 destinationGateId) public view returns (bool) {
-    uint256 timestamp = PortaeAstralesSubscriptions.get(characterId);
+    uint256 expiresAt = PortaeAstralesSubscriptions.get(characterId);
 
-    if (timestamp >= block.timestamp) {
+    if (expiresAt >= block.timestamp) {
       return true;
     }
 

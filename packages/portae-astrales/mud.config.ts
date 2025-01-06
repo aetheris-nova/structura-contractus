@@ -37,7 +37,7 @@ export default (() => {
         name: 'PASubs',
         schema: {
           characterID: 'uint256',
-          timestamp: 'uint256',
+          expiresAt: 'uint256',
         },
       },
       PortaeAstralesDepositMethods: {

@@ -36,6 +36,32 @@ contract SmartStorageUnitSystem is System {
    * private functions
    */
 
+  /**
+   * @notice Calculates the subscription time for a given duration. This takes into account the current subscription
+   * time and appends the subscription time to the existing subscription time.
+   * @dev
+   * * If the current subscription time is 0 or less than the current time, the new subscription time starts from now.
+   * @param currentSubscriptionTime The current subscription time.
+   * @param duration The duration to append.
+   * @param multiplier A multiplier to use if the player has deposited multiple subscriptions.
+   * @return THe new subscription time with any appended time.
+   */
+  function _calculateSubscriptionTime(
+    uint256 currentSubscriptionTime,
+    uint256 duration,
+    uint8 multiplier
+  ) internal view returns (uint256) {
+    uint8 _multiplier = multiplier == 0 ? 1 : multiplier;
+    uint256 subscriptionTime = duration * _multiplier;
+
+    // if there is no subscription time left or the amount has run out, refresh from now
+    if (currentSubscriptionTime == 0 || currentSubscriptionTime < block.timestamp) {
+      return block.timestamp + subscriptionTime;
+    }
+
+    return currentSubscriptionTime + subscriptionTime;
+  }
+
   function _inventoryLib() internal view returns (InventoryLib.World memory) {
     if (!ResourceIds.getExists(WorldResourceIdLib.encodeNamespace(FRONTIER_WORLD_DEPLOYMENT_NAMESPACE))) {
       return InventoryLib.World({ iface: IBaseWorld(_world()), namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE });
@@ -51,9 +77,10 @@ contract SmartStorageUnitSystem is System {
   /**
    * @notice
    */
-  function subscribe(uint256 ssuID, uint256 itemID, uint8 amount) public {
-    uint8 _amount = amount == 0 ? 1 : amount;
+  function subscribe(uint256 ssuID, uint256 itemID, uint8 multiplier) public {
+    uint8 _multiplier = multiplier == 0 ? 1 : multiplier;
     uint256 characterID;
+    uint256 currentSubscriptionTime;
     PortaeAstralesDepositMethodsData memory depositMethod;
     EphemeralInvItemTableData memory playerItems;
     InventoryLib.World memory inventory;
@@ -78,7 +105,7 @@ contract SmartStorageUnitSystem is System {
     }
 
     playerItems = EphemeralInvItemTable.get(ssuID, itemID, _msgSender());
-    requiredQuantity = depositMethod.requiredQuantity * _amount;
+    requiredQuantity = depositMethod.requiredQuantity * _multiplier;
 
     if (playerItems.quantity < requiredQuantity) {
       revert NotEnoughOfItemError(itemID);
@@ -86,13 +113,18 @@ contract SmartStorageUnitSystem is System {
 
     inventory = _inventoryLib();
     transferItems = new TransferItem[](1);
-    transferItems[0] = TransferItem(itemID, _msgSender(), requiredQuantity);
+    transferItems[0] = TransferItem(itemID, owner, requiredQuantity);
 
     // transfer the deposited items from the player's inventory (ephemeral) to the ssu's inventory
     _inventoryLib().ephemeralToInventoryTransfer(ssuID, transferItems);
 
-    // add a subscription entry for the player
-    //    PortaeAstralesDeposits.set();
-    //    PortaeAstralesSubscriptions.set(characterID);
+    currentSubscriptionTime = PortaeAstralesSubscriptions.get(characterID);
+
+    // add subscription and deposit entries for the player
+    //    PortaeAstralesDeposits.set(characterID, requiredQuantity, ssuID, block.timestamp);
+    PortaeAstralesSubscriptions.set(
+      characterID,
+      _calculateSubscriptionTime(currentSubscriptionTime, depositMethod.duration, _multiplier)
+    );
   }
 }
