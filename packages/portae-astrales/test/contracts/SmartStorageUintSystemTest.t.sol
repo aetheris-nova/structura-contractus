@@ -6,11 +6,7 @@ import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE, SMART_STORAGE_UNIT_SYSTEM_NAME } f
 import { CharactersByAddressTable } from '@eveworld/world/src/codegen/tables/CharactersByAddressTable.sol';
 import { GlobalDeployableState } from '@eveworld/world/src/codegen/tables/GlobalDeployableState.sol';
 import { IBaseWorld } from '@eveworld/world/src/codegen/world/IWorld.sol';
-import { EntityRecordLib } from '@eveworld/world/src/modules/entity-record/EntityRecordLib.sol';
-import { EntityRecordOffchainTableData } from '@eveworld/world/src/codegen/tables/EntityRecordOffchainTable.sol';
-import { SmartCharacterLib } from '@eveworld/world/src/modules/smart-character/SmartCharacterLib.sol';
 import { SmartDeployableLib } from '@eveworld/world/src/modules/smart-deployable/SmartDeployableLib.sol';
-import { EntityRecordData as CharacterEntityRecord } from '@eveworld/world/src/modules/smart-character/types.sol';
 import { SmartStorageUnitLib } from '@eveworld/world/src/modules/smart-storage-unit/SmartStorageUnitLib.sol';
 import { EntityRecordData, WorldPosition, SmartObjectData, Coord } from '@eveworld/world/src/modules/smart-storage-unit/types.sol';
 import { ResourceId } from '@latticexyz/world/src/WorldResourceId.sol';
@@ -28,18 +24,19 @@ import { IWorld } from '@mud/world/IWorld.sol';
 
 // utils
 import { SmartObjectUtils } from '@contracts/utils/SmartObjectUtils.sol';
+import { SmartCharacterUtils } from './utils/SmartCharacterUtils.sol';
 
 contract SmartStorageUintSystemTest is MudTest {
-  using EntityRecordLib for EntityRecordLib.World;
-  using SmartCharacterLib for SmartCharacterLib.World;
   using SmartDeployableLib for SmartDeployableLib.World;
   using SmartStorageUnitLib for SmartStorageUnitLib.World;
 
-  EntityRecordLib.World private _entityRecord;
+  uint256 private _deployerPrivateKey;
   uint256 private _itemID = uint256(70505200487489129491533272716910408603753256595363780714882065332876101173161); // salt (83839)
   bytes14 private _namespace;
   address private _owner;
-  SmartCharacterLib.World private _smartCharacter;
+  uint256 private _ownerCharacterID = uint256(128);
+  address private _player;
+  uint256 private _playerCharacterID = uint256(256);
   SmartDeployableLib.World private _smartDeployable;
   SmartStorageUnitLib.World private _smartStorageUnit;
   uint256 private _ssuID = uint256(17614304337475056394242299294383532840873792487945557467064313427436901763821);
@@ -47,20 +44,12 @@ contract SmartStorageUintSystemTest is MudTest {
   IWorld private _world;
 
   function setUp() public override {
-    uint256 deployerPrivateKey = vm.envUint('PRIVATE_KEY');
-
     super.setUp();
 
-    _entityRecord = EntityRecordLib.World({
-      iface: IBaseWorld(worldAddress),
-      namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
-    });
+    _deployerPrivateKey = vm.envUint('PRIVATE_KEY');
     _namespace = bytes14(bytes(vm.envString('NAMESPACE')));
-    _owner = vm.addr(deployerPrivateKey);
-    _smartCharacter = SmartCharacterLib.World({
-      iface: IBaseWorld(worldAddress),
-      namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
-    });
+    _owner = vm.addr(_deployerPrivateKey);
+    _player = address(1);
     _smartDeployable = SmartDeployableLib.World({
       iface: IBaseWorld(worldAddress),
       namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
@@ -72,21 +61,17 @@ contract SmartStorageUintSystemTest is MudTest {
     _systemId = SmartObjectUtils.resourceID(_namespace, SMART_STORAGE_UNIT_SYSTEM_NAME);
     _world = IWorld(worldAddress);
 
-    if (CharactersByAddressTable.get(_owner) == 0) {
-      _smartCharacter.createCharacter(
-        123,
-        _owner,
-        200003,
-        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: 'ron', dappURL: 'noURL', description: '.' }),
-        ''
-      );
-    }
+    console.logAddress(worldAddress);
 
+    // create characters
+    SmartCharacterUtils.createCharacter(_ownerCharacterID, _owner, 'owner', worldAddress);
+    SmartCharacterUtils.createCharacter(_playerCharacterID, _player, 'player', worldAddress);
+
+    // create the ssu
     _createAnchorAndOnline(_ssuID, _owner);
 
     // add the default item to the deposit methods table
-    vm.startBroadcast(deployerPrivateKey);
+    vm.startBroadcast(_deployerPrivateKey);
     PortaeAstralesDepositMethods.set(_itemID, true, DEFAULT_DEPOSIT_METHOD_DURATION, uint256(128));
     vm.stopBroadcast();
   }
@@ -139,6 +124,7 @@ contract SmartStorageUintSystemTest is MudTest {
     vm.expectRevert(abi.encodeWithSelector(SmartStorageUnitSystem.UnknownDepositMethodError.selector, invalidItemID));
 
     // act
+    vm.prank(_player);
     _world.call(_systemId, abi.encodeCall(SmartStorageUnitSystem.subscribe, (_ssuID, invalidItemID, 1)));
   }
 
@@ -148,6 +134,7 @@ contract SmartStorageUintSystemTest is MudTest {
     vm.expectRevert(abi.encodeWithSelector(SmartStorageUnitSystem.NotEnoughOfItemError.selector, _itemID));
 
     // act
+    vm.prank(_player);
     _world.call(_systemId, abi.encodeCall(SmartStorageUnitSystem.subscribe, (_ssuID, _itemID, 1)));
   }
 }

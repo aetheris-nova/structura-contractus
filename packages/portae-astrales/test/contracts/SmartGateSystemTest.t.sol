@@ -3,14 +3,9 @@ pragma solidity ^0.8.24;
 
 import 'forge-std/Test.sol';
 import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE, SMART_GATE_SYSTEM_NAME } from '@eveworld/common-constants/src/constants.sol';
-import { CharactersByAddressTable } from '@eveworld/world/src/codegen/tables/CharactersByAddressTable.sol';
 import { GlobalDeployableState } from '@eveworld/world/src/codegen/tables/GlobalDeployableState.sol';
 import { IBaseWorld } from '@eveworld/world/src/codegen/world/IWorld.sol';
-import { EntityRecordLib } from '@eveworld/world/src/modules/entity-record/EntityRecordLib.sol';
-import { EntityRecordOffchainTableData } from '@eveworld/world/src/codegen/tables/EntityRecordOffchainTable.sol';
-import { SmartCharacterLib } from '@eveworld/world/src/modules/smart-character/SmartCharacterLib.sol';
 import { SmartDeployableLib } from '@eveworld/world/src/modules/smart-deployable/SmartDeployableLib.sol';
-import { EntityRecordData as CharacterEntityRecord } from '@eveworld/world/src/modules/smart-character/types.sol';
 import { SmartObjectData } from '@eveworld/world/src/modules/smart-deployable/types.sol';
 import { SmartGateLib } from '@eveworld/world/src/modules/smart-gate/SmartGateLib.sol';
 import { EntityRecordData, WorldPosition, Coord } from '@eveworld/world/src/modules/smart-storage-unit/types.sol';
@@ -30,17 +25,15 @@ import { IWorld } from '@mud/world/IWorld.sol';
 
 // utils
 import { SmartObjectUtils } from '@contracts/utils/SmartObjectUtils.sol';
+import { SmartCharacterUtils } from './utils/SmartCharacterUtils.sol';
 
 contract SmartGateSystemTest is MudTest {
-  using EntityRecordLib for EntityRecordLib.World;
   using SmartDeployableLib for SmartDeployableLib.World;
-  using SmartCharacterLib for SmartCharacterLib.World;
   using SmartGateLib for SmartGateLib.World;
 
   uint256 private _deployerPrivateKey;
   uint256 private _destinationGateID =
     uint256(67387866010353549996346280963079126762450299713900890730943797543376801696007);
-  EntityRecordLib.World private _entityRecord;
   uint256 private _itemID = uint256(70505200487489129491533272716910408603753256595363780714882065332876101173161); // salt (83839)
   bytes14 private _namespace;
   address private _owner;
@@ -49,7 +42,6 @@ contract SmartGateSystemTest is MudTest {
   uint256 private _playerCharacterID = uint256(256);
   uint256 private _sourceGateID =
     uint256(34818344039668088032259299209624217066809194721387714788472158182502870248994);
-  SmartCharacterLib.World private _smartCharacter;
   SmartDeployableLib.World private _smartDeployable;
   SmartGateLib.World private _smartGate;
   uint256 private _ssuID = uint256(17614304337475056394242299294383532840873792487945557467064313427436901763821);
@@ -60,17 +52,9 @@ contract SmartGateSystemTest is MudTest {
     super.setUp();
 
     _deployerPrivateKey = vm.envUint('PRIVATE_KEY');
-    _entityRecord = EntityRecordLib.World({
-      iface: IBaseWorld(worldAddress),
-      namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
-    });
     _namespace = bytes14(bytes(vm.envString('NAMESPACE')));
     _owner = vm.addr(_deployerPrivateKey);
     _player = address(1);
-    _smartCharacter = SmartCharacterLib.World({
-      iface: IBaseWorld(worldAddress),
-      namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
-    });
     _smartDeployable = SmartDeployableLib.World({
       iface: IBaseWorld(worldAddress),
       namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
@@ -82,27 +66,9 @@ contract SmartGateSystemTest is MudTest {
     _systemId = SmartObjectUtils.resourceID(_namespace, SMART_GATE_SYSTEM_NAME);
     _world = IWorld(worldAddress);
 
-    if (CharactersByAddressTable.get(_owner) == 0) {
-      _smartCharacter.createCharacter(
-        _ownerCharacterID,
-        _owner,
-        0,
-        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: 'owner', dappURL: 'noURL', description: '.' }),
-        ''
-      );
-    }
-
-    if (CharactersByAddressTable.get(_player) == 0) {
-      _smartCharacter.createCharacter(
-        _playerCharacterID,
-        _player,
-        0,
-        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: 'player', dappURL: 'noURL', description: '.' }),
-        ''
-      );
-    }
+    // create characters
+    SmartCharacterUtils.createCharacter(_ownerCharacterID, _owner, 'owner', worldAddress);
+    SmartCharacterUtils.createCharacter(_playerCharacterID, _player, 'player', worldAddress);
 
     // create and bring online gates
     _createAnchorAndOnline(_sourceGateID, _owner);
