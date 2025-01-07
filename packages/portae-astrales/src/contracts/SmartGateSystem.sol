@@ -2,7 +2,9 @@
 pragma solidity >=0.8.24;
 
 import { System } from '@latticexyz/world/src/System.sol';
-import { PortaeAstralesSubscriptions } from '@mud/tables/PortaeAstralesSubscriptions.sol';
+
+// mud
+import { SubscriptionTimes, SubscriptionTimesData } from '@mud/tables/SubscriptionTimes.sol';
 
 /**
  * @notice Implements the logic for the smart gates. This simply checks if a character has a valid subscription.
@@ -19,9 +21,9 @@ contract SmartGateSystem is System {
    * @return True if the character can use the gate, false otherwise.
    */
   function canJump(uint256 characterId, uint256 sourceGateId, uint256 destinationGateId) public view returns (bool) {
-    uint256 expiresAt = PortaeAstralesSubscriptions.get(characterId);
+    SubscriptionTimesData memory subscription = SubscriptionTimes.get(characterId);
 
-    if (expiresAt >= block.timestamp) {
+    if (subscription.expiresAt >= block.timestamp) {
       return true;
     }
 

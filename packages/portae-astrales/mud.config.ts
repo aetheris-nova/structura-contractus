@@ -22,32 +22,36 @@ export default (() => {
     namespace: process.env.NAMESPACE,
     sourceDirectory,
     tables: {
-      PortaeAstralesDeposits: {
-        key: [],
-        name: 'PADeps',
-        schema: {
-          characterID: 'uint256',
-          quantity: 'uint256',
-          ssuID: 'uint256',
-          timestamp: 'uint256',
-        },
-      },
-      PortaeAstralesSubscriptions: {
-        key: ['characterID'],
-        name: 'PASubs',
-        schema: {
-          characterID: 'uint256',
-          expiresAt: 'uint256',
-        },
-      },
-      PortaeAstralesDepositMethods: {
+      ItemSubscriptionMethods: {
         key: ['itemID'],
-        name: 'PADepMeths',
+        name: 'ItmSubMeths',
         schema: {
           active: 'bool',
           duration: 'uint256',
           itemID: 'uint256',
           requiredQuantity: 'uint256',
+        },
+      },
+      ItemSubscriptions: {
+        key: ['id'],
+        name: 'ItmSubs',
+        schema: {
+          characterID: 'uint256',
+          createdAt: 'uint256',
+          duration: 'uint256',
+          id: 'uint256',
+          itemID: 'uint256',
+          quantity: 'uint256',
+          ssuID: 'uint256',
+        },
+      },
+      SubscriptionTimes: {
+        key: ['characterID'],
+        name: 'SubTms',
+        schema: {
+          characterID: 'uint256',
+          expiresAt: 'uint256',
+          updatedAt: 'uint256',
         },
       },
     },

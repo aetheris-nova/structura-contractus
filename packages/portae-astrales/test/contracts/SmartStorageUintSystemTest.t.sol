@@ -21,9 +21,8 @@ import { DEFAULT_DEPOSIT_METHOD_DURATION } from '@contracts/constants/Durations.
 import { SmartStorageUnitSystem } from '@contracts/SmartStorageUnitSystem.sol';
 
 // mud
-import { PortaeAstralesDeposits, PortaeAstralesDepositsData } from '@mud/tables/PortaeAstralesDeposits.sol';
-import { PortaeAstralesDepositMethods, PortaeAstralesDepositMethodsData } from '@mud/tables/PortaeAstralesDepositMethods.sol';
-import { PortaeAstralesSubscriptions } from '@mud/tables/PortaeAstralesSubscriptions.sol';
+import { ItemSubscriptionMethods, ItemSubscriptionMethodsData } from '@mud/tables/ItemSubscriptionMethods.sol';
+import { SubscriptionTimes, SubscriptionTimesData } from '@mud/tables/SubscriptionTimes.sol';
 import { IWorld } from '@mud/world/IWorld.sol';
 
 // utils
@@ -34,11 +33,12 @@ contract SmartStorageUintSystemTest is MudTest {
   using SmartDeployableLib for SmartDeployableLib.World;
   using SmartStorageUnitLib for SmartStorageUnitLib.World;
 
-  uint256 private _deployerPrivateKey;
   uint256 private _itemID = uint256(70505200487489129491533272716910408603753256595363780714882065332876101173161); // salt (83839)
   bytes14 private _namespace;
+  address private _nonPlayer;
   address private _owner;
   uint256 private _ownerCharacterID = uint256(128);
+  uint256 private _ownerPrivateKey;
   address private _player;
   uint256 private _playerCharacterID = uint256(256);
   SmartDeployableLib.World private _smartDeployable;
@@ -50,10 +50,13 @@ contract SmartStorageUintSystemTest is MudTest {
   function setUp() public override {
     super.setUp();
 
-    _deployerPrivateKey = vm.envUint('PRIVATE_KEY');
     _namespace = bytes14(bytes(vm.envString('NAMESPACE')));
-    _owner = vm.addr(_deployerPrivateKey);
-    _player = address(1);
+
+    _nonPlayer = vm.addr(1);
+    _ownerPrivateKey = vm.envUint('PRIVATE_KEY');
+    _owner = vm.addr(_ownerPrivateKey);
+    _player = address(this); // setting the address to the system contract as prank does not work for subsequent calls in world() calls, i.e. internal calls to other systems loses the player
+
     _smartDeployable = SmartDeployableLib.World({
       iface: IBaseWorld(worldAddress),
       namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
@@ -73,9 +76,8 @@ contract SmartStorageUintSystemTest is MudTest {
     _createAnchorAndOnline(_ssuID, _owner);
 
     // add the default item to the deposit methods table
-    vm.startBroadcast(_deployerPrivateKey);
-    PortaeAstralesDepositMethods.set(_itemID, true, DEFAULT_DEPOSIT_METHOD_DURATION, uint256(128));
-    vm.stopBroadcast();
+    vm.prank(_owner);
+    ItemSubscriptionMethods.set(_itemID, true, DEFAULT_DEPOSIT_METHOD_DURATION, uint256(128));
   }
 
   /**
@@ -121,19 +123,26 @@ contract SmartStorageUintSystemTest is MudTest {
   }
 
   /**
-   * subscribe()
+   * subscribeWithItems()
    */
 
-  function test_SubscribeWithNoKnownCharacter() public {
+  function test_SubscribeWithItemsFailWithNoKnownCharacter() public {
     // arrange
     // assert
     vm.expectRevert(SmartStorageUnitSystem.CharacterDoesNotExistError.selector);
 
     // act
-    _world.call(_systemId, abi.encodeCall(SmartStorageUnitSystem.subscribe, (_ssuID, _itemID, 1)));
+    vm.prank(_nonPlayer); // use an account that does is not a character
+    _world.call(
+      _systemId,
+      abi.encodeCall(
+        SmartStorageUnitSystem.subscribeWithItems,
+        (_ssuID, _itemID, 1, keccak256(abi.encodePacked('test_SubscribeWithItemsFailWithNoKnownCharacter')))
+      )
+    );
   }
 
-  function test_SubscribeWithUnknownItem() public {
+  function test_SubscribeWithItemsFailWithUnknownItem() public {
     // arrange
     uint256 invalidItemID = uint256(112603025077760770783264636189502217226733230421932850697496331082050661822826); // lens 3x (77518)
 
@@ -141,45 +150,66 @@ contract SmartStorageUintSystemTest is MudTest {
     vm.expectRevert(abi.encodeWithSelector(SmartStorageUnitSystem.UnknownDepositMethodError.selector, invalidItemID));
 
     // act
-    vm.prank(_player);
-    _world.call(_systemId, abi.encodeCall(SmartStorageUnitSystem.subscribe, (_ssuID, invalidItemID, 1)));
+    _world.call(
+      _systemId,
+      abi.encodeCall(
+        SmartStorageUnitSystem.subscribeWithItems,
+        (_ssuID, invalidItemID, 1, keccak256(abi.encodePacked('test_SubscribeWithItemsFailWithUnknownItem')))
+      )
+    );
   }
 
-  function test_SubscribeWithNotEnoughItems() public {
+  function test_SubscribeWithItemsFailWithNotEnoughItems() public {
     // arrange
     // assert
     vm.expectRevert(abi.encodeWithSelector(SmartStorageUnitSystem.NotEnoughOfItemError.selector, _itemID));
 
     // act
-    vm.prank(_player);
-    _world.call(_systemId, abi.encodeCall(SmartStorageUnitSystem.subscribe, (_ssuID, _itemID, 1)));
+    _world.call(
+      _systemId,
+      abi.encodeCall(
+        SmartStorageUnitSystem.subscribeWithItems,
+        (_ssuID, _itemID, 1, keccak256(abi.encodePacked('test_SubscribeWithItemsFailWithNotEnoughItems')))
+      )
+    );
   }
 
-  function test_SubscribeWithRequiredQuantity() public {
+  function test_SubscribeWithItemsSucceedWithMinimumRequiredQuantity() public {
     // arrange
-    PortaeAstralesDepositMethodsData memory depositMethod = PortaeAstralesDepositMethods.get(_itemID);
-    EphemeralInvItemTableData memory items;
-    //  PortaeAstralesDepositsData memory deposit;
-    uint256 subscriptionTime;
+    ItemSubscriptionMethodsData memory depositMethod = ItemSubscriptionMethods.get(_itemID);
+    EphemeralInvItemTableData memory playerItems;
+    SubscriptionTimesData memory subscriptionTime;
 
     _addItemsToEphemeralInventory(_itemID, _player, depositMethod.requiredQuantity);
 
-    items = EphemeralInvItemTable.get(_ssuID, _itemID, _player);
+    playerItems = EphemeralInvItemTable.get(_ssuID, _itemID, _player);
 
-    assertTrue(items.quantity == depositMethod.requiredQuantity, 'expect ephemeral items to be deposited');
+    assertTrue(playerItems.quantity == depositMethod.requiredQuantity, 'expect ephemeral items to be deposited');
 
     // act
-    vm.prank(_player);
-    _world.call(_systemId, abi.encodeCall(SmartStorageUnitSystem.subscribe, (_ssuID, _itemID, 1)));
+    _world.call(
+      _systemId,
+      abi.encodeCall(
+        SmartStorageUnitSystem.subscribeWithItems,
+        (_ssuID, _itemID, 1, keccak256(abi.encodePacked('test_SubscribeWithItemsSucceedWithMinimumRequiredQuantity')))
+      )
+    );
 
     // assert
-    //    deposit = PortaeAstralesDeposits.get(PortaeAstralesDepositsData(_playerCharacterID, depositMethod.requiredQuantity, _ssuID, block.timestamp));
-    subscriptionTime = PortaeAstralesSubscriptions.get(_playerCharacterID);
+    subscriptionTime = SubscriptionTimes.get(_playerCharacterID);
+    playerItems = EphemeralInvItemTable.get(_ssuID, _itemID, _player);
 
-    assertTrue(subscriptionTime > block.timestamp, 'expected subscription time to be greater than now');
+    assertTrue(
+      subscriptionTime.expiresAt > block.timestamp,
+      'expected subscription expires at to be greater than now (block.timestamp)'
+    );
+    assertTrue(
+      subscriptionTime.updatedAt == block.timestamp,
+      'expected subscription to be updated to now (block.timestamp)'
+    );
+    assertTrue(playerItems.quantity == 0, 'expected ephemeral items to be removed');
 
-    vm.startBroadcast(_deployerPrivateKey);
-    PortaeAstralesSubscriptions.deleteRecord(_playerCharacterID);
-    vm.stopBroadcast();
+    vm.prank(_owner);
+    SubscriptionTimes.deleteRecord(_playerCharacterID);
   }
 }

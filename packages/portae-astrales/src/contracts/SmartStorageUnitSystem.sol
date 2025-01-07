@@ -11,14 +11,14 @@ import { InventoryLib } from '@eveworld/world/src/modules/inventory/InventoryLib
 import { InventoryItem, TransferItem } from '@eveworld/world/src/modules/inventory/types.sol';
 import { System } from '@latticexyz/world/src/System.sol';
 import { WorldResourceIdLib } from '@latticexyz/world/src/WorldResourceId.sol';
-import { PortaeAstralesDeposits } from '@mud/tables/PortaeAstralesDeposits.sol';
-import { PortaeAstralesDepositMethods, PortaeAstralesDepositMethodsData } from '@mud/tables/PortaeAstralesDepositMethods.sol';
-import { PortaeAstralesSubscriptions } from '@mud/tables/PortaeAstralesSubscriptions.sol';
 
-// constants
-import { DEFAULT_DEPOSIT_METHOD_DURATION } from './constants/Durations.sol';
+// mud
+import { ItemSubscriptionMethods, ItemSubscriptionMethodsData } from '@mud/tables/ItemSubscriptionMethods.sol';
+import { ItemSubscriptions } from '@mud/tables/ItemSubscriptions.sol';
+import { SubscriptionTimes } from '@mud/tables/SubscriptionTimes.sol';
 
 // utils
+import { ItemSubscriptionUtils } from './utils/ItemSubscriptionUtils.sol';
 import { SmartObjectUtils } from './utils/SmartObjectUtils.sol';
 
 /**
@@ -42,24 +42,19 @@ contract SmartStorageUnitSystem is System {
    * @dev
    * * If the current subscription time is 0 or less than the current time, the new subscription time starts from now.
    * @param currentSubscriptionTime The current subscription time.
-   * @param duration The duration to append.
-   * @param multiplier A multiplier to use if the player has deposited multiple subscriptions.
-   * @return THe new subscription time with any appended time.
+   * @param timeToAdd The amount of time to be added.
+   * @return The new subscription time with any appended time.
    */
   function _calculateSubscriptionTime(
     uint256 currentSubscriptionTime,
-    uint256 duration,
-    uint8 multiplier
+    uint256 timeToAdd
   ) internal view returns (uint256) {
-    uint8 _multiplier = multiplier == 0 ? 1 : multiplier;
-    uint256 subscriptionTime = duration * _multiplier;
-
     // if there is no subscription time left or the amount has run out, refresh from now
     if (currentSubscriptionTime == 0 || currentSubscriptionTime < block.timestamp) {
-      return block.timestamp + subscriptionTime;
+      return block.timestamp + timeToAdd;
     }
 
-    return currentSubscriptionTime + subscriptionTime;
+    return currentSubscriptionTime + timeToAdd;
   }
 
   function _inventoryLib() internal view returns (InventoryLib.World memory) {
@@ -71,26 +66,43 @@ contract SmartStorageUnitSystem is System {
   }
 
   /**
+   * @notice Convenience function to transfer the ephemeral items from the player to the SSU's inventory.
+   * @param ssuID The ID of the SSU.
+   * @param itemID The ID of the item to transfer.
+   * @param quantity The quantity of items to transfer.
+   */
+  function _transferItems(uint256 ssuID, uint256 itemID, uint256 quantity) internal {
+    address ssuOwner = SmartObjectUtils.ownerOf(ssuID);
+    TransferItem[] memory transferItems = new TransferItem[](1);
+
+    transferItems[0] = TransferItem(itemID, ssuOwner, quantity);
+
+    _inventoryLib().ephemeralToInventoryTransfer(ssuID, transferItems);
+  }
+
+  /**
    * public functions
    */
 
   /**
-   * @notice
+   * @notice Allows a player to subscribe to the Portale Astrales (the gate system) by the items deposited in their
+   * ephemeral inventory of the SSU. The player will need the right amount of items that is outlined in the
+   * ItemSubscriptionMethods table.
+   * @dev
+   * * The subscription time is appended to their current subscription time.
+   * @param ssuID The ID of the SSU that is being interacted with.
+   * @param itemID The ID of the item they would like to use to make a subscription.
+   * @param multiplier Determines how many subscriptions from of the item they would like to make. Defaults to 1x.
+   * @param nonce A unique nonce that is used for randomness when creating table IDs.
    */
-  function subscribe(uint256 ssuID, uint256 itemID, uint8 multiplier) public {
+  function subscribeWithItems(uint256 ssuID, uint256 itemID, uint8 multiplier, bytes32 nonce) public {
     uint8 _multiplier = multiplier == 0 ? 1 : multiplier;
     uint256 characterID;
     uint256 currentSubscriptionTime;
-    PortaeAstralesDepositMethodsData memory depositMethod;
     EphemeralInvItemTableData memory playerItems;
-    InventoryLib.World memory inventory;
-    address owner = SmartObjectUtils.ownerOf(ssuID);
     uint256 requiredQuantity;
-    TransferItem[] memory transferItems;
-
-    if (owner == address(0)) {
-      revert InvalidSSUError(ssuID);
-    }
+    ItemSubscriptionMethodsData memory subscriptionMethod;
+    uint256 subscriptionTimeToAdd;
 
     characterID = CharactersByAddressTable.get(_msgSender());
 
@@ -98,33 +110,47 @@ contract SmartStorageUnitSystem is System {
       revert CharacterDoesNotExistError();
     }
 
-    depositMethod = PortaeAstralesDepositMethods.get(itemID);
+    subscriptionMethod = ItemSubscriptionMethods.get(itemID);
 
-    if (!depositMethod.active) {
+    if (!subscriptionMethod.active) {
       revert UnknownDepositMethodError(itemID);
     }
 
     playerItems = EphemeralInvItemTable.get(ssuID, itemID, _msgSender());
-    requiredQuantity = depositMethod.requiredQuantity * _multiplier;
+    requiredQuantity = subscriptionMethod.requiredQuantity * _multiplier;
 
     if (playerItems.quantity < requiredQuantity) {
       revert NotEnoughOfItemError(itemID);
     }
 
-    inventory = _inventoryLib();
-    transferItems = new TransferItem[](1);
-    transferItems[0] = TransferItem(itemID, owner, requiredQuantity);
-
     // transfer the deposited items from the player's inventory (ephemeral) to the ssu's inventory
-    _inventoryLib().ephemeralToInventoryTransfer(ssuID, transferItems);
+    _transferItems(ssuID, itemID, requiredQuantity);
 
-    currentSubscriptionTime = PortaeAstralesSubscriptions.get(characterID);
+    currentSubscriptionTime = SubscriptionTimes.getExpiresAt(characterID);
+    subscriptionTimeToAdd = subscriptionMethod.duration * _multiplier;
 
-    // add subscription and deposit entries for the player
-    //    PortaeAstralesDeposits.set(characterID, requiredQuantity, ssuID, block.timestamp);
-    PortaeAstralesSubscriptions.set(
+    // add subscription entries for the player
+    ItemSubscriptions.set(
+      ItemSubscriptionUtils.generateID(
+        characterID,
+        block.timestamp,
+        subscriptionTimeToAdd,
+        itemID,
+        requiredQuantity,
+        ssuID,
+        nonce
+      ),
       characterID,
-      _calculateSubscriptionTime(currentSubscriptionTime, depositMethod.duration, _multiplier)
+      block.timestamp,
+      subscriptionTimeToAdd,
+      itemID,
+      requiredQuantity,
+      ssuID
+    );
+    SubscriptionTimes.set(
+      characterID,
+      _calculateSubscriptionTime(currentSubscriptionTime, subscriptionTimeToAdd),
+      block.timestamp
     );
   }
 }

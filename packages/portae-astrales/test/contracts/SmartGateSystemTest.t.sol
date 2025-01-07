@@ -19,8 +19,7 @@ import { DEFAULT_DEPOSIT_METHOD_DURATION } from '@contracts/constants/Durations.
 import { SmartGateSystem } from '@contracts/SmartGateSystem.sol';
 
 // mud
-import { PortaeAstralesDepositMethods, PortaeAstralesDepositMethodsData } from '@mud/tables/PortaeAstralesDepositMethods.sol';
-import { PortaeAstralesSubscriptions } from '@mud/tables/PortaeAstralesSubscriptions.sol';
+import { SubscriptionTimes } from '@mud/tables/SubscriptionTimes.sol';
 import { IWorld } from '@mud/world/IWorld.sol';
 
 // utils
@@ -108,7 +107,7 @@ contract SmartGateSystemTest is MudTest {
   function test_CanJumpWithNoSubscription() public {
     // arrange
     vm.startBroadcast(_deployerPrivateKey);
-    PortaeAstralesSubscriptions.deleteRecord(_playerCharacterID);
+    SubscriptionTimes.deleteRecord(_playerCharacterID);
     vm.stopBroadcast();
 
     // act
@@ -129,7 +128,7 @@ contract SmartGateSystemTest is MudTest {
     bool result;
 
     vm.startBroadcast(_deployerPrivateKey);
-    PortaeAstralesSubscriptions.set(_playerCharacterID, block.timestamp + DEFAULT_DEPOSIT_METHOD_DURATION);
+    SubscriptionTimes.set(_playerCharacterID, block.timestamp + DEFAULT_DEPOSIT_METHOD_DURATION, block.timestamp);
     vm.stopBroadcast();
 
     // act
