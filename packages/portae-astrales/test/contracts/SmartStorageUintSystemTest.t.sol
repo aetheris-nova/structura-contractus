@@ -196,8 +196,8 @@ contract SmartStorageUintSystemTest is MudTest {
     );
 
     // assert
-    subscriptionTime = SubscriptionTimes.get(_playerCharacterID);
     playerItems = EphemeralInvItemTable.get(_ssuID, _itemID, _player);
+    subscriptionTime = SubscriptionTimes.get(_playerCharacterID);
 
     assertTrue(
       subscriptionTime.expiresAt > block.timestamp,

@@ -27,10 +27,14 @@ import { SmartObjectUtils } from './utils/SmartObjectUtils.sol';
 contract SmartStorageUnitSystem is System {
   using InventoryLib for InventoryLib.World;
 
+  // errors
   error CharacterDoesNotExistError();
   error InvalidSSUError(uint256 ssuID);
   error NotEnoughOfItemError(uint256 itemID);
   error UnknownDepositMethodError(uint256 itemID);
+
+  // events
+  event PortalaeAstrales_SubscriptionCreated(uint256 indexed id);
 
   /**
    * private functions
@@ -102,6 +106,7 @@ contract SmartStorageUnitSystem is System {
     EphemeralInvItemTableData memory playerItems;
     uint256 requiredQuantity;
     ItemSubscriptionMethodsData memory subscriptionMethod;
+    uint256 subscriptionID;
     uint256 subscriptionTimeToAdd;
 
     characterID = CharactersByAddressTable.get(_msgSender());
@@ -128,18 +133,19 @@ contract SmartStorageUnitSystem is System {
 
     currentSubscriptionTime = SubscriptionTimes.getExpiresAt(characterID);
     subscriptionTimeToAdd = subscriptionMethod.duration * _multiplier;
+    subscriptionID = ItemSubscriptionUtils.generateID(
+      characterID,
+      block.timestamp,
+      subscriptionTimeToAdd,
+      itemID,
+      requiredQuantity,
+      ssuID,
+      nonce
+    );
 
     // add subscription entries for the player
     ItemSubscriptions.set(
-      ItemSubscriptionUtils.generateID(
-        characterID,
-        block.timestamp,
-        subscriptionTimeToAdd,
-        itemID,
-        requiredQuantity,
-        ssuID,
-        nonce
-      ),
+      subscriptionID,
       characterID,
       block.timestamp,
       subscriptionTimeToAdd,
@@ -152,5 +158,7 @@ contract SmartStorageUnitSystem is System {
       _calculateSubscriptionTime(currentSubscriptionTime, subscriptionTimeToAdd),
       block.timestamp
     );
+
+    emit PortalaeAstrales_SubscriptionCreated(subscriptionID);
   }
 }
