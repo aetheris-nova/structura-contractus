@@ -26,7 +26,7 @@ export default createSystem(
             DEFAULT: {
               value: {
                 _light: '{colors.gray.800}',
-                _dark: '{colors.gray.100}',
+                _dark: '{colors.beige.50}',
               },
             },
           },
