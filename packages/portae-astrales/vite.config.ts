@@ -1,8 +1,5 @@
 import react from '@vitejs/plugin-react-swc';
-import {
-  join,
-  //resolve,
-} from 'node:path';
+import { join } from 'node:path';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
@@ -11,7 +8,6 @@ import { version } from './package.json';
 
 export default (() => {
   const outDir = join(__dirname, 'dist', 'client');
-  // const srcDir = join(__dirname, 'src', 'client');
 
   return defineConfig({
     build: {

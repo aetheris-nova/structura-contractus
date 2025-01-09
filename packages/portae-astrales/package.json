@@ -30,6 +30,9 @@
     "test:contracts": "shx cp .env.test .env && pnpm run deploy && forge test --fork-url http://127.0.0.1:8545 -vv"
   },
   "dependencies": {
+    "@chakra-ui/color-mode": "^2.2.0",
+    "@chakra-ui/react": "^3.2.5",
+    "@emotion/react": "^11.14.0",
     "@eveworld/common-constants": "0.0.13",
     "@eveworld/world": "0.0.17",
     "@latticexyz/cli": "2.2.14",
@@ -39,8 +42,15 @@
     "@latticexyz/store-indexer": "2.2.14",
     "@latticexyz/world": "2.2.14",
     "@latticexyz/world-modules": "2.2.14",
+    "@stablelib/uuid": "^2.0.1",
+    "i18next": "^24.2.1",
+    "next-themes": "^0.4.4",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-i18next": "^15.4.0",
+    "react-icons": "^5.4.0",
+    "react-router-dom": "^7.1.1",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@types/node": "^22.10.1",

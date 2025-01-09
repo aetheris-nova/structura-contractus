@@ -17,9 +17,18 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "paths": {
-      "@app/containers/*": ["src/client/containers/*"],
-      "@app/types": ["src/client/types"],
-      "@app/utils/*": ["src/client/utils/*"]
+      "@client/components/*": ["src/client/components/*"],
+      "@client/constants": ["src/client/constants"],
+      "@client/containers/*": ["src/client/containers/*"],
+      "@client/hooks/*": ["src/client/hooks/*"],
+      "@client/pages/*": ["src/client/pages/*"],
+      "@client/selectors": ["src/client/selectors"],
+      "@client/slices/*": ["src/client/slices/*"],
+      "@client/styles/*": ["src/client/styles/*"],
+      "@client/theme": ["src/client/theme.ts"],
+      "@client/translations": ["src/client/translations"],
+      "@client/types": ["src/client/types"],
+      "@client/utils/*": ["src/client/utils/*"]
     },
     "removeComments": false,
     "resolveJsonModule": true,
@@ -28,6 +37,6 @@
     "strictBindCallApply": false,
     "strictNullChecks": true,
     "strictPropertyInitialization": false,
-    "target": "ES2020"
+    "target": "ESNext"
   }
 }
