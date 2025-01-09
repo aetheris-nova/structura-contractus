@@ -1,13 +1,12 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "declarationMap": true,
-    "lib": ["ESNext"],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "moduleResolution": "Bundler",
     "outDir": "dist/client",
     "rootDir": "src/client",
     "sourceMap": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/client/**/*"],
   "exclude": ["node_modules", "**/*.test.ts", "test"]
 }

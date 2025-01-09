@@ -10,12 +10,16 @@
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
     "isolatedModules": true,
+    "jsx": "react-jsx",
+    "module": "ESNext",
     "moduleResolution": "Node",
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "paths": {
-      "@dist/*": ["dist/*"]
+      "@app/containers/*": ["src/client/containers/*"],
+      "@app/types": ["src/client/types"],
+      "@app/utils/*": ["src/client/utils/*"]
     },
     "removeComments": false,
     "resolveJsonModule": true,

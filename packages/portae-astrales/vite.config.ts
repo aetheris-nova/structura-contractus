@@ -1,24 +1,33 @@
-import { defineConfig, mergeConfig } from 'vite';
-import dts from 'vite-plugin-dts';
+import react from '@vitejs/plugin-react-swc';
+import {
+  join,
+  //resolve,
+} from 'node:path';
+import { defineConfig } from 'vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
-// configs
-import commonConfig from './vite.common.config';
+// versions
+import { version } from './package.json';
 
-export default mergeConfig(
-  commonConfig,
-  defineConfig({
+export default (() => {
+  const outDir = join(__dirname, 'dist', 'client');
+  // const srcDir = join(__dirname, 'src', 'client');
+
+  return defineConfig({
     build: {
-      lib: {
-        entry: 'src/client/index.ts',
-        formats: ['es'],
-        fileName: 'index',
-      },
-      outDir: 'dist/client',
+      outDir,
+    },
+    define: {
+      __VERSION__: JSON.stringify(version),
     },
     plugins: [
-      dts({
-        tsconfigPath: 'tsconfig.build.json',
+      react(),
+      tsconfigPaths({
+        configNames: ['tsconfig.build.json'],
       }),
     ],
-  })
-);
+    server: {
+      port: 8080,
+    },
+  });
+})();
