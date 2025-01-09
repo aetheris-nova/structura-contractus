@@ -44,6 +44,9 @@ importers:
       prettier:
         specifier: ^3.4.2
         version: 3.4.2
+      prettier-plugin-solidity:
+        specifier: ^1.4.1
+        version: 1.4.1(prettier@3.4.2)
       semantic-release:
         specifier: ^24.2.0
         version: 24.2.0(typescript@5.7.2)
@@ -153,9 +156,6 @@ importers:
       globals:
         specifier: ^15.13.0
         version: 15.14.0
-      prettier-plugin-solidity:
-        specifier: ^1.4.1
-        version: 1.4.1(prettier@3.2.5)
       solhint:
         specifier: ^5.0.3
         version: 5.0.3(typescript@5.7.2)
@@ -18063,10 +18063,10 @@ snapshots:
       semver: 7.6.3
       solidity-comments-extractor: 0.0.8
 
-  prettier-plugin-solidity@1.4.1(prettier@3.2.5):
+  prettier-plugin-solidity@1.4.1(prettier@3.4.2):
     dependencies:
       '@solidity-parser/parser': 0.18.0
-      prettier: 3.2.5
+      prettier: 3.4.2
       semver: 7.6.3
 
   prettier@2.8.8:

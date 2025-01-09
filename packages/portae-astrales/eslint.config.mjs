@@ -23,7 +23,7 @@ export default [
     },
   },
   {
-    ignores: ['cache/', 'dependencies/', 'dist/', 'node_modules/', 'lib/'],
+    ignores: ['.mud/', 'cache/', 'dependencies/', 'dist/', 'node_modules/', 'lib/'],
   },
   {
     rules: {

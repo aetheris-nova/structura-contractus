@@ -64,7 +64,6 @@
     "eslint-config-prettier": "^9.1.0",
     "ethers": "^6.13.4",
     "globals": "^15.13.0",
-    "prettier-plugin-solidity": "^1.4.1",
     "solhint": "^5.0.3",
     "solhint-config-mud": "2.2.9",
     "solhint-plugin-mud": "2.2.9",
