@@ -6,18 +6,26 @@ import {
   type RefAttributes,
 } from 'react';
 
+// hooks
+import useBackgroundColor from '@client/hooks/useBackgroundColor';
+import useForegroundColor from '@client/hooks/useForegroundColor';
+
 const Button: ForwardRefExoticComponent<
   PropsWithoutRef<ButtonProps> & RefAttributes<HTMLButtonElement>
 > = forwardRef<HTMLButtonElement, ButtonProps>((props: ButtonProps, ref) => {
+  // hooks
+  const backgroundColor = useBackgroundColor();
+  const foregroundColor = useForegroundColor();
+
   return (
     <ChakraButton
       _hover={{
-        bg: 'beige.50',
-        color: 'gray.800',
+        bg: props.variant === 'outline' ? foregroundColor : backgroundColor,
+        color: props.variant === 'outline' ? backgroundColor : foregroundColor,
       }}
       borderRadius={0}
       borderWidth={0}
-      color="beige.50"
+      color={props.variant === 'outline' ? foregroundColor : backgroundColor}
       colorPalette="gray"
       fontFamily="{fonts.mono}"
       h="full"

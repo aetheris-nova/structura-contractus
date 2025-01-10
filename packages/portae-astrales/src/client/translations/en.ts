@@ -8,9 +8,11 @@ export default {
   },
   headings: {
     noTerminalFound: 'No terminal found.',
+    selectAWallet: 'Select a Wallet',
     welcome: 'Ave, advenae.',
   },
   labels: {
+    cancel: 'Cancel',
     connect: 'Connect',
   },
   titles: {

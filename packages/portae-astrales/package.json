@@ -43,6 +43,7 @@
     "@latticexyz/store-indexer": "2.2.14",
     "@latticexyz/world": "2.2.14",
     "@latticexyz/world-modules": "2.2.14",
+    "@stablelib/random": "^2.0.1",
     "@stablelib/uuid": "^2.0.1",
     "axios": "^1.7.9",
     "i18next": "^24.2.1",
