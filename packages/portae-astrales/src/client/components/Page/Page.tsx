@@ -7,10 +7,10 @@ import type { IProps } from './types';
 import useStore from '@client/utils/useStore';
 
 const Page: FC<PropsWithChildren<IProps>> = ({ children, title, subtitle }) => {
-  const { setSubtitle, setTitle } = useStore();
+  const { setSubtitleAction, setTitleAction } = useStore();
 
-  useEffect(() => setTitle(title ?? null), []);
-  useEffect(() => setSubtitle(subtitle ?? null), []);
+  useEffect(() => setTitleAction(title ?? null), []);
+  useEffect(() => setSubtitleAction(subtitle ?? null), []);
 
   return children;
 };

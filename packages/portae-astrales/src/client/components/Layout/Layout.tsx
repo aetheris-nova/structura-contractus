@@ -9,11 +9,11 @@ import Header from '@client/components/Header';
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@client/constants';
 
 // hooks
-import useBorderColor from '@client/hooks/useBorderColor';
+import useForegroundColor from '@client/hooks/useForegroundColor';
 
 const Layout: FC<PropsWithChildren> = ({ children }) => {
   // hooks
-  const borderColor = useBorderColor();
+  const foregroundColor = useForegroundColor();
 
   return (
     <VStack
@@ -24,7 +24,7 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
       px={DEFAULT_GAP / 2}
     >
       <VStack
-        borderColor={borderColor}
+        borderColor={foregroundColor}
         borderWidth={1}
         flex={1}
         gap={0}

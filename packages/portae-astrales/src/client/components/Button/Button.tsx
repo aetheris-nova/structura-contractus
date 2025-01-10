@@ -9,8 +9,6 @@ import {
 const Button: ForwardRefExoticComponent<
   PropsWithoutRef<ButtonProps> & RefAttributes<HTMLButtonElement>
 > = forwardRef<HTMLButtonElement, ButtonProps>((props: ButtonProps, ref) => {
-  // hooks
-
   return (
     <ChakraButton
       _hover={{

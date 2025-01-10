@@ -20,6 +20,8 @@
       "@client/components/*": ["src/client/components/*"],
       "@client/constants": ["src/client/constants"],
       "@client/containers/*": ["src/client/containers/*"],
+      "@client/enums": ["src/client/enums"],
+      "@client/errors/*": ["src/client/errors/*"],
       "@client/hooks/*": ["src/client/hooks/*"],
       "@client/pages/*": ["src/client/pages/*"],
       "@client/selectors": ["src/client/selectors"],

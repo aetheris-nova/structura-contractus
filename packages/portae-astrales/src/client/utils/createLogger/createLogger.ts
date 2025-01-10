@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // types
-import type { ILogger, TLogLevel } from '@app/types';
+import type { ILogger, TLogLevel } from '@client/types';
 
 /**
  * Creates a logger that can set whether the logs appear based on the level.

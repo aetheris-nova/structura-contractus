@@ -4,8 +4,10 @@ import type { ITranslation } from '@client/types';
 export default {
   captions: {
     description: 'The great Portae Astrales of the Aetheris Nova facilitates the safe traversal of the Aether.',
+    retrievingDetails: 'Retrieving details.',
   },
   headings: {
+    noTerminalFound: 'No terminal found.',
     welcome: 'Ave, advenae.',
   },
   labels: {
