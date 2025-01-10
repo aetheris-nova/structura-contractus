@@ -8,15 +8,15 @@ import Page from '@client/components/Page';
 // types
 import type { IParams } from './types';
 
-const TerminalPage: FC = () => {
+const GatePage: FC = () => {
   const { t } = useTranslation();
   const { id } = useParams() as Readonly<IParams>;
 
   return (
-    <Page subtitle={id} title={t('titles.page', { context: 'terminal' })}>
+    <Page subtitle={id} title={t('titles.page', { context: 'gate' })}>
       <div>Hello Human</div>
     </Page>
   );
 };
 
-export default TerminalPage;
+export default GatePage;

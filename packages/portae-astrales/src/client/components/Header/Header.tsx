@@ -1,4 +1,4 @@
-import { Box, Grid, GridItem, Heading, HStack, Link, Spacer, Text, VStack } from '@chakra-ui/react';
+import { Grid, GridItem, Heading, HStack, Link, Text, VStack } from '@chakra-ui/react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
