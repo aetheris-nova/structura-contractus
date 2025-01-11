@@ -1,4 +1,4 @@
-import { EIP6963ProviderDetail } from '@eveworld/types';
+import { type EIP6963ProviderDetail, SupportedWallets } from '@eveworld/types';
 import { useCallback, useEffect } from 'react';
 
 // types
@@ -8,7 +8,7 @@ import type { IState } from './types';
 import useStore from '@client/utils/useStore';
 
 export default function useOnAnnounceProvider(): IState {
-  const { addProviderAction, logger } = useStore();
+  const { logger, setInGame } = useStore();
   // actions
   const requestProvidersAction = useCallback(() => {
     window.dispatchEvent(new CustomEvent('eip6963:requestProvider'));
@@ -17,9 +17,13 @@ export default function useOnAnnounceProvider(): IState {
   const handleOnEIP6963Provider = (event: CustomEvent<EIP6963ProviderDetail>) => {
     const __functionName = 'handleOnEIP6963Provider';
 
-    logger.debug(`${__functionName}: provider "${event.detail.info.name}" found`);
+    if (event.detail.info.name !== SupportedWallets.FRONTIER) {
+      return;
+    }
 
-    addProviderAction(event.detail);
+    logger.debug(`${__functionName}: in-game provider "${event.detail.info.name}" found`);
+
+    setInGame(true);
   };
 
   useEffect(() => {

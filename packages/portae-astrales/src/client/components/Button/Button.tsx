@@ -1,4 +1,4 @@
-import { Button as ChakraButton, type ButtonProps } from '@chakra-ui/react';
+import { Button as ChakraButton } from '@chakra-ui/react';
 import {
   type PropsWithoutRef,
   type ForwardRefExoticComponent,
@@ -6,13 +6,19 @@ import {
   type RefAttributes,
 } from 'react';
 
+// constants
+import { BUTTON_HEIGHT } from '@client/constants';
+
 // hooks
 import useBackgroundColor from '@client/hooks/useBackgroundColor';
 import useForegroundColor from '@client/hooks/useForegroundColor';
 
+// types
+import type { IProps } from './types';
+
 const Button: ForwardRefExoticComponent<
-  PropsWithoutRef<ButtonProps> & RefAttributes<HTMLButtonElement>
-> = forwardRef<HTMLButtonElement, ButtonProps>((props: ButtonProps, ref) => {
+  PropsWithoutRef<IProps> & RefAttributes<HTMLButtonElement>
+> = forwardRef<HTMLButtonElement, IProps>(({ scheme, ...buttonProps }, ref) => {
   // hooks
   const backgroundColor = useBackgroundColor();
   const foregroundColor = useForegroundColor();
@@ -20,18 +26,20 @@ const Button: ForwardRefExoticComponent<
   return (
     <ChakraButton
       _hover={{
-        bg: props.variant === 'outline' ? foregroundColor : backgroundColor,
-        color: props.variant === 'outline' ? backgroundColor : foregroundColor,
+        bg: scheme === 'secondary' ? foregroundColor : backgroundColor,
+        color: scheme === 'secondary' ? backgroundColor : foregroundColor,
       }}
+      background={foregroundColor}
+      borderColor={foregroundColor}
       borderRadius={0}
-      borderWidth={0}
-      color={props.variant === 'outline' ? foregroundColor : backgroundColor}
+      borderWidth={buttonProps.variant === 'ghost' ? 0 : 1}
+      color={scheme === 'secondary' ? foregroundColor : backgroundColor}
       colorPalette="gray"
       fontFamily="{fonts.mono}"
-      h="full"
+      minH={BUTTON_HEIGHT}
       textTransform="uppercase"
       transition="ease-in-out 300ms"
-      {...props}
+      {...buttonProps}
       ref={ref}
     />
   );

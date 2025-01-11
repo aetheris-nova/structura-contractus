@@ -7,15 +7,40 @@ import { DEFAULT_GAP } from '@client/constants';
 // hooks
 import useForegroundColor from '@client/hooks/useForegroundColor';
 
-const PulseLoader: FC = () => {
+// types
+import type { IProps } from './types';
+
+const PulseLoader: FC<IProps> = ({ size = 'md' }) => {
   // hooks
   const foregroundColor = useForegroundColor();
-  // misc
-  const props = useMemo<Partial<BoxProps>>(() => ({
-    background: foregroundColor,
-    h: DEFAULT_GAP - 2,
-    w: DEFAULT_GAP - 2,
-  }), []);
+  // memos
+  const props = useMemo<Partial<BoxProps>>(() => {
+    let _size = '0.5rem';
+
+    switch (size) {
+      case 'xs':
+        _size = '0.25rem';
+        break;
+      case 'sm':
+        _size = '0.375rem';
+        break;
+      case 'lg':
+        _size = '0.75rem';
+        break;
+      case 'xl':
+        _size = '1rem';
+        break;
+      case 'md':
+      default:
+        break;
+    }
+
+    return {
+      background: foregroundColor,
+      h: _size,
+      w: _size,
+    };
+  }, []);
 
   return (
     <HStack gap={DEFAULT_GAP / 3}>

@@ -1,5 +1,7 @@
 export type { default as IActionAPI } from './IActionAPI';
+export type { default as IFetchOptions } from './IFetchOptions';
 export type { default as ILogger } from './ILogger';
+export type { default as ISmartCharacterWithTimestamp } from './ISmartCharacterWithTimestamp';
 export type { default as ITranslation } from './ITranslation';
 export type { default as IWorldConfig } from './IWorldConfig';
 export type { default as IWorldConfigWithTimestamp } from './IWorldConfigWithTimestamp';

@@ -1,5 +1,3 @@
-import { SupportedWallets } from '@eveworld/types';
-
 // utils
 import useStore from '@client/utils/useStore';
 
@@ -10,5 +8,5 @@ import useStore from '@client/utils/useStore';
  * @see {@link https://docs.evefrontier.com/Dapp/Building/in-game-provider}
  */
 export default function useSelectIsInGame(): boolean {
-  return useStore((state) => !!state.providers.find(({ info }) => info.name === SupportedWallets.FRONTIER));
+  return useStore((state) => state.inGame);
 }

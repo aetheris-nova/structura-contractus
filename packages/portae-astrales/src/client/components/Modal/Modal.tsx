@@ -15,7 +15,7 @@ import { GrClose } from 'react-icons/gr';
 import IconButton from '@client/components/IconButton';
 
 // constants
-import { DEFAULT_GAP, HEADER_HEIGHT } from '@client/constants';
+import { DEFAULT_GAP, BUTTON_HEIGHT } from '@client/constants';
 
 // hooks
 import useBackgroundColor from '@client/hooks/useBackgroundColor';
@@ -32,6 +32,49 @@ const Modal: FC<IProps> = ({ body, closeButton, footer, onClose, open, subtitle,
   const context = useMemo(() => randomString(8), []);
   // handlers
   const handleClose = () => onClose && onClose();
+  // renders
+  const renderFooter = () => {
+    if (!footer || footer.length <= 0) {
+      return null;
+    }
+
+    // if there are up to two buttons, make them horizontal
+    if (footer.length <= 2) {
+      return (
+        <HStack
+          borderColor={foregroundColor}
+          borderTopWidth={1}
+          gap={0}
+          h={BUTTON_HEIGHT}
+          w="full"
+        >
+          {footer.map((value, index, array) => cloneElement(value, {
+            borderColor: foregroundColor,
+            flex: 1,
+            key: `${context}__footer-${index}`,
+            ...(index < array.length - 1 && {
+              borderRightWidth: 1,
+            })
+          }))}
+        </HStack>
+      );
+    }
+
+    // three or more, make them vertical
+    return (
+      <VStack
+        gap={0}
+        w="full"
+      >
+        {footer.map((value, index, array) => cloneElement(value, {
+          borderColor: foregroundColor,
+          borderTopWidth: 1,
+          h: BUTTON_HEIGHT,
+          key: `${context}__footer-${index}`,
+        }))}
+      </VStack>
+    );
+  };
 
   return (
     <>
@@ -57,8 +100,8 @@ const Modal: FC<IProps> = ({ body, closeButton, footer, onClose, open, subtitle,
                   <HStack
                     borderBottomWidth={1}
                     borderColor={foregroundColor}
-                    h={HEADER_HEIGHT}
                     justify="space-between"
+                    minH={BUTTON_HEIGHT}
                     pl={DEFAULT_GAP / 2}
                     w="full"
                   >
@@ -81,7 +124,8 @@ const Modal: FC<IProps> = ({ body, closeButton, footer, onClose, open, subtitle,
                         borderColor={foregroundColor}
                         borderLeftWidth={1}
                         onClick={handleClose}
-                        w={HEADER_HEIGHT}
+                        scheme="secondary"
+                        variant="ghost"
                       >
                         <GrClose />
                       </IconButton>
@@ -104,7 +148,7 @@ const Modal: FC<IProps> = ({ body, closeButton, footer, onClose, open, subtitle,
                     borderColor={foregroundColor}
                     borderTopWidth={1}
                     gap={0}
-                    h={HEADER_HEIGHT}
+                    h={BUTTON_HEIGHT}
                     w="full"
                   >
                     {footer.map((value, index, array) => cloneElement(value, {

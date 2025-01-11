@@ -1,12 +1,12 @@
 // types
 import type { TActionCreator } from '@client/types';
 
-const resetProvidersAction: TActionCreator =
+const setInGameAction: TActionCreator<boolean> =
   ({ setState }) =>
-  () =>
+  (inGame) =>
     setState((state) => ({
       ...state,
-      providers: [],
+      inGame,
     }));
 
-export default resetProvidersAction;
+export default setInGameAction;

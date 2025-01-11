@@ -2,6 +2,7 @@ import { type FC, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
+import { useAccount } from 'wagmi';
 
 // components
 import Layout from '@client/components/Layout';
@@ -14,14 +15,18 @@ import useStore from '@client/utils/useStore';
 
 const Root: FC = () => {
   const { t } = useTranslation();
-  const { subtitle, title, fetchWorldConfigAction } = useStore();
-  // hooks
-  const { requestProvidersAction } = useOnAnnounceProvider();
+  const { addresses } = useAccount();
+  const { fetchingAccounts, fetchWorldConfigAction, setAccountsAction, subtitle, title } = useStore();
 
+  useOnAnnounceProvider();
   useEffect(() => {
     (async () => await fetchWorldConfigAction())();
-    requestProvidersAction();
   }, []);
+  useEffect(() => {
+    if (addresses && !fetchingAccounts) {
+      (async () => await setAccountsAction(addresses.map((value) => value)))();
+    }
+  }, [addresses]);
 
   return (
     <>

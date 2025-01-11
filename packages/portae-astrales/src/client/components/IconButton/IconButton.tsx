@@ -1,4 +1,4 @@
-import { IconButton as ChakraIconButton, type IconButtonProps } from '@chakra-ui/react';
+import { IconButton as ChakraIconButton } from '@chakra-ui/react';
 import {
   type PropsWithoutRef,
   type ForwardRefExoticComponent,
@@ -6,24 +6,41 @@ import {
   type RefAttributes,
 } from 'react';
 
+// constants
+import { BUTTON_HEIGHT } from '@client/constants';
+
+// hooks
+import useBackgroundColor from '@client/hooks/useBackgroundColor';
+import useForegroundColor from '@client/hooks/useForegroundColor';
+
+// types
+import type { IProps } from './types';
+
 const IconButton: ForwardRefExoticComponent<
-  PropsWithoutRef<IconButtonProps> & RefAttributes<HTMLButtonElement>
-> = forwardRef<HTMLButtonElement, IconButtonProps>((props: IconButtonProps, ref) => {
+  PropsWithoutRef<IProps> & RefAttributes<HTMLButtonElement>
+> = forwardRef<HTMLButtonElement, IProps>(({ scheme, ...buttonProps }, ref) => {
+  // hooks
+  const backgroundColor = useBackgroundColor();
+  const foregroundColor = useForegroundColor();
+
   return (
     <ChakraIconButton
       _hover={{
-        bg: 'beige.50',
-        color: 'gray.800',
+        bg: scheme === 'secondary' ? foregroundColor : backgroundColor,
+        color: scheme === 'secondary' ? backgroundColor : foregroundColor,
       }}
+      background={scheme === 'secondary' ? backgroundColor : foregroundColor}
+      borderColor={foregroundColor}
       borderRadius={0}
-      borderWidth={0}
-      color="beige.50"
+      borderWidth={buttonProps.variant === 'ghost' ? 0 : 1}
+      color={scheme === 'secondary' ? foregroundColor : backgroundColor}
       colorPalette="gray"
       fontFamily="{fonts.mono}"
-      h="full"
+      minH={BUTTON_HEIGHT}
+      minW={BUTTON_HEIGHT}
       textTransform="uppercase"
       transition="ease-in-out 300ms"
-      {...props}
+      {...buttonProps}
       ref={ref}
     />
   );

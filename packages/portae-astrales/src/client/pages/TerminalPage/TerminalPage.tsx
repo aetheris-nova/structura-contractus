@@ -30,7 +30,7 @@ const TerminalPage: FC = () => {
           <Spacer />
 
           <VStack gap={DEFAULT_GAP - 2} w="full">
-            <PulseLoader />
+            <PulseLoader size="lg" />
 
             <Text>{t('captions.retrievingDetails')}</Text>
           </VStack>
