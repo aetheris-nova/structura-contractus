@@ -1,8 +1,10 @@
 import { Box, DataList, Heading, HStack, Image, Spacer, Text, VStack } from '@chakra-ui/react';
 import { type FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatUnits } from 'viem';
 
 // components
+import Card from '@client/components/Card';
 import DataListItem from '@client/components/DataListItem';
 import EmptyState from '@client/components/EmptyState';
 import Page from '@client/components/Page';
@@ -13,8 +15,11 @@ import { DEFAULT_GAP } from '@client/constants';
 // hooks
 import useForegroundColor from '@client/hooks/useForegroundColor';
 
+// icons
+import EvEVEToken from '@client/icons/EvEVEToken';
+
 // selectors
-import { useSelectSelectedAccount } from '@client/selectors';
+import { useSelectEVEToken, useSelectSelectedAccount } from '@client/selectors';
 
 // utils
 import ellipseText from '@client/utils/ellipseText';
@@ -23,6 +28,7 @@ const CharacterPage: FC = () => {
   const { t } = useTranslation();
   // selectors
   const account = useSelectSelectedAccount();
+  const eveToken = useSelectEVEToken();
   // hooks
   const foregroundColor = useForegroundColor();
   // memos
@@ -45,6 +51,7 @@ const CharacterPage: FC = () => {
 
     return (
       <HStack
+        align="start"
         borderColor={foregroundColor}
         borderBottomWidth={1}
         gap={0}
@@ -52,12 +59,9 @@ const CharacterPage: FC = () => {
         w="full"
       >
         {/*details*/}
-        <VStack
-          align="start"
-          borderColor={foregroundColor}
+        <Card
           borderRightWidth={1}
-          gap={DEFAULT_GAP - 2}
-          p={DEFAULT_GAP / 2}
+          title={t('headings.details')}
           w="full"
         >
           <HStack
@@ -73,6 +77,9 @@ const CharacterPage: FC = () => {
               <Image
                 h={imageSize}
                 src={account.image}
+                style={{
+                  filter: 'grayscale(100%)',
+                }}
                 w={imageSize}
               />
             </Box>
@@ -83,7 +90,7 @@ const CharacterPage: FC = () => {
             </Heading>
           </HStack>
 
-          <DataList.Root orientation="horizontal">
+          <DataList.Root orientation="horizontal" w="full">
             {/*id*/}
             <DataListItem
               label={t('labels.id').toUpperCase()}
@@ -99,15 +106,31 @@ const CharacterPage: FC = () => {
               value={account.address}
             />
           </DataList.Root>
-        </VStack>
+        </Card>
 
-        {/*balances*/}
-        <VStack
-          p={DEFAULT_GAP / 2}
+        {/*tokens*/}
+        <Card
+          title={t('headings.tokens')}
           w="full"
         >
+          <DataList.Root orientation="horizontal" w="full">
+            {/*eve token*/}
+            {eveToken && (
+              <DataListItem
+                label={(eveToken?.name || 'EVE').toUpperCase()}
+                value={(
+                  <HStack>
+                    <Text>
+                      {formatUnits(BigInt(account.eveBalanceWei), eveToken.decimals)}
+                    </Text>
 
-        </VStack>
+                    <EvEVEToken />
+                  </HStack>
+                )}
+              />
+            )}
+          </DataList.Root>
+        </Card>
       </HStack>
     );
   };

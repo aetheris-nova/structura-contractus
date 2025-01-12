@@ -23,6 +23,7 @@
       "@client/enums": ["src/client/enums"],
       "@client/errors/*": ["src/client/errors/*"],
       "@client/hooks/*": ["src/client/hooks/*"],
+      "@client/icons/*": ["src/client/icons/*"],
       "@client/pages/*": ["src/client/pages/*"],
       "@client/selectors": ["src/client/selectors"],
       "@client/slices/*": ["src/client/slices/*"],

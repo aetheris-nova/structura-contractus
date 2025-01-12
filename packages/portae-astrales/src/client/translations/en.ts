@@ -10,9 +10,11 @@ export default {
     retrievingDetails: 'Retrieving details.',
   },
   headings: {
+    details: 'Details',
     noCharacterDataFound: 'No character data found',
     noTerminalFound: 'No terminal found',
     selectAWallet: 'Select a Wallet',
+    tokens: 'Tokens',
     welcome: 'Ave, advenae.',
     welcomeWithCharacter: 'Ave, advenae {{name}}',
   },

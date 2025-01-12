@@ -5,7 +5,6 @@ import { useDisconnect } from 'wagmi';
 
 // components
 import Button from '@client/components/Button';
-import PortaeAstralesIcon from '@client/components/PortaeAstralesIcon';
 import ProfileHeader from '@client/components/ProfileHeader';
 import WalletSelectModal from '@client/components/WalletSelectModal';
 
@@ -14,6 +13,9 @@ import { DEFAULT_GAP, BUTTON_HEIGHT } from '@client/constants';
 
 // hooks
 import useForegroundColor from '@client/hooks/useForegroundColor';
+
+// icons
+import PaLogo from '@client/icons/PaLogo';
 
 // selectors
 import { useSelectSelectedAccount } from '@client/selectors';
@@ -25,7 +27,7 @@ const Header: FC = () => {
   const { t } = useTranslation();
   const { disconnectAsync } = useDisconnect();
   const { onClose: onWalletSelectDialogClose, onOpen: onWalletSelectDialogOpen, open: walletSelectDialogOpen } = useDisclosure();
-  const { isFetchingWorldConfig, setAccountsAction, subtitle, title } = useStore();
+  const { inGame, isFetchingWorldConfig, setAccountsAction, subtitle, title, worldConfig } = useStore();
   // selectors
   const account = useSelectSelectedAccount();
   // hooks
@@ -51,7 +53,7 @@ const Header: FC = () => {
       >
         <GridItem display="flex" colSpan={1}>
           <Link href="/" ml={DEFAULT_GAP / 2}>
-            <PortaeAstralesIcon fontSize="3xl" />
+            <PaLogo fontSize="2xl" />
           </Link>
         </GridItem>
 
@@ -81,23 +83,27 @@ const Header: FC = () => {
               <Spinner size="md" />
             )}
 
-            <HStack gap={1} justify="flex-end" h="full">
-              {account ? (
-                <ProfileHeader
-                  account={account}
-                  onDisconnectClick={handleOnDisconnectClick}
-                />
-              ) : (
-                <Button
-                  borderColor={foregroundColor}
-                  borderLeftWidth={1}
-                  onClick={handleOnConnectClick}
-                  variant="ghost"
-                >
-                  {t('labels.connect')}
-                </Button>
-              )}
-            </HStack>
+            {worldConfig && (
+              <HStack gap={1} justify="flex-end" h="full">
+                {account ? (
+                  <ProfileHeader
+                    account={account}
+                    inGame={inGame}
+                    onDisconnectClick={handleOnDisconnectClick}
+                    worldConfig={worldConfig}
+                  />
+                ) : (
+                  <Button
+                    borderColor={foregroundColor}
+                    borderLeftWidth={1}
+                    onClick={handleOnConnectClick}
+                    variant="ghost"
+                  >
+                    {t('labels.connect')}
+                  </Button>
+                )}
+              </HStack>
+            )}
           </HStack>
         </GridItem>
       </Grid>

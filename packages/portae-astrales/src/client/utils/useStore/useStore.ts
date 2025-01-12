@@ -8,6 +8,7 @@ import { STORE_NAME } from '@client/constants';
 import createAccountSlice from '@client/slices/createAccountSlice';
 import createLayoutSlice from '@client/slices/createLayoutSlice';
 import createSystemSlice from '@client/slices/createSystemSlice';
+import createTokenSlice from '@client/slices/createTokenSlice';
 import createWorldSlice from '@client/slices/createWorldSlice';
 
 // types
@@ -23,13 +24,15 @@ const useStore = create<TState>()(
         ...createAccountSlice(...api),
         ...createLayoutSlice(...api),
         ...createSystemSlice(...api),
+        ...createTokenSlice(...api),
         ...createWorldSlice(...api),
       }),
       {
         name: STORE_NAME,
-        partialize: ({ accounts, colorMode, worldConfig }) => ({
+        partialize: ({ accounts, colorMode, tokens, worldConfig }) => ({
           accounts,
           colorMode,
+          tokens,
           worldConfig,
         }),
         storage: createJSONStorage(() => (isLocalStorageAvailable() ? window.localStorage : window.sessionStorage)),

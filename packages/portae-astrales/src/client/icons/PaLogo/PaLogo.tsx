@@ -1,7 +1,7 @@
 import { Icon, IconProps } from '@chakra-ui/react';
 import type { FC } from 'react';
 
-const PortaeAstralesIcon: FC<IconProps> = (props) => {
+const PaLogo: FC<IconProps> = (props) => {
   return (
     <Icon {...props}>
       <svg viewBox="0 0 546.1333 546.1333">
@@ -14,4 +14,4 @@ const PortaeAstralesIcon: FC<IconProps> = (props) => {
   );
 };
 
-export default PortaeAstralesIcon;
+export default PaLogo;

@@ -6,7 +6,7 @@ interface ISlice {
   worldConfig: IWorldConfigWithTimestamp | null;
   isFetchingWorldConfig: boolean;
   // actions
-  fetchWorldConfigAction: (payload?: undefined) => Promise<void>;
+  fetchWorldConfigAction: (payload?: undefined) => Promise<IWorldConfigWithTimestamp>;
 }
 
 export default ISlice;

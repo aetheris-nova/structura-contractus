@@ -9,7 +9,7 @@ import type { ISmartCharacterWithTimestamp, TActionCreator } from '@client/types
 // utils
 import fetchSmartCharacterByAddress from '@client/utils/fetchSmartCharacterByAddress';
 
-const setAccountsAction: TActionCreator<string[], Promise<void>> =
+const setAccountsAction: TActionCreator<string[], Promise<ISmartCharacterWithTimestamp[]>> =
   ({ getState, setState }) =>
   async (addresses) => {
     const __function = 'setAccountsAction';
@@ -61,6 +61,8 @@ const setAccountsAction: TActionCreator<string[], Promise<void>> =
         ? state.selectedAccountAddress
         : _accounts[0]?.address || null,
     }));
+
+    return _accounts;
   };
 
 export default setAccountsAction;

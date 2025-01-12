@@ -1,8 +1,9 @@
 import { HStack, Text, VStack } from '@chakra-ui/react';
-import type { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GrPower, GrUserSettings } from 'react-icons/gr';
 import { useNavigate } from 'react-router-dom';
+import { formatUnits } from 'viem';
 
 // components
 import IconButton from '@client/components/IconButton';
@@ -11,16 +12,25 @@ import Tooltip from '@client/components/Tooltip';
 // constants
 import { CHARACTER_ROUTE } from '@client/constants';
 
+// hooks
+import useForegroundColor from '@client/hooks/useForegroundColor';
+
+// icons
+import EvGas from '@client/icons/EvGas';
+
 // types
 import type { IProps } from './types';
 
 // utils
-import ellipseText from '@client/utils/ellipseText';
 import truncateText from '@client/utils/truncateText';
 
-const ProfileHeader: FC<IProps> = ({ account, onDisconnectClick }) => {
+const ProfileHeader: FC<IProps> = ({ account, inGame, onDisconnectClick, worldConfig }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  // hooks
+  const foregroundColor = useForegroundColor();
+  // memos
+  const gasBalanceInStandardForm = useMemo(() => formatUnits(BigInt(account.gasBalanceWei), worldConfig.nativeCurrency.decimals), []);
   // handlers
   const handleOnCharacterDetailsClick = () => navigate(CHARACTER_ROUTE);
   const handleOnDisconnectClick = () => onDisconnectClick();
@@ -41,14 +51,15 @@ const ProfileHeader: FC<IProps> = ({ account, onDisconnectClick }) => {
           </Text>
         </Tooltip>
 
-        {/*id*/}
-        <Tooltip content={account.id}>
-          <Text fontSize="sm">
-            {ellipseText(account.id, {
-              end: 10,
-              start: 10,
-            })}
-          </Text>
+        {/*gas balance*/}
+        <Tooltip content={`${gasBalanceInStandardForm} ${worldConfig.nativeCurrency.symbol}`}>
+          <HStack gap={1} justify="end" w="full">
+            <Text fontSize="sm">
+              {gasBalanceInStandardForm}
+            </Text>
+
+            <EvGas color={foregroundColor} />
+          </HStack>
         </Tooltip>
       </VStack>
 
@@ -66,16 +77,18 @@ const ProfileHeader: FC<IProps> = ({ account, onDisconnectClick }) => {
         </Tooltip>
 
         {/*disconnect button*/}
-        <Tooltip content={t('labels.disconnect')}>
-          <IconButton
-            borderLeftWidth={1}
-            onClick={handleOnDisconnectClick}
-            scheme="secondary"
-            variant="ghost"
-          >
-            <GrPower />
-          </IconButton>
-        </Tooltip>
+        {!inGame && (
+          <Tooltip content={t('labels.disconnect')}>
+            <IconButton
+              borderLeftWidth={1}
+              onClick={handleOnDisconnectClick}
+              scheme="secondary"
+              variant="ghost"
+            >
+              <GrPower />
+            </IconButton>
+          </Tooltip>
+        )}
       </HStack>
     </HStack>
   );

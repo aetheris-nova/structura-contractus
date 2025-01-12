@@ -2,7 +2,7 @@ import { type FC, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
-import { useAccount } from 'wagmi';
+import { useAccount, useConfig } from 'wagmi';
 
 // components
 import Layout from '@client/components/Layout';
@@ -16,11 +16,20 @@ import useStore from '@client/utils/useStore';
 const Root: FC = () => {
   const { t } = useTranslation();
   const { addresses } = useAccount();
-  const { fetchingAccounts, fetchWorldConfigAction, setAccountsAction, subtitle, title } = useStore();
+  const config = useConfig();
+  const { fetchingAccounts, fetchERC20TokenAction, fetchWorldConfigAction, setAccountsAction, subtitle, title } = useStore();
 
   useOnAnnounceProvider();
   useEffect(() => {
-    (async () => await fetchWorldConfigAction())();
+    (async () => {
+      const worldConfig = await fetchWorldConfigAction();
+
+      // fetch the eve token details
+      await fetchERC20TokenAction({
+        address: worldConfig.contracts.eveToken.address,
+        config,
+      });
+    })();
   }, []);
   useEffect(() => {
     if (addresses && !fetchingAccounts) {

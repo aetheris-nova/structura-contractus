@@ -33,7 +33,7 @@ const DataListItem: ForwardRefExoticComponent<
         )}
       </ChakraDataList.ItemLabel>
 
-      <ChakraDataList.ItemValue flex={grow ? '1' : undefined}>
+      <ChakraDataList.ItemValue justifyContent="flex-end" flex={grow ? '1' : undefined}>
         {value}
       </ChakraDataList.ItemValue>
 

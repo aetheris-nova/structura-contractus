@@ -6,7 +6,7 @@ interface ISlice {
   fetchingAccounts: boolean;
   selectedAccountAddress: string | null;
   // actions
-  setAccountsAction: (addresses: string[]) => Promise<void>;
+  setAccountsAction: (addresses: string[]) => Promise<ISmartCharacterWithTimestamp[]>;
 }
 
 export default ISlice;
