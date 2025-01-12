@@ -1,6 +1,7 @@
-import type { SmartCharacter } from '@eveworld/types';
+// types
+import type ISmartCharacter from './ISmartCharacter';
 
-interface ISmartCharacterWithTimestamp extends SmartCharacter {
+interface ISmartCharacterWithTimestamp extends ISmartCharacter {
   lastUpdatedAt: number;
 }
 

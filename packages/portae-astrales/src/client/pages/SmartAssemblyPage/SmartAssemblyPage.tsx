@@ -17,7 +17,7 @@ import useSmartAssembly from '@client/hooks/useSmartAssembly';
 // types
 import type { IParams } from './types'
 
-const TerminalPage: FC = () => {
+const SmartAssemblyPage: FC = () => {
   const { t } = useTranslation();
   const { id } = useParams() as Readonly<IParams>;
   // hooks
@@ -72,4 +72,4 @@ const TerminalPage: FC = () => {
   );
 };
 
-export default TerminalPage;
+export default SmartAssemblyPage;

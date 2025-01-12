@@ -1,4 +1,4 @@
-import { VStack } from '@chakra-ui/react';
+import { Flex, VStack } from '@chakra-ui/react';
 import type { FC, PropsWithChildren } from 'react';
 
 // components
@@ -16,29 +16,36 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
   const foregroundColor = useForegroundColor();
 
   return (
-    <VStack
+    <Flex
       backgroundColor={BODY_BACKGROUND_COLOR}
-      gap={0}
-      minH="100vh"
-      pt={DEFAULT_GAP / 2}
-      px={DEFAULT_GAP / 2}
+      justify="center"
+      w="full"
     >
       <VStack
-        borderColor={foregroundColor}
-        borderWidth={1}
-        flex={1}
         gap={0}
+        maxW="1024px"
+        minH="100vh"
+        pt={DEFAULT_GAP / 2}
+        px={DEFAULT_GAP / 2}
         w="full"
       >
-        <Header />
+        <VStack
+          borderColor={foregroundColor}
+          borderWidth={1}
+          flex={1}
+          gap={0}
+          w="full"
+        >
+          <Header />
 
-        <VStack as="main" flex={1} w="full">
-          {children}
+          <VStack as="main" flex={1} w="full">
+            {children}
+          </VStack>
         </VStack>
-      </VStack>
 
-      <Footer />
-    </VStack>
+        <Footer />
+      </VStack>
+    </Flex>
   );
 };
 

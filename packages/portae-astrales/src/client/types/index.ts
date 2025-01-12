@@ -3,6 +3,7 @@ export type { default as IERC20Token } from './IERC20Token';
 export type { default as IFetchOptions } from './IFetchOptions';
 export type { default as ILogger } from './ILogger';
 export type { default as INativeCurrency } from './INativeCurrency';
+export type { default as ISmartCharacter } from './ISmartCharacter';
 export type { default as ISmartCharacterWithTimestamp } from './ISmartCharacterWithTimestamp';
 export type { default as ITranslation } from './ITranslation';
 export type { default as IWorldConfig } from './IWorldConfig';

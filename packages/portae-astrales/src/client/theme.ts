@@ -4,11 +4,18 @@ export default createSystem(
   defaultConfig,
   defineConfig({
     globalCss: {
+      '::-webkit-scrollbar': {
+        display: 'none',
+      },
       html: {
-        color: 'fg',
         bg: 'bg',
-        lineHeight: '1.5',
         colorPalette: 'gray',
+        color: 'fg',
+        lineHeight: '1.5',
+        scrollbarWidth: 'none',
+      },
+      body: {
+        msOverflowStyle: 'none',
       },
     },
     theme: {

@@ -3,7 +3,7 @@ import { I18nextProvider } from 'react-i18next';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 // constants
-import { CHARACTER_ROUTE, GATE_ROUTE, TERMINAL_ROUTE } from '@client/constants';
+import { CHARACTER_ROUTE, SMART_ASSEMBLY_ROUTE } from '@client/constants';
 
 // containers
 import Root from '@client/containers/Root';
@@ -12,8 +12,7 @@ import WalletConnectionProvider from '@client/containers/WalletConnectionProvide
 
 // pages
 import CharacterPage from '@client/pages/CharacterPage';
-import GatePage from '@client/pages/GatePage';
-import TerminalPage from '@client/pages/TerminalPage';
+import SmartAssemblyPage from '@client/pages/SmartAssemblyPage';
 import WelcomePage from '@client/pages/WelcomePage';
 
 // types
@@ -33,12 +32,8 @@ const App: FC<IProps> = ({ i18n }) => {
           path: CHARACTER_ROUTE,
         },
         {
-          element: <GatePage />,
-          path: `${GATE_ROUTE}/:id`,
-        },
-        {
-          element: <TerminalPage />,
-          path: `${TERMINAL_ROUTE}/:id`,
+          element: <SmartAssemblyPage />,
+          path: `${SMART_ASSEMBLY_ROUTE}/:id`,
         },
       ],
       element: <Root />,
