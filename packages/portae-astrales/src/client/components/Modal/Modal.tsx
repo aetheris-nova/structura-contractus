@@ -93,7 +93,7 @@ const Modal: FC<IProps> = ({ body, closeButton, footer, onClose, open, subtitle,
                 borderColor={foregroundColor}
                 borderWidth={1}
                 flex={0}
-                minW="45%"
+                minW="400px"
               >
                 {/*header*/}
                 {(closeButton || subtitle || title) && (

@@ -39,7 +39,7 @@ const CharacterPage: FC = () => {
   const imageSize = useMemo(() => 14, []);
   // renders
   const renderContent = () => {
-    if (!account) {
+    if (!account || !account.isSmartCharacter) {
       return (
         <VStack flex={1} w="full">
           <Spacer />
@@ -51,7 +51,7 @@ const CharacterPage: FC = () => {
           <Spacer />
         </VStack>
       );
-    };
+    }
 
     return (
       <VStack flex={1} gap={0} w="full">

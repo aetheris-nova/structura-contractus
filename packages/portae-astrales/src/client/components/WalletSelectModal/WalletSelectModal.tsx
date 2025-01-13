@@ -1,4 +1,4 @@
-import { Text, VStack } from '@chakra-ui/react';
+import { Heading, Text, VStack } from '@chakra-ui/react';
 import { randomString } from '@stablelib/random';
 import { FC, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -61,7 +61,9 @@ const WalletSelectModal: FC<IProps> = ({ onClose, open }) => {
               onClick={handleOnConnectorClick(value)}
               w="full"
             >
-              {value.name}
+              <Heading fontSize="sm">
+                {value.name}
+              </Heading>
             </Button>
           ))}
         </VStack>

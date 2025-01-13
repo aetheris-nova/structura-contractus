@@ -1,4 +1,4 @@
-import { HStack, Text, VStack } from '@chakra-ui/react';
+import { Heading, HStack, Text, VStack } from '@chakra-ui/react';
 import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GrPower, GrUserSettings } from 'react-icons/gr';
@@ -22,6 +22,7 @@ import EvGas from '@client/icons/EvGas';
 import type { IProps } from './types';
 
 // utils
+import ellipseText from '@client/utils/ellipseText';
 import truncateText from '@client/utils/truncateText';
 
 const ProfileHeader: FC<IProps> = ({ account, inGame, onDisconnectClick, worldConfig }) => {
@@ -42,14 +43,25 @@ const ProfileHeader: FC<IProps> = ({ account, inGame, onDisconnectClick, worldCo
         gap={0}
         justify="space-evenly"
       >
-        {/*name*/}
-        <Tooltip content={account.name}>
-          <Text fontSize="lg" fontWeight="bold">
-            {account.name.length > 25 ? truncateText(account.name, {
-              length: 25,
-            }) : account.name}
-          </Text>
-        </Tooltip>
+        {/*name/account*/}
+        {account.isSmartCharacter ? (
+          <Tooltip content={account.name}>
+            <Heading fontSize="md" fontWeight="bold">
+              {account.name.length > 25 ? truncateText(account.name, {
+                length: 25,
+              }) : account.name}
+            </Heading>
+          </Tooltip>
+        ) : (
+          <Tooltip content={account.address}>
+            <Heading fontSize="md" fontWeight="bold">
+              {ellipseText(account.address, {
+                end: 5,
+                start: 5,
+              })}
+            </Heading>
+          </Tooltip>
+        )}
 
         {/*gas balance*/}
         <Tooltip content={`${gasBalanceInStandardForm} ${worldConfig.nativeCurrency.symbol}`}>

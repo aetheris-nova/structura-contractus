@@ -103,7 +103,7 @@ export default createSystem(
         },
         fonts: {
           heading: {
-            value: '"Anonymous Pro", serif',
+            value: '"Source Code Pro", serif',
           },
           body: {
             value: '"Anonymous Pro", sans-serif',

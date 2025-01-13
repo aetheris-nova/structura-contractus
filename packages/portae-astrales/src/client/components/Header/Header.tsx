@@ -1,10 +1,13 @@
 import { Grid, GridItem, Heading, HStack, Link, Spinner, Text, VStack, useDisclosure } from '@chakra-ui/react';
 import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import { GrLinkPrevious } from 'react-icons/gr';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useDisconnect } from 'wagmi';
 
 // components
 import Button from '@client/components/Button';
+import IconButton from '@client/components/IconButton';
 import ProfileHeader from '@client/components/ProfileHeader';
 import WalletSelectModal from '@client/components/WalletSelectModal';
 
@@ -25,6 +28,8 @@ import useStore from '@client/utils/useStore';
 
 const Header: FC = () => {
   const { t } = useTranslation();
+  const { key } = useLocation();
+  const navigate = useNavigate();
   const { disconnectAsync } = useDisconnect();
   const { onClose: onWalletSelectDialogClose, onOpen: onWalletSelectDialogOpen, open: walletSelectDialogOpen } = useDisclosure();
   const { inGame, isFetchingWorldConfig, setAccountsAction, subtitle, title, worldConfig } = useStore();
@@ -34,10 +39,13 @@ const Header: FC = () => {
   const foregroundColor = useForegroundColor();
   // handlers
   const handleOnConnectClick = () => onWalletSelectDialogOpen();
+  const handleOnBackClick = () => navigate(-1);
   const handleOnDisconnectClick = async () => {
     await disconnectAsync();
     await setAccountsAction([]); // remove any stored account data
   };
+
+  console.log(key);
 
   return (
     <>
@@ -52,6 +60,17 @@ const Header: FC = () => {
         w="full"
       >
         <GridItem display="flex" colSpan={1}>
+          {key !== 'default' && (
+            <IconButton
+              borderRightWidth={1}
+              onClick={handleOnBackClick}
+              scheme="secondary"
+              variant="ghost"
+            >
+              <GrLinkPrevious />
+            </IconButton>
+          )}
+
           <Link href="/" ml={DEFAULT_GAP / 2}>
             <PaLogo fontSize="2xl" />
           </Link>
@@ -99,7 +118,9 @@ const Header: FC = () => {
                     onClick={handleOnConnectClick}
                     variant="ghost"
                   >
-                    {t('labels.connect')}
+                    <Heading fontSize="sm">
+                      {t('labels.connect').toUpperCase()}
+                    </Heading>
                   </Button>
                 )}
               </HStack>
