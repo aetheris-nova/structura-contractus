@@ -1,4 +1,5 @@
 import { Spacer, Text, VStack } from '@chakra-ui/react';
+import type { SmartAssemblyType } from '@eveworld/types';
 import { type FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -7,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import EmptyState from '@client/components/EmptyState';
 import PulseLoader from '@client/components/PulseLoader';
 import Page from '@client/components/Page';
+import SmartGateContent from './SmartGateContent';
 
 // constants
 import { DEFAULT_GAP } from '@client/constants';
@@ -14,14 +16,22 @@ import { DEFAULT_GAP } from '@client/constants';
 // hooks
 import useSmartAssembly from '@client/hooks/useSmartAssembly';
 
+// selectors
+import { useSelectSelectedAccount } from '@client/selectors';
+
 // types
-import type { IParams } from './types'
+import type { IParams } from './types';
+
+// utils
+import ellipseText from '@client/utils/ellipseText';
 
 const SmartAssemblyPage: FC = () => {
   const { t } = useTranslation();
   const { id } = useParams() as Readonly<IParams>;
+  // selectors
+  const account = useSelectSelectedAccount();
   // hooks
-  const { error, fetching, fetchSmartAssemblyAction, smartAssembly } = useSmartAssembly<'SmartStorageUnit'>();
+  const { fetching, fetchSmartAssemblyAction, smartAssembly } = useSmartAssembly();
   // renders
   const renderContent = () => {
     if (fetching) {
@@ -41,9 +51,9 @@ const SmartAssemblyPage: FC = () => {
     }
 
     if (smartAssembly) {
-      if (smartAssembly.assemblyType === 'SmartStorageUnit') {
+      if (smartAssembly.assemblyType === 'SmartGate') {
         return (
-          <div>{`Hello ${smartAssembly?.id}`}</div>
+          <SmartGateContent account={account} smartGate={smartAssembly as SmartAssemblyType<'SmartGate'>} />
         );
       }
     }
@@ -53,7 +63,7 @@ const SmartAssemblyPage: FC = () => {
         <Spacer />
 
         <EmptyState
-          title={t('headings.noTerminalFound')}
+          title={t('headings.noDataFound')}
         />
 
         <Spacer />
@@ -66,7 +76,15 @@ const SmartAssemblyPage: FC = () => {
   }, [id]);
 
   return (
-    <Page subtitle={id} title={t('titles.page', { context: 'terminal' })}>
+    <Page
+      {...(smartAssembly && {
+        subtitle: smartAssembly.name.length > 0 ? smartAssembly.name : ellipseText(smartAssembly.id, {
+          end: 5,
+          start: 5,
+        }),
+        title: t('headings.smartAssemblyType', { context: smartAssembly.assemblyType }),
+      })}
+    >
       {renderContent()}
     </Page>
   );

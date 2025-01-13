@@ -35,7 +35,7 @@ export default function useSmartAssembly<Type extends SmartAssemblies>(): IState
     try {
       response = await axios.get(`${import.meta.env.VITE_WORLD_API_URL}/smartassemblies/${id}`);
 
-      logger.debug(`${__hookName}: found smart assembly "${response.data.id}"`);
+      logger.debug(`${__hookName}: found smart assembly:`, response.data);
 
       setSmartAssembly(response.data);
       setFetching(false);

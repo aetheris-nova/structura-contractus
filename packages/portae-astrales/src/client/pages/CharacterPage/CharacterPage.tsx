@@ -8,11 +8,11 @@ import { formatUnits } from 'viem';
 import Card from '@client/components/Card';
 import DataListItem from '@client/components/DataListItem';
 import EmptyState from '@client/components/EmptyState';
+import ListItem from '@client/components/ListItem';
 import Page from '@client/components/Page';
-import SmartAssemblyItem from '@client/components/SmartAssemblyItem';
 
 // constants
-import { DEFAULT_GAP } from '@client/constants';
+import { DEFAULT_GAP, SMART_ASSEMBLY_ROUTE } from '@client/constants';
 
 // hooks
 import useForegroundColor from '@client/hooks/useForegroundColor';
@@ -25,6 +25,7 @@ import { useSelectEVEToken, useSelectSelectedAccount } from '@client/selectors';
 
 // utils
 import ellipseText from '@client/utils/ellipseText';
+import smartAssemblyIcon from '@client/utils/smartAssemblyIcon';
 
 const CharacterPage: FC = () => {
   const { t } = useTranslation();
@@ -50,7 +51,7 @@ const CharacterPage: FC = () => {
           <Spacer />
         </VStack>
       );
-    }
+    };
 
     return (
       <VStack flex={1} gap={0} w="full">
@@ -103,6 +104,7 @@ const CharacterPage: FC = () => {
               <DataList.Root orientation="horizontal" w="full">
                 {/*id*/}
                 <DataListItem
+                  copyText={account.id}
                   label={<Text fontWeight="600">{t('labels.id').toUpperCase()}</Text>}
                   value={ellipseText(account.id, {
                     end: 15,
@@ -112,8 +114,12 @@ const CharacterPage: FC = () => {
 
                 {/*address*/}
                 <DataListItem
+                  copyText={account.address}
                   label={<Text fontWeight="600">{t('labels.address').toUpperCase()}</Text>}
-                  value={account.address}
+                  value={ellipseText(account.address, {
+                    end: 15,
+                    start: 15,
+                  })}
                 />
               </DataList.Root>
             </VStack>
@@ -164,9 +170,17 @@ const CharacterPage: FC = () => {
                 w="full"
               >
                 {account.smartAssemblies.map((value, index) => (
-                  <SmartAssemblyItem
+                  <ListItem
+                    icon={smartAssemblyIcon(value.assemblyType)}
                     key={`${context}__smart-assembly-item-${index}`}
-                    smartAssembly={value}
+                    link={`${SMART_ASSEMBLY_ROUTE}/${value.id}`}
+                    secondarySubtitle={value.state.toString()}
+                    secondaryTitle={value.solarSystem.solarSystemName.length > 0 ? value.solarSystem.solarSystemName : '-'}
+                    subtitle={t('labels.smartAssemblyType', { context: value.assemblyType })}
+                    title={value.name?.length > 0 ? value.name : ellipseText(value.id, {
+                      end: 15,
+                      start: 15,
+                    })}
                   />
                 ))}
               </VStack>

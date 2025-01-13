@@ -9,8 +9,8 @@ import useStore from '@client/utils/useStore';
 const Page: FC<PropsWithChildren<IProps>> = ({ children, title, subtitle }) => {
   const { setSubtitleAction, setTitleAction } = useStore();
 
-  useEffect(() => setTitleAction(title ?? null), []);
-  useEffect(() => setSubtitleAction(subtitle ?? null), []);
+  useEffect(() => setTitleAction(title || null), []);
+  useEffect(() => setSubtitleAction(subtitle || null), []);
 
   return children;
 };

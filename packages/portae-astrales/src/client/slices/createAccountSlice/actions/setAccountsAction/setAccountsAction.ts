@@ -1,25 +1,23 @@
-import type { SmartCharacter } from '@eveworld/types';
-
 // constants
 import { FETCH_ACCOUNT_DELAY, FETCH_ACCOUNT_TIMEOUT } from '@client/constants';
 
 // types
-import type { ISmartCharacterWithTimestamp, TActionCreator } from '@client/types';
+import type { ISmartCharacter, TActionCreator, TSmartCharacterWithExtendedProps } from '@client/types';
 
 // utils
 import fetchSmartCharacterByAddress from '@client/utils/fetchSmartCharacterByAddress';
 
-const setAccountsAction: TActionCreator<string[], Promise<ISmartCharacterWithTimestamp[]>> =
+const setAccountsAction: TActionCreator<string[], Promise<TSmartCharacterWithExtendedProps[]>> =
   ({ getState, setState }) =>
   async (addresses) => {
     const __function = 'setAccountsAction';
     const accounts = getState().accounts;
     const logger = getState().logger;
     const now = new Date();
-    let _accounts: ISmartCharacterWithTimestamp[] = [];
-    let account: ISmartCharacterWithTimestamp | null;
+    let _accounts: TSmartCharacterWithExtendedProps[] = [];
+    let account: TSmartCharacterWithExtendedProps | null;
     let address: string;
-    let result: SmartCharacter;
+    let result: ISmartCharacter;
 
     setState((state) => ({
       ...state,

@@ -17,18 +17,22 @@ const Root: FC = () => {
   const { t } = useTranslation();
   const { addresses } = useAccount();
   const config = useConfig();
-  const { fetchingAccounts, fetchERC20TokenAction, fetchWorldConfigAction, setAccountsAction, subtitle, title } = useStore();
+  const { fetchingAccounts, fetchERC20TokenAction, fetchItemAction, fetchWorldConfigAction, setAccountsAction, subtitle, title } = useStore();
 
   useOnAnnounceProvider();
   useEffect(() => {
     (async () => {
       const worldConfig = await fetchWorldConfigAction();
 
-      // fetch the eve token details
-      await fetchERC20TokenAction({
-        address: worldConfig.contracts.eveToken.address,
-        config,
-      });
+      await Promise.all([
+        // fetch the salt fuel details
+        fetchItemAction(worldConfig.itemTypeIDs.fuel.toString()),
+        // fetch the eve token details
+        fetchERC20TokenAction({
+          address: worldConfig.contracts.eveToken.address,
+          config,
+        }),
+      ]);
     })();
   }, []);
   useEffect(() => {

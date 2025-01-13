@@ -1,8 +1,8 @@
 // types
-import type { ISmartCharacterWithTimestamp, IWorldConfig } from '@client/types';
+import type { IWorldConfig, TSmartCharacterWithExtendedProps } from '@client/types';
 
 interface IProps {
-  account: ISmartCharacterWithTimestamp;
+  account: TSmartCharacterWithExtendedProps;
   inGame: boolean;
   onDisconnectClick: () => void;
   worldConfig: IWorldConfig;
