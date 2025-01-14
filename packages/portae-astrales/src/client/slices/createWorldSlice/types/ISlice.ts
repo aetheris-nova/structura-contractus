@@ -1,12 +1,12 @@
 // types
-import type { IWorldConfigWithTimestamp } from '@client/types';
+import type { IWorldConfigWithExtendedProps } from '@client/types';
 
 interface ISlice {
   // state
-  worldConfig: IWorldConfigWithTimestamp | null;
+  worldConfig: IWorldConfigWithExtendedProps | null;
   isFetchingWorldConfig: boolean;
   // actions
-  fetchWorldConfigAction: (payload?: undefined) => Promise<IWorldConfigWithTimestamp>;
+  fetchWorldConfigAction: (payload?: undefined) => Promise<IWorldConfigWithExtendedProps>;
 }
 
 export default ISlice;

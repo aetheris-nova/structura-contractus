@@ -74,6 +74,9 @@ importers:
       '@eveworld/types':
         specifier: ^0.0.9
         version: 0.0.9(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.23.8)
+      '@eveworld/utils':
+        specifier: ^0.0.9
+        version: 0.0.9(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.23.8)
       '@eveworld/world':
         specifier: 0.0.17
         version: 0.0.17(@aws-sdk/client-kms@3.716.0)(asn1.js@5.4.1)(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -1653,6 +1656,9 @@ packages:
 
   '@eveworld/types@0.0.9':
     resolution: {integrity: sha512-yLH7D12oo5XR/eX2ZBR0odxsATGQ/pcD8hHNWYbHOxMg4D09oxUO64adCphjJbivzyOwXsU+Gn7UlTdrPs435Q==}
+
+  '@eveworld/utils@0.0.9':
+    resolution: {integrity: sha512-5OI6IM4h3xkfbm8ynL9I0yVlOUFCaBDoqwDHZZMhs6+RGOur9u0RvVMC5wtGIxwn4hfDLwLibjcgjmM/QRodCA==}
 
   '@eveworld/world@0.0.17':
     resolution: {integrity: sha512-/CcLDZ0wSu/otvfb4b4psooLcIq09ulvmPqxzx+E379LBBSkPMb546PAibY7PlUiQmzwOhYytF2YR3RyQgNksQ==}
@@ -10806,6 +10812,16 @@ snapshots:
 
   '@eveworld/types@0.0.9(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.23.8)':
     dependencies:
+      viem: 2.22.5(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.23.8)
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - zod
+
+  '@eveworld/utils@0.0.9(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.23.8)':
+    dependencies:
+      '@eveworld/types': 0.0.9(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.23.8)
       viem: 2.22.5(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.23.8)
     transitivePeerDependencies:
       - bufferutil

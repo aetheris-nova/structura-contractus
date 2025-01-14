@@ -3,18 +3,17 @@ import type { SmartAssemblyType } from '@eveworld/types';
 import { type FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { useConfig } from 'wagmi';
 
 // components
 import EmptyState from '@client/components/EmptyState';
-import PulseLoader from '@client/components/PulseLoader';
 import Page from '@client/components/Page';
+import PulseLoader from '@client/components/PulseLoader';
 import SmartGateContent from './SmartGateContent';
+import SmartStorageUnitContent from './SmartStorageUnitContent';
 
 // constants
 import { DEFAULT_GAP } from '@client/constants';
-
-// hooks
-import useSmartAssembly from '@client/hooks/useSmartAssembly';
 
 // selectors
 import { useSelectSelectedAccount } from '@client/selectors';
@@ -24,28 +23,32 @@ import type { IParams } from './types';
 
 // utils
 import ellipseText from '@client/utils/ellipseText';
+import useStore from '@client/utils/useStore';
 
 const SmartAssemblyPage: FC = () => {
   const { t } = useTranslation();
   const { id } = useParams() as Readonly<IParams>;
+  const wagmiConfig = useConfig();
   // selectors
   const account = useSelectSelectedAccount();
   // hooks
-  const { fetching, fetchSmartAssemblyAction, smartAssembly } = useSmartAssembly();
+  const { fetchingSmartAssembly, fetchSmartAssemblyAction, smartAssembly, toggleSmartAssemblyOnlineAction } = useStore();
+  // handlers
+  const handleOnEditMetadataClick = async () => {
+
+  };
+  const handleOnToggleOnlineClick = () => toggleSmartAssemblyOnlineAction({
+    t,
+    wagmiConfig,
+  });
   // renders
   const renderContent = () => {
-    if (fetching) {
+    if (fetchingSmartAssembly) {
       return (
-        <VStack flex={1} w="full">
-          <Spacer />
+        <VStack gap={DEFAULT_GAP - 2} w="full">
+          <PulseLoader />
 
-          <VStack gap={DEFAULT_GAP - 2} w="full">
-            <PulseLoader size="lg" />
-
-            <Text>{t('captions.retrievingDetails')}</Text>
-          </VStack>
-
-          <Spacer />
+          <Text>{t('captions.retrievingDetails')}</Text>
         </VStack>
       );
     }
@@ -53,7 +56,23 @@ const SmartAssemblyPage: FC = () => {
     if (smartAssembly) {
       if (smartAssembly.assemblyType === 'SmartGate') {
         return (
-          <SmartGateContent account={account} smartGate={smartAssembly as SmartAssemblyType<'SmartGate'>} />
+          <SmartGateContent
+            account={account}
+            onEditMetadataClick={handleOnEditMetadataClick}
+            onToggleOnlineClick={handleOnToggleOnlineClick}
+            smartAssembly={smartAssembly as SmartAssemblyType<'SmartGate'>}
+          />
+        );
+      }
+
+      if (smartAssembly.assemblyType === 'SmartStorageUnit') {
+        return (
+          <SmartStorageUnitContent
+            account={account}
+            onEditMetadataClick={handleOnEditMetadataClick}
+            onToggleOnlineClick={handleOnToggleOnlineClick}
+            smartAssembly={smartAssembly as SmartAssemblyType<'SmartStorageUnit'>}
+          />
         );
       }
     }

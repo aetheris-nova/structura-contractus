@@ -9,7 +9,7 @@ export default async function fetchItemByID(id: string, { delay }: IFetchOptions
       let response: AxiosResponse<IItem>;
 
       try {
-        response = await axios.get(`${import.meta.env.VITE_WORLD_API_URL}/types/${id}`);
+        response = await axios.get(`${import.meta.env.VITE_WORLD_API_HTTP_URL}/types/${id}`);
 
         return resolve(response.data);
       } catch (error) {

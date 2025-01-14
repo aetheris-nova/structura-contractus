@@ -101,7 +101,7 @@ const CharacterPage: FC = () => {
                 </Heading>
               </HStack>
 
-              <DataList.Root orientation="horizontal" w="full">
+              <DataList.Root gap={DEFAULT_GAP / 3} orientation="horizontal" w="full">
                 {/*id*/}
                 <DataListItem
                   copyText={account.id}

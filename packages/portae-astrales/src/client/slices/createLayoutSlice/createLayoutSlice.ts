@@ -1,5 +1,7 @@
 // actions
 import setColorModeAction from './actions/setColorModeAction';
+import setErrorAction from './actions/setErrorAction';
+import setLoadingModalDetailsAction from './actions/setLoadingModalDetailsAction';
 import setSubtitleAction from './actions/setSubtitleAction';
 import setTitleAction from './actions/setTitleAction';
 
@@ -13,10 +15,14 @@ const createLayoutSlice: TStateCreator<ISlice> = (setState, getState) => {
   return {
     // state
     colorMode: 'light',
+    error: null,
+    loadingModalDetails: null,
     subtitle: null,
     title: null,
     // actions
     setColorModeAction: setColorModeAction(api),
+    setErrorAction: setErrorAction(api),
+    setLoadingModalDetailsAction: setLoadingModalDetailsAction(api),
     setSubtitleAction: setSubtitleAction(api),
     setTitleAction: setTitleAction(api),
   };

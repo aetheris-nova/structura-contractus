@@ -8,6 +8,7 @@ import { STORE_NAME } from '@client/constants';
 import createAccountSlice from '@client/slices/createAccountSlice';
 import createItemSlice from '@client/slices/createItemSlice';
 import createLayoutSlice from '@client/slices/createLayoutSlice';
+import createSmartAssemblySlice from '@client/slices/createSmartAssemblySlice';
 import createSystemSlice from '@client/slices/createSystemSlice';
 import createTokenSlice from '@client/slices/createTokenSlice';
 import createWorldSlice from '@client/slices/createWorldSlice';
@@ -25,6 +26,7 @@ const useStore = create<TState>()(
         ...createAccountSlice(...api),
         ...createItemSlice(...api),
         ...createLayoutSlice(...api),
+        ...createSmartAssemblySlice(...api),
         ...createSystemSlice(...api),
         ...createTokenSlice(...api),
         ...createWorldSlice(...api),

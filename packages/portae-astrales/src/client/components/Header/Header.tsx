@@ -9,7 +9,6 @@ import { useDisconnect } from 'wagmi';
 import Button from '@client/components/Button';
 import IconButton from '@client/components/IconButton';
 import ProfileHeader from '@client/components/ProfileHeader';
-import WalletSelectModal from '@client/components/WalletSelectModal';
 
 // constants
 import { DEFAULT_GAP, BUTTON_HEIGHT } from '@client/constants';
@@ -19,6 +18,9 @@ import useForegroundColor from '@client/hooks/useForegroundColor';
 
 // icons
 import PaLogo from '@client/icons/PaLogo';
+
+// modals
+import WalletSelectModal from '@client/modals/WalletSelectModal';
 
 // selectors
 import { useSelectSelectedAccount } from '@client/selectors';
@@ -44,8 +46,6 @@ const Header: FC = () => {
     await disconnectAsync();
     await setAccountsAction([]); // remove any stored account data
   };
-
-  console.log(key);
 
   return (
     <>

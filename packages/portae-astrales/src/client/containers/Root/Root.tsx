@@ -10,6 +10,10 @@ import Layout from '@client/components/Layout';
 // hooks
 import useOnAnnounceProvider from '@client/hooks/useOnAnnounceProvider';
 
+// modals
+import ErrorModal from '@client/modals/ErrorModal';
+import LoadingModal from '@client/modals/LoadingModal';
+
 // utils
 import useStore from '@client/utils/useStore';
 
@@ -17,7 +21,9 @@ const Root: FC = () => {
   const { t } = useTranslation();
   const { addresses } = useAccount();
   const config = useConfig();
-  const { fetchingAccounts, fetchERC20TokenAction, fetchItemAction, fetchWorldConfigAction, setAccountsAction, subtitle, title } = useStore();
+  const { error, fetchingAccounts, fetchERC20TokenAction, fetchItemAction, fetchWorldConfigAction, loadingModalDetails, setAccountsAction, setErrorAction, subtitle, title } = useStore();
+  // handlers
+  const handleOnErrorModalClose = () => setErrorAction(null);
 
   useOnAnnounceProvider();
   useEffect(() => {
@@ -54,6 +60,14 @@ const Root: FC = () => {
           name="description"
         />
       </Helmet>
+
+      {/*modals*/}
+      <ErrorModal error={error} onClose={handleOnErrorModalClose} />
+      <LoadingModal
+        message={loadingModalDetails?.message || t('captions.pleaseWait')}
+        open={!!loadingModalDetails && loadingModalDetails.loading}
+        title={loadingModalDetails?.title || t('captions.loading')}
+      />
 
       <Layout>
         <Outlet />

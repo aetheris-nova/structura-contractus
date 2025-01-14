@@ -12,7 +12,9 @@ export default async function fetchSmartCharacterByAddress(
       let response: AxiosResponse<ISmartCharacter>;
 
       try {
-        response = await axios.get(`${import.meta.env.VITE_WORLD_API_URL}/smartcharacters/${address.toLowerCase()}`);
+        response = await axios.get(
+          `${import.meta.env.VITE_WORLD_API_HTTP_URL}/smartcharacters/${address.toLowerCase()}`
+        );
 
         return resolve(response.data);
       } catch (error) {

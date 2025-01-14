@@ -35,6 +35,7 @@
     "@emotion/react": "^11.14.0",
     "@eveworld/common-constants": "0.0.13",
     "@eveworld/types": "^0.0.9",
+    "@eveworld/utils": "^0.0.9",
     "@eveworld/world": "0.0.17",
     "@latticexyz/cli": "2.2.14",
     "@latticexyz/explorer": "2.2.14",

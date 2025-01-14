@@ -16,9 +16,9 @@ import { DEFAULT_GAP } from '@client/constants';
 import { useSelectLogger } from '@client/selectors';
 
 // types
-import type { IProps } from './types';
+import type { IModalProps } from '@client/types';
 
-const WalletSelectModal: FC<IProps> = ({ onClose, open }) => {
+const WalletSelectModal: FC<IModalProps> = ({ onClose, open }) => {
   const { t } = useTranslation();
   const { connectors, connect, isPending, isSuccess } = useConnect();
   // selectors
@@ -33,9 +33,7 @@ const WalletSelectModal: FC<IProps> = ({ onClose, open }) => {
 
     connect({ connector });
   };
-  const handleClose = () => {
-    onClose();
-  };
+  const handleClose = () => onClose && onClose();
   // renders
   const renderBody = () => {
     if (isPending) {

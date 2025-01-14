@@ -1,11 +1,13 @@
 import { DataList, HStack, Link as ChakraLink, Spacer, Text, VStack } from '@chakra-ui/react';
+import { isOwner as eveworldIsOwner } from '@eveworld/utils';
 import { randomString } from '@stablelib/random';
 import BigNumber from 'bignumber.js';
-import { type FC, type ReactNode, useMemo } from 'react';
+import { cloneElement, type FC, type ReactElement, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 // components
+import Button from '@client/components/Button';
 import Card from '@client/components/Card';
 import DataListItem from '@client/components/DataListItem';
 import EmptyState from '@client/components/EmptyState';
@@ -21,13 +23,13 @@ import useForegroundColor from '@client/hooks/useForegroundColor';
 import { useSelectFuelItem } from '@client/selectors';
 
 // types
-import type { ISmartGateContentProps } from './types';
+import type { IContentProps } from './types';
 
 // utils
 import ellipseText from '@client/utils/ellipseText';
 import smartAssemblyIcon from '@client/utils/smartAssemblyIcon';
 
-const SmartGateContent: FC<ISmartGateContentProps> = ({ account, smartGate }) => {
+const SmartGateContent: FC<IContentProps<'SmartGate'>> = ({ account, onEditMetadataClick, smartAssembly }) => {
   const { t } = useTranslation();
   // hooks
   const foregroundColor = useForegroundColor();
@@ -42,15 +44,37 @@ const SmartGateContent: FC<ISmartGateContentProps> = ({ account, smartGate }) =>
       return -1;
     }
 
-    return new BigNumber(String(smartGate.fuel.fuelAmount)).dividedBy(new BigNumber(String(smartGate.fuel.fuelMaxCapacity))).toNumber();
-  }, [fuelItem, smartGate.fuel]);
+    return new BigNumber(String(smartAssembly.fuel.fuelAmount)).dividedBy(new BigNumber(String(smartAssembly.fuel.fuelMaxCapacity))).toNumber();
+  }, [fuelItem, smartAssembly.fuel]);
+  const isOwner = useMemo(() => !!account && eveworldIsOwner(smartAssembly, account.address), [account, smartAssembly]);
   // renders
   const renderActions = () => {
-    const buttons: ReactNode[] = [];
+    let buttons: ReactElement[] = [];
 
-    return (
+    if (isOwner) {
+      buttons = [
+        ...buttons,
+        (
+          <Button onClick={onEditMetadataClick} w="full">
+            {t('labels.editDetails')}
+          </Button>
+        ),
+      ];
+    }
+
+    return buttons.length > 0 ? (
       <VStack gap={1} p={DEFAULT_GAP / 2} w="full">
+        {buttons.map((value, index) => cloneElement(value, {
+          key: `${context}__action-buttons-${index}`,
+        }))}
+      </VStack>
+    ) : (
+      <VStack flex={1} w="full">
+        <Spacer />
 
+        <EmptyState title={t('headings.noActionsAvailable')} />
+
+        <Spacer />
       </VStack>
     );
   };
@@ -73,14 +97,14 @@ const SmartGateContent: FC<ISmartGateContentProps> = ({ account, smartGate }) =>
               {/*name*/}
               <DataListItem
                 label={<Text fontWeight="600">{t('labels.name').toUpperCase()}</Text>}
-                value={smartGate.name.length > 0 ? smartGate.name : '-'}
+                value={smartAssembly.name.length > 0 ? smartAssembly.name : '-'}
               />
 
               {/*id*/}
               <DataListItem
-                copyText={smartGate.id}
+                copyText={smartAssembly.id}
                 label={<Text fontWeight="600">{t('labels.id').toUpperCase()}</Text>}
-                value={ellipseText(smartGate.id, {
+                value={ellipseText(smartAssembly.id, {
                   end: 15,
                   start: 15,
                 })}
@@ -89,22 +113,22 @@ const SmartGateContent: FC<ISmartGateContentProps> = ({ account, smartGate }) =>
               {/*owner*/}
               <DataListItem
                 label={<Text fontWeight="600">{t('labels.owner').toUpperCase()}</Text>}
-                value={smartGate.ownerName}
+                value={`${smartAssembly.ownerName}${isOwner && ` (${t('captions.you')})`}`}
               />
 
               {/*location*/}
               <DataListItem
                 label={<Text fontWeight="600">{t('labels.location').toUpperCase()}</Text>}
-                value={smartGate.solarSystem.solarSystemName.length > 0 ? smartGate.solarSystem.solarSystemName : '-'}
-                {...(smartGate.solarSystem.solarSystemName.length > 0 && {
-                  copyText: smartGate.solarSystem.solarSystemName,
+                value={smartAssembly.solarSystem.solarSystemName.length > 0 ? smartAssembly.solarSystem.solarSystemName : '-'}
+                {...(smartAssembly.solarSystem.solarSystemName.length > 0 && {
+                  copyText: smartAssembly.solarSystem.solarSystemName,
                 })}
               />
 
               {/*state*/}
               <DataListItem
                 label={<Text fontWeight="600">{t('labels.state').toUpperCase()}</Text>}
-                value={smartGate.state}
+                value={smartAssembly.state}
               />
 
               {/*fuel remaining*/}
@@ -123,10 +147,10 @@ const SmartGateContent: FC<ISmartGateContentProps> = ({ account, smartGate }) =>
               <DataListItem
                 label={<Text fontWeight="600">{t('labels.destinationGate').toUpperCase()}</Text>}
                 value={
-                  smartGate.gateLink.destinationGate ? (
+                  smartAssembly.gateLink.destinationGate ? (
                     <ChakraLink asChild={true}>
-                      <Link to={`${SMART_ASSEMBLY_ROUTE}/${smartGate.gateLink.destinationGate}`}>
-                        {ellipseText(smartGate.gateLink.destinationGate, {
+                      <Link to={`${SMART_ASSEMBLY_ROUTE}/${smartAssembly.gateLink.destinationGate}`}>
+                        {ellipseText(smartAssembly.gateLink.destinationGate, {
                           end: 15,
                           start: 15,
                         })}
@@ -136,8 +160,8 @@ const SmartGateContent: FC<ISmartGateContentProps> = ({ account, smartGate }) =>
                     '-'
                   )
                 }
-                {...(smartGate.gateLink.destinationGate && {
-                  copyText: smartGate.gateLink.destinationGate,
+                {...(smartAssembly.gateLink.destinationGate && {
+                  copyText: smartAssembly.gateLink.destinationGate,
                 })}
               />
             </DataList.Root>
@@ -145,20 +169,22 @@ const SmartGateContent: FC<ISmartGateContentProps> = ({ account, smartGate }) =>
         </Card>
 
         {/*actions*/}
-        <Card title={t('headings.actions')} w="full"></Card>
+        <Card title={t('headings.actions')} w="full">
+          {renderActions()}
+        </Card>
       </HStack>
 
       {/*gates in range*/}
       <Card
         h="50vh"
         p={0}
-        subtitle={smartGate.gateLink.gatesInRange.length.toString()}
+        subtitle={smartAssembly.gateLink.gatesInRange.length.toString()}
         title={t('headings.gatesInRange')}
         w="full"
       >
-        {smartGate.gateLink.gatesInRange.length > 0 ? (
+        {smartAssembly.gateLink.gatesInRange.length > 0 ? (
           <VStack overflow="scroll" w="full">
-            {smartGate.gateLink.gatesInRange.map((value, index) => (
+            {smartAssembly.gateLink.gatesInRange.map((value, index) => (
               <ListItem
                 icon={smartAssemblyIcon('SmartGate')}
                 key={`${context}__gates-in-range-item-${index}`}
