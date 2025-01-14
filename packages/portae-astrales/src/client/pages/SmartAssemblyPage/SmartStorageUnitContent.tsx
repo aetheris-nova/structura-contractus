@@ -1,4 +1,4 @@
-import { DataList, HStack, Image, Spacer, Text, VStack } from '@chakra-ui/react';
+import { DataList, Heading, HStack, Image, Spacer, Text, VStack } from '@chakra-ui/react';
 import { isOwner as eveworldIsOwner } from '@eveworld/utils';
 import { randomString } from '@stablelib/random';
 import BigNumber from 'bignumber.js';
@@ -61,12 +61,16 @@ const SmartStorageUnitContent: FC<IContentProps<'SmartStorageUnit'>> = ({ accoun
         ...buttons,
         (
           <Button onClick={onEditMetadataClick} w="full">
-            {t('labels.editDetails')}
+            <Heading fontSize="sm">
+              {t('labels.editDetails')}
+            </Heading>
           </Button>
         ),
         (
           <Button onClick={onToggleOnlineClick} w="full">
-            {t(smartAssembly.isOnline ? 'labels.bringOffline' : 'labels.bringOnline')}
+            <Heading fontSize="sm">
+              {t(smartAssembly.isOnline ? 'labels.bringOffline' : 'labels.bringOnline')}
+            </Heading>
           </Button>
         ),
       ];

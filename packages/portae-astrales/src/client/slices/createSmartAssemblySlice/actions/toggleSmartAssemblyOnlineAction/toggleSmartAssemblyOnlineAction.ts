@@ -2,15 +2,15 @@ import { getTxUrl } from '@eveworld/utils';
 import { simulateContract, waitForTransactionReceipt, writeContract } from '@wagmi/core';
 import type { Hash } from 'viem';
 
+// contracts
+import worldABI from '@dist/contracts/world/IWorld.sol/IWorld.abi.json';
+
 // errors
 import UnknownError from '@client/errors/UnknownError';
 
 // types
 import type { IWorldInteractionOptions } from '@client/slices/createSmartAssemblySlice';
 import type { TActionCreator } from '@client/types';
-
-// utils
-import extractWorldABI from '@client/utils/extractWorldABI';
 
 const toggleSmartAssemblyOnlineAction: TActionCreator<IWorldInteractionOptions, Promise<void>> =
   ({ getState, setState }) =>
@@ -20,10 +20,9 @@ const toggleSmartAssemblyOnlineAction: TActionCreator<IWorldInteractionOptions, 
     const logger = getState().logger;
     const smartAssembly = getState().smartAssembly;
     const worldConfig = getState().worldConfig;
-    const worldABI = extractWorldABI(worldConfig);
     let transactionHash: Hash;
 
-    if (!worldConfig || !worldABI || !smartAssembly) {
+    if (!worldConfig || !smartAssembly) {
       return;
     }
 
@@ -41,7 +40,7 @@ const toggleSmartAssemblyOnlineAction: TActionCreator<IWorldInteractionOptions, 
         address: worldConfig.contracts.world.address,
         args: [BigInt(smartAssembly.id)],
         chainId: worldConfig.chainId,
-        functionName: smartAssembly.isOnline ? 'bringOffline' : 'bringOnline',
+        functionName: smartAssembly.isOnline ? 'eveworld__bringOffline' : 'eveworld__bringOnline',
       });
 
       transactionHash = await writeContract(wagmiConfig, request);

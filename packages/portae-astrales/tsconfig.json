@@ -32,7 +32,9 @@
       "@client/theme": ["src/client/theme.ts"],
       "@client/translations": ["src/client/translations"],
       "@client/types": ["src/client/types"],
-      "@client/utils/*": ["src/client/utils/*"]
+      "@client/utils/*": ["src/client/utils/*"],
+
+      "@dist/contracts/*": ["dist/contracts/*"]
     },
     "removeComments": false,
     "resolveJsonModule": true,

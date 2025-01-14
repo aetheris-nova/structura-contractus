@@ -21,7 +21,7 @@ const ErrorModal: FC<IProps> = ({ error, onClose }) => {
     <Modal
       body={(
         <VStack gap={DEFAULT_GAP - 2} w="full">
-          <Icon>
+          <Icon fontSize="3xl">
             <GrStatusWarning />
           </Icon>
 

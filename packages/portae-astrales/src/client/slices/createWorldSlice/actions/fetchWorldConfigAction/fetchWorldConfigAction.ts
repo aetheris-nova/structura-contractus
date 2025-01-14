@@ -5,7 +5,6 @@ import { FETCH_WORLD_CONFIG_TIMEOUT } from '@client/constants';
 
 // types
 import type { IWorldConfig, IWorldConfigWithExtendedProps, TActionCreator } from '@client/types';
-import type { IWorldABIConfigResponse } from './types';
 
 /**
  * Fetches the World config and the abis (based on the env var VITE_WORLD_API_HTTP_URL). As the world config persists to
@@ -19,9 +18,8 @@ const fetchWorldConfigAction: TActionCreator<undefined, Promise<IWorldConfigWith
     const worldConfig = getState().worldConfig;
     let _worldConfig: IWorldConfigWithExtendedProps;
     let now: Date = new Date();
-    let abiConfigResponse: AxiosResponse<IWorldABIConfigResponse>;
-    let configResponse: AxiosResponse<IWorldConfig[]>;
-    let configResult: IWorldConfig | null;
+    let response: AxiosResponse<IWorldConfig[]>;
+    let result: IWorldConfig | null;
 
     // if the world config has already been updated recently, we don't need to update
     if (worldConfig && now.getTime() > worldConfig.lastUpdatedAt + FETCH_WORLD_CONFIG_TIMEOUT) {
@@ -34,22 +32,19 @@ const fetchWorldConfigAction: TActionCreator<undefined, Promise<IWorldConfigWith
     }));
 
     try {
-      configResponse = await axios.get(`${import.meta.env.VITE_WORLD_API_HTTP_URL}/config`);
-      configResult = configResponse.data[0] || null;
+      response = await axios.get(`${import.meta.env.VITE_WORLD_API_HTTP_URL}/config`);
+      result = response.data[0] || null;
 
-      if (!configResult) {
+      if (!result) {
         throw new Error('failed to fetch a world config');
       }
 
-      abiConfigResponse = await axios.get(`${import.meta.env.VITE_WORLD_API_HTTP_URL}/abis/config`);
-
       _worldConfig = {
-        ...configResult,
-        abis: abiConfigResponse.data?.cfg ?? [],
+        ...result,
         lastUpdatedAt: now.getTime(),
       };
 
-      logger.debug(`${__functionName}: fetched world config for chain ID "${configResult.chainId}":`, _worldConfig);
+      logger.debug(`${__functionName}: fetched world config for chain ID "${result.chainId}":`, _worldConfig);
 
       setState((state) => ({
         ...state,

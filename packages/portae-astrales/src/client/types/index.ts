@@ -1,5 +1,4 @@
 export type { default as IActionAPI } from './IActionAPI';
-export type { default as IEIP712 } from './IEIP712';
 export type { default as IERC20Token } from './IERC20Token';
 export type { default as IFetchOptions } from './IFetchOptions';
 export type { default as IItem } from './IItem';
@@ -11,7 +10,6 @@ export type { default as IModalProps } from './IModalProps';
 export type { default as INativeCurrency } from './INativeCurrency';
 export type { default as ISmartCharacter } from './ISmartCharacter';
 export type { default as ITranslation } from './ITranslation';
-export type { default as IWorldABI } from './IWorldABI';
 export type { default as IWorldConfig } from './IWorldConfig';
 export type { default as IWorldConfigWithExtendedProps } from './IWorldConfigWithExtendedProps';
 export type { default as IWorldContractConfig } from './IWorldContractConfig';

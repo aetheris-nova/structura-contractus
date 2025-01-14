@@ -66,7 +66,7 @@ const Root: FC = () => {
       <LoadingModal
         message={loadingModalDetails?.message || t('captions.pleaseWait')}
         open={!!loadingModalDetails && loadingModalDetails.loading}
-        title={loadingModalDetails?.title || t('captions.loading')}
+        title={loadingModalDetails?.title || t('headings.loading')}
       />
 
       <Layout>

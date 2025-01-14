@@ -5,5 +5,4 @@ export { default as useSelectGasBalanceInStandardForm } from './useSelectGasBala
 export { default as useSelectLogger } from './useSelectLogger';
 export { default as useSelectNativeCurrency } from './useSelectNativeCurrency';
 export { default as useSelectSelectedAccount } from './useSelectSelectedAccount';
-export { default as useSelectWorldABI } from './useSelectWorldABI';
 export { default as useSelectWorldConfig } from './useSelectWorldConfig';
