@@ -1,16 +1,18 @@
 import { getTxUrl } from '@eveworld/utils';
 import { simulateContract, waitForTransactionReceipt, writeContract } from '@wagmi/core';
-import type { Hash } from 'viem';
+import { getAbiItem, type Hash } from 'viem';
 
 // contracts
 import worldABI from '@dist/contracts/world/IWorld.sol/IWorld.abi.json';
 
 // errors
+import BaseError from '@client/errors/BaseError';
+import SmartAssemblyNotFoundError from '@client/errors/SmartAssemblyNotFoundError';
 import UnknownError from '@client/errors/UnknownError';
+import WorldDataNotFoundError from '@client/errors/WorldDataNotFoundError';
 
 // types
-import type { IWorldInteractionOptions } from '@client/slices/createSmartAssemblySlice';
-import type { TActionCreator } from '@client/types';
+import type { IWorldInteractionOptions, TActionCreator } from '@client/types';
 
 const toggleSmartAssemblyOnlineAction: TActionCreator<IWorldInteractionOptions, Promise<void>> =
   ({ getState, setState }) =>
@@ -20,27 +22,42 @@ const toggleSmartAssemblyOnlineAction: TActionCreator<IWorldInteractionOptions, 
     const logger = getState().logger;
     const smartAssembly = getState().smartAssembly;
     const worldConfig = getState().worldConfig;
+    let functionName: 'eveworld__bringOffline' | 'eveworld__bringOnline';
     let transactionHash: Hash;
 
     if (!worldConfig || !smartAssembly) {
       return;
     }
 
-    setState((state) => ({
-      ...state,
-      loadingModalDetails: {
-        loading: true,
-        message: t(smartAssembly.isOnline ? 'captions.bringingUnitOnline' : 'captions.bringingUnitOffline'),
-      },
-    }));
-
     try {
+      if (!worldConfig) {
+        throw new WorldDataNotFoundError(`not world config found`);
+      }
+
+      if (!smartAssembly) {
+        throw new SmartAssemblyNotFoundError();
+      }
+
+      setState((state) => ({
+        ...state,
+        loadingModalDetails: {
+          loading: true,
+          message: t(smartAssembly.isOnline ? 'captions.bringingUnitOnline' : 'captions.bringingUnitOffline'),
+        },
+      }));
+
+      functionName = smartAssembly.isOnline ? 'eveworld__bringOffline' : 'eveworld__bringOnline';
       const { request } = await simulateContract(wagmiConfig, {
-        abi: worldABI,
+        abi: [
+          getAbiItem({
+            abi: worldABI,
+            name: functionName,
+          }),
+        ],
         address: worldConfig.contracts.world.address,
         args: [BigInt(smartAssembly.id)],
         chainId: worldConfig.chainId,
-        functionName: smartAssembly.isOnline ? 'eveworld__bringOffline' : 'eveworld__bringOnline',
+        functionName,
       });
 
       transactionHash = await writeContract(wagmiConfig, request);
@@ -62,6 +79,14 @@ const toggleSmartAssemblyOnlineAction: TActionCreator<IWorldInteractionOptions, 
       await fetchSmartAssemblyAction(smartAssembly.id);
     } catch (error) {
       logger.error(`${__function}:`, error);
+
+      if ((error as BaseError).isAtherisNovaError) {
+        setState((state) => ({
+          ...state,
+          error,
+          loadingModalDetails: null,
+        }));
+      }
 
       setState((state) => ({
         ...state,

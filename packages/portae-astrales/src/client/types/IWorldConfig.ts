@@ -1,8 +1,9 @@
+import type { Address } from 'viem';
+
 // types
 import type INativeCurrency from './INativeCurrency';
 import type IWorldContractConfig from './IWorldContractConfig';
 import type IWorldRPCURLConfig from './IWorldRPCURLConfig';
-import type IWorldSystemsConfig from './IWorldSystemsConfig';
 
 interface IWorldConfig {
   baseDappUrl: string;
@@ -16,7 +17,7 @@ interface IWorldConfig {
   name: string;
   nativeCurrency: INativeCurrency;
   rpcUrls: Record<'default' | 'public', IWorldRPCURLConfig>;
-  systems: IWorldSystemsConfig;
+  systems: Record<string, Address>;
   vaultDappUrl: string;
   walletApiUrl: string;
 }

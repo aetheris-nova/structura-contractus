@@ -5,8 +5,8 @@ import type { TSmartCharacterWithExtendedProps } from '@client/types';
 
 interface IContentProps<Type extends SmartAssemblies> {
   account: TSmartCharacterWithExtendedProps | null;
-  onEditMetadataClick: () => Promise<void>;
-  onToggleOnlineClick: () => Promise<void>;
+  onEditMetadataClick: () => void | Promise<void>;
+  onToggleOnlineClick: () => void | Promise<void>;
   smartAssembly: SmartAssemblyType<Type>;
 }
 

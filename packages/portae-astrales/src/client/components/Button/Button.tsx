@@ -1,4 +1,4 @@
-import { Button as ChakraButton } from '@chakra-ui/react';
+import { Button as ChakraButton, Heading } from '@chakra-ui/react';
 import {
   type PropsWithoutRef,
   type ForwardRefExoticComponent,
@@ -18,7 +18,7 @@ import type { IProps } from './types';
 
 const Button: ForwardRefExoticComponent<
   PropsWithoutRef<IProps> & RefAttributes<HTMLButtonElement>
-> = forwardRef<HTMLButtonElement, IProps>(({ scheme, ...buttonProps }, ref) => {
+> = forwardRef<HTMLButtonElement, IProps>(({ children, scheme, ...buttonProps }, ref) => {
   // hooks
   const backgroundColor = useBackgroundColor();
   const foregroundColor = useForegroundColor();
@@ -29,7 +29,7 @@ const Button: ForwardRefExoticComponent<
         bg: scheme === 'secondary' ? foregroundColor : backgroundColor,
         color: scheme === 'secondary' ? backgroundColor : foregroundColor,
       }}
-      background={foregroundColor}
+      background={scheme === 'secondary' ? backgroundColor : foregroundColor}
       borderColor={foregroundColor}
       borderRadius={0}
       borderWidth={buttonProps.variant === 'ghost' ? 0 : 1}
@@ -41,7 +41,11 @@ const Button: ForwardRefExoticComponent<
       transition="ease-in-out 300ms"
       {...buttonProps}
       ref={ref}
-    />
+    >
+      <Heading fontSize="sm">
+        {children.toUpperCase()}
+      </Heading>
+    </ChakraButton>
   );
 });
 

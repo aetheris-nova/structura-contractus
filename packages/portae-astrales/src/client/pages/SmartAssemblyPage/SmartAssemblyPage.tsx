@@ -1,4 +1,4 @@
-import { Spacer, Text, VStack } from '@chakra-ui/react';
+import { Spacer, Text, VStack, useDisclosure } from '@chakra-ui/react';
 import type { SmartAssemblyType } from '@eveworld/types';
 import { type FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,6 +15,9 @@ import SmartStorageUnitContent from './SmartStorageUnitContent';
 // constants
 import { DEFAULT_GAP } from '@client/constants';
 
+// modals
+import EditSmartAssemblyDetailsModal from '@client/modals/EditSmartAssemblyDetailsModal';
+
 // selectors
 import { useSelectSelectedAccount } from '@client/selectors';
 
@@ -29,14 +32,17 @@ const SmartAssemblyPage: FC = () => {
   const { t } = useTranslation();
   const { id } = useParams() as Readonly<IParams>;
   const wagmiConfig = useConfig();
+  const {
+    onClose: onEditDetailsModalClose,
+    onOpen: onEditDetailsModalOpen,
+    open: editDetailsModalOpen,
+  } = useDisclosure();
   // selectors
   const account = useSelectSelectedAccount();
   // hooks
   const { fetchingSmartAssembly, fetchSmartAssemblyAction, smartAssembly, toggleSmartAssemblyOnlineAction } = useStore();
   // handlers
-  const handleOnEditMetadataClick = async () => {
-
-  };
+  const handleOnEditMetadataClick = () => onEditDetailsModalOpen();
   const handleOnToggleOnlineClick = () => toggleSmartAssemblyOnlineAction({
     t,
     wagmiConfig,
@@ -95,17 +101,27 @@ const SmartAssemblyPage: FC = () => {
   }, [id]);
 
   return (
-    <Page
-      {...(smartAssembly && {
-        subtitle: smartAssembly.name.length > 0 ? smartAssembly.name : ellipseText(smartAssembly.id, {
-          end: 5,
-          start: 5,
-        }),
-        title: t('headings.smartAssemblyType', { context: smartAssembly.assemblyType }),
-      })}
-    >
-      {renderContent()}
-    </Page>
+    <>
+      {smartAssembly && (
+        <EditSmartAssemblyDetailsModal
+          onClose={onEditDetailsModalClose}
+          open={editDetailsModalOpen}
+          smartAssembly={smartAssembly}
+        />
+      )}
+
+      <Page
+        {...(smartAssembly && {
+          subtitle: smartAssembly.name.length > 0 ? smartAssembly.name : ellipseText(smartAssembly.id, {
+            end: 5,
+            start: 5,
+          }),
+          title: t('headings.smartAssemblyType', { context: smartAssembly.assemblyType }),
+        })}
+      >
+        {renderContent()}
+      </Page>
+    </>
   );
 };
 

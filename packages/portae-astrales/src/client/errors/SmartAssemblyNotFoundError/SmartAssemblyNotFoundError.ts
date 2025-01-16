@@ -8,15 +8,15 @@ import BaseError from '@client/errors/BaseError';
 import type { INewOptions } from './types';
 
 export default class SmartAssemblyNotFoundError extends BaseError {
-  public readonly id: string;
+  public readonly id: string | null;
 
-  constructor({ id, message }: INewOptions) {
+  constructor({ id, message }: INewOptions = {}) {
     super({
       code: ErrorCodeEnum.SmartAssemblyNotFoundError,
       message,
       reference: 'SmartAssemblyNotFoundError',
     });
 
-    this.id = id;
+    this.id = id || null;
   }
 }

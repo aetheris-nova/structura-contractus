@@ -5,6 +5,7 @@ import { FETCH_WORLD_CONFIG_TIMEOUT } from '@client/constants';
 
 // types
 import type { IWorldConfig, IWorldConfigWithExtendedProps, TActionCreator } from '@client/types';
+import type { IWorldABIConfigResponse } from './types';
 
 /**
  * Fetches the World config and the abis (based on the env var VITE_WORLD_API_HTTP_URL). As the world config persists to
@@ -18,7 +19,8 @@ const fetchWorldConfigAction: TActionCreator<undefined, Promise<IWorldConfigWith
     const worldConfig = getState().worldConfig;
     let _worldConfig: IWorldConfigWithExtendedProps;
     let now: Date = new Date();
-    let response: AxiosResponse<IWorldConfig[]>;
+    let worldConfigABIResponse: AxiosResponse<IWorldABIConfigResponse>;
+    let worldConfigResponse: AxiosResponse<IWorldConfig[]>;
     let result: IWorldConfig | null;
 
     // if the world config has already been updated recently, we don't need to update
@@ -32,15 +34,18 @@ const fetchWorldConfigAction: TActionCreator<undefined, Promise<IWorldConfigWith
     }));
 
     try {
-      response = await axios.get(`${import.meta.env.VITE_WORLD_API_HTTP_URL}/config`);
-      result = response.data[0] || null;
+      worldConfigResponse = await axios.get(`${import.meta.env.VITE_WORLD_API_HTTP_URL}/config`);
+      result = worldConfigResponse.data[0] || null;
 
       if (!result) {
         throw new Error('failed to fetch a world config');
       }
 
+      worldConfigABIResponse = await axios.get(`${import.meta.env.VITE_WORLD_API_HTTP_URL}/abis/config`);
+
       _worldConfig = {
         ...result,
+        abis: worldConfigABIResponse.data.cfg || [],
         lastUpdatedAt: now.getTime(),
       };
 

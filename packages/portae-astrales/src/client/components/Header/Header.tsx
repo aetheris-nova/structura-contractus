@@ -118,9 +118,7 @@ const Header: FC = () => {
                     onClick={handleOnConnectClick}
                     variant="ghost"
                   >
-                    <Heading fontSize="sm">
-                      {t('labels.connect').toUpperCase()}
-                    </Heading>
+                    {t('labels.connect')}
                   </Button>
                 )}
               </HStack>

@@ -61,16 +61,12 @@ const SmartStorageUnitContent: FC<IContentProps<'SmartStorageUnit'>> = ({ accoun
         ...buttons,
         (
           <Button onClick={onEditMetadataClick} w="full">
-            <Heading fontSize="sm">
-              {t('labels.editDetails')}
-            </Heading>
+             {t('labels.editDetails')}
           </Button>
         ),
         (
           <Button onClick={onToggleOnlineClick} w="full">
-            <Heading fontSize="sm">
-              {t(smartAssembly.isOnline ? 'labels.bringOffline' : 'labels.bringOnline')}
-            </Heading>
+            {t(smartAssembly.isOnline ? 'labels.bringOffline' : 'labels.bringOnline')}
           </Button>
         ),
       ];

@@ -107,7 +107,7 @@ const Modal: FC<IProps> = ({ body, closeButton, footer, onClose, open, subtitle,
                   >
                     <VStack flex={1} gap={0} justify="center" w="full">
                       {title && (
-                        <Heading>
+                        <Heading w="full">
                           {title.toUpperCase()}
                         </Heading>
                       )}
@@ -148,7 +148,6 @@ const Modal: FC<IProps> = ({ body, closeButton, footer, onClose, open, subtitle,
                     borderColor={foregroundColor}
                     borderTopWidth={1}
                     gap={0}
-                    h={BUTTON_HEIGHT}
                     w="full"
                   >
                     {footer.map((value, index, array) => cloneElement(value, {

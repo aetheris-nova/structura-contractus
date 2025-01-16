@@ -59,9 +59,7 @@ const WalletSelectModal: FC<IModalProps> = ({ onClose, open }) => {
               onClick={handleOnConnectorClick(value)}
               w="full"
             >
-              <Heading fontSize="sm">
-                {value.name}
-              </Heading>
+              {value.name}
             </Button>
           ))}
         </VStack>

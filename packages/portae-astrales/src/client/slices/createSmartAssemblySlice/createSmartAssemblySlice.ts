@@ -1,5 +1,6 @@
 // actions
 import fetchSmartAssemblyAction from './actions/fetchSmartAssemblyAction';
+import setSmartAssemblyMetadataAction from './actions/setSmartAssemblyMetadataAction';
 import toggleSmartAssemblyOnlineAction from './actions/toggleSmartAssemblyOnlineAction';
 
 // types
@@ -14,6 +15,7 @@ const createSmartAssemblySlice: TStateCreator<ISlice> = (setState, getState) => 
     smartAssembly: null,
     // setters
     fetchSmartAssemblyAction: fetchSmartAssemblyAction(api),
+    setSmartAssemblyMetadataAction: setSmartAssemblyMetadataAction(api),
     toggleSmartAssemblyOnlineAction: toggleSmartAssemblyOnlineAction(api),
   };
 };

@@ -1,5 +1,5 @@
 interface INewOptions {
-  id: string;
+  id?: string;
   message?: string;
 }
 
