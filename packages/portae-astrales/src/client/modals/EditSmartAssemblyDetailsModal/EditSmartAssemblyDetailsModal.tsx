@@ -1,5 +1,5 @@
 import { VStack } from '@chakra-ui/react';
-import { type ChangeEvent, type FC, useState } from 'react';
+import { type ChangeEvent, type FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from 'wagmi';
 
@@ -73,6 +73,12 @@ const EditSmartAssemblyDetailsModal: FC<IProps> = ({ onClose, open, smartAssembl
       handleClose();
     }
   };
+
+  useEffect(() => {
+    setDappURL(smartAssembly.dappUrl);
+    setDescription(smartAssembly.description);
+    setName(smartAssembly.name);
+  }, [open]);
 
   return (
     <Modal

@@ -202,7 +202,7 @@ const SmartGateContent: FC<IContentProps<'SmartGate'>> = ({ account, onEditMetad
                     icon={smartAssemblyIcon('SmartGate')}
                     key={`${context}__gates-in-range-item-${index}`}
                     link={`${SMART_ASSEMBLY_ROUTE}/${value.id}`}
-                    secondarySubtitle={`${destinationGate && destinationGate.id === value.id ? '(Linked) ' : ''}${value.state.toString()}`}
+                    secondarySubtitle={`${value.state.toString()}${destinationGate && destinationGate.id === value.id ? ' (Linked)' : ''}`}
                     secondaryTitle={value.ownerName}
                     subtitle={`${value.solarSystem.solarSystemName.length > 0 ? value.solarSystem.solarSystemName : '-'}${distance ? ` ▪ ${formatUnit(metersToLightYears(distance))}ly` : ''}`}
                     title={
