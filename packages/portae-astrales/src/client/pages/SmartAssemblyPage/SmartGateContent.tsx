@@ -26,8 +26,11 @@ import type { IContentProps } from './types';
 
 // utils
 import ellipseText from '@client/utils/ellipseText';
+import formatUnit from '@client/utils/formatUnit';
 import isOwner from '@client/utils/isOwner';
 import smartAssemblyIcon from '@client/utils/smartAssemblyIcon';
+import calculateDistanceBetweenPoints from '@client/utils/calculateDistanceBetweenPoints';
+import metersToLightYears from '@client/utils/metersToLightYears';
 
 const SmartGateContent: FC<IContentProps<'SmartGate'>> = ({ account, onEditMetadataClick, smartAssembly }) => {
   const { t } = useTranslation();
@@ -36,7 +39,9 @@ const SmartGateContent: FC<IContentProps<'SmartGate'>> = ({ account, onEditMetad
   // selectors
   const fuelItem = useSelectFuelItem();
   // memos
+  const _isOwner = useMemo(() => !!account && isOwner(smartAssembly, account.address), [account, smartAssembly]);
   const context = useMemo(() => randomString(8), []);
+  const destinationGate = useMemo(() => smartAssembly.gateLink.gatesInRange.find(({ id }) => smartAssembly.gateLink.destinationGate && id === smartAssembly.gateLink.destinationGate) || null, [smartAssembly]);
   const fuelRemainingPercent = useMemo(() => {
     const baseUnitVolume = fuelItem?.metadata.attributes.find(({ trait_type }) => trait_type == 'volume')?.value.toString() || null;
 
@@ -46,7 +51,6 @@ const SmartGateContent: FC<IContentProps<'SmartGate'>> = ({ account, onEditMetad
 
     return new BigNumber(String(smartAssembly.fuel.fuelAmount)).dividedBy(new BigNumber(String(smartAssembly.fuel.fuelMaxCapacity))).toNumber();
   }, [fuelItem, smartAssembly.fuel]);
-  const _isOwner = useMemo(() => !!account && isOwner(smartAssembly, account.address), [account, smartAssembly]);
   // renders
   const renderActions = () => {
     let buttons: ReactElement[] = [];
@@ -105,15 +109,15 @@ const SmartGateContent: FC<IContentProps<'SmartGate'>> = ({ account, onEditMetad
                 copyText={smartAssembly.id}
                 label={<Text fontWeight="600">{t('labels.id').toUpperCase()}</Text>}
                 value={ellipseText(smartAssembly.id, {
-                  end: 15,
-                  start: 15,
+                  end: 5,
+                  start: 5,
                 })}
               />
 
               {/*owner*/}
               <DataListItem
                 label={<Text fontWeight="600">{t('labels.owner').toUpperCase()}</Text>}
-                value={`${smartAssembly.ownerName}${_isOwner && ` (${t('captions.you')})`}`}
+                value={`${smartAssembly.ownerName}${_isOwner ? ` (${t('captions.you')})` : ''}`}
               />
 
               {/*location*/}
@@ -147,12 +151,12 @@ const SmartGateContent: FC<IContentProps<'SmartGate'>> = ({ account, onEditMetad
               <DataListItem
                 label={<Text fontWeight="600">{t('labels.destinationGate').toUpperCase()}</Text>}
                 value={
-                  smartAssembly.gateLink.destinationGate ? (
+                  destinationGate ? (
                     <ChakraLink asChild={true}>
-                      <Link to={`${SMART_ASSEMBLY_ROUTE}/${smartAssembly.gateLink.destinationGate}`}>
-                        {ellipseText(smartAssembly.gateLink.destinationGate, {
-                          end: 15,
-                          start: 15,
+                      <Link to={`${SMART_ASSEMBLY_ROUTE}/${destinationGate.id}`}>
+                        {ellipseText(destinationGate.id, {
+                          end: 5,
+                          start: 5,
                         })}
                       </Link>
                     </ChakraLink>
@@ -185,25 +189,33 @@ const SmartGateContent: FC<IContentProps<'SmartGate'>> = ({ account, onEditMetad
         {smartAssembly.gateLink.gatesInRange.length > 0 ? (
           <VStack overflow="scroll" w="full">
             {smartAssembly.gateLink.gatesInRange
-              .reduce((acc, value) => smartAssembly.gateLink.destinationGate && smartAssembly.gateLink.destinationGate === value.id ? [value, ...acc] : [...acc, value], [])
-              .map((value, index) => (
-              <ListItem
-                icon={smartAssemblyIcon('SmartGate')}
-                key={`${context}__gates-in-range-item-${index}`}
-                link={`${SMART_ASSEMBLY_ROUTE}/${value.id}`}
-                secondarySubtitle={value.state.toString()}
-                secondaryTitle={value.ownerName}
-                subtitle={value.solarSystem.solarSystemName.length > 0 ? value.solarSystem.solarSystemName : '-'}
-                title={
-                  value.name?.length > 0
-                    ? value.name
-                    : ellipseText(value.id, {
-                        end: 15,
-                        start: 15,
-                      })
+              .sort((a, b) => calculateDistanceBetweenPoints(smartAssembly.location, a.location).minus(calculateDistanceBetweenPoints(smartAssembly.location, b.location)).toNumber())
+              .map((value, index) => {
+                let distance: BigNumber | null = null;
+
+                if (value.location && smartAssembly.location) {
+                  distance = calculateDistanceBetweenPoints(smartAssembly.location, value.location);
                 }
-              />
-            ))}
+
+                return (
+                  <ListItem
+                    icon={smartAssemblyIcon('SmartGate')}
+                    key={`${context}__gates-in-range-item-${index}`}
+                    link={`${SMART_ASSEMBLY_ROUTE}/${value.id}`}
+                    secondarySubtitle={`${destinationGate && destinationGate.id === value.id ? '(Linked) ' : ''}${value.state.toString()}`}
+                    secondaryTitle={value.ownerName}
+                    subtitle={`${value.solarSystem.solarSystemName.length > 0 ? value.solarSystem.solarSystemName : '-'}${distance ? ` ▪ ${formatUnit(metersToLightYears(distance))}ly` : ''}`}
+                    title={
+                      value.name?.length > 0
+                        ? value.name
+                        : ellipseText(value.id, {
+                          end: 15,
+                          start: 15,
+                        })
+                    }
+                  />
+                );
+              })}
           </VStack>
         ) : (
           <VStack flex={1} w="full">

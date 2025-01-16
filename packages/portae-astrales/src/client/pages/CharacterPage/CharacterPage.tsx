@@ -107,8 +107,8 @@ const CharacterPage: FC = () => {
                   copyText={account.id}
                   label={<Text fontWeight="600">{t('labels.id').toUpperCase()}</Text>}
                   value={ellipseText(account.id, {
-                    end: 15,
-                    start: 15,
+                    end: 5,
+                    start: 5,
                   })}
                 />
 
@@ -117,8 +117,8 @@ const CharacterPage: FC = () => {
                   copyText={account.address}
                   label={<Text fontWeight="600">{t('labels.address').toUpperCase()}</Text>}
                   value={ellipseText(account.address, {
-                    end: 15,
-                    start: 15,
+                    end: 5,
+                    start: 5,
                   })}
                 />
               </DataList.Root>
@@ -178,8 +178,8 @@ const CharacterPage: FC = () => {
                     secondaryTitle={value.solarSystem.solarSystemName.length > 0 ? value.solarSystem.solarSystemName : '-'}
                     subtitle={t('labels.smartAssemblyType', { context: value.assemblyType })}
                     title={value.name?.length > 0 ? value.name : ellipseText(value.id, {
-                      end: 15,
-                      start: 15,
+                      end: 5,
+                      start: 5,
                     })}
                   />
                 ))}

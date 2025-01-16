@@ -53,10 +53,18 @@ const SmartAssemblyPage: FC = () => {
   const renderContent = () => {
     if (fetchingSmartAssembly) {
       return (
-        <VStack gap={DEFAULT_GAP - 2} w="full">
-          <PulseLoader />
+        <VStack flex={1} gap={DEFAULT_GAP - 2} w="full">
+          <Spacer />
 
-          <Text>{t('captions.retrievingDetails')}</Text>
+          <VStack gap={DEFAULT_GAP / 3}>
+            <PulseLoader />
+
+            <Text>
+              {t('captions.retrievingDetails')}
+            </Text>
+          </VStack>
+
+          <Spacer />
         </VStack>
       );
     }

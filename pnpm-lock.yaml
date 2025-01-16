@@ -128,6 +128,9 @@ importers:
       next-themes:
         specifier: ^0.4.4
         version: 0.4.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      numbro:
+        specifier: ^2.5.0
+        version: 2.5.0
       react:
         specifier: ^19.0.0
         version: 19.0.0
@@ -6909,6 +6912,9 @@ packages:
 
   nullthrows@1.1.1:
     resolution: {integrity: sha512-2vPPEi+Z7WqML2jZYddDIfy5Dqb0r2fze2zTxNNknZaFpVHU3mFB3R+DWeJWGVx0ecvttSGlJTI+WG+8Z4cDWw==}
+
+  numbro@2.5.0:
+    resolution: {integrity: sha512-xDcctDimhzko/e+y+Q2/8i3qNC9Svw1QgOkSkQoO0kIPI473tR9QRbo2KP88Ty9p8WbPy+3OpTaAIzehtuHq+A==}
 
   nuqs@1.20.0:
     resolution: {integrity: sha512-nGVfv7eWMNxAzOJ9n8ARTo6ObqeEr1ETYZ+dIMCg/VfGUoZoPrqyTOndIvQIgUzK3pIC41mTXg10JJxh9ziEhw==}
@@ -18432,6 +18438,10 @@ snapshots:
   npm@10.9.2: {}
 
   nullthrows@1.1.1: {}
+
+  numbro@2.5.0:
+    dependencies:
+      bignumber.js: 9.1.2
 
   nuqs@1.20.0(next@14.2.5(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.83.1)):
     dependencies:

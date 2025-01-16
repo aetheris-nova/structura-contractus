@@ -115,15 +115,15 @@ const SmartStorageUnitContent: FC<IContentProps<'SmartStorageUnit'>> = ({ accoun
                 copyText={smartAssembly.id}
                 label={<Text fontWeight="600">{t('labels.id').toUpperCase()}</Text>}
                 value={ellipseText(smartAssembly.id, {
-                  end: 15,
-                  start: 15,
+                  end: 5,
+                  start: 5,
                 })}
               />
 
               {/*owner*/}
               <DataListItem
                 label={<Text fontWeight="600">{t('labels.owner').toUpperCase()}</Text>}
-                value={`${smartAssembly.ownerName}${_isOwner && ` (${t('captions.you')})`}`}
+                value={`${smartAssembly.ownerName}${_isOwner ? ` (${t('captions.you')})` : ''}`}
               />
 
               {/*location*/}

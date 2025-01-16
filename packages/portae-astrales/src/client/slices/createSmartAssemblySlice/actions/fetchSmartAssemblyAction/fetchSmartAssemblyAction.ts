@@ -9,6 +9,7 @@ import type { TActionCreator, TSmartAssemblyWithAdditionalModules } from '@clien
 
 // utils
 import fetchSmartAssemblyByID from '@client/utils/fetchSmartAssemblyByID';
+import { FETCH_SMART_ASSEMBLY_DELAY } from '@client/constants';
 
 const fetchSmartAssemblyAction: TActionCreator<
   string,
@@ -60,7 +61,9 @@ const fetchSmartAssemblyAction: TActionCreator<
       result.gateLink.gatesInRange = await Promise.all(
         result.gateLink.gatesInRange.map(async (value, index) => {
           try {
-            const { location } = await fetchSmartAssemblyByID<'SmartGate'>(value.id);
+            const { location } = await fetchSmartAssemblyByID<'SmartGate'>(value.id, {
+              delay: index * FETCH_SMART_ASSEMBLY_DELAY,
+            });
 
             return {
               ...value,

@@ -13,7 +13,7 @@ export default async function fetchSmartAssemblyByID<Type extends SmartAssemblie
       let response: AxiosResponse<TSmartAssemblyWithAdditionalModules<Type>>;
 
       try {
-        response = await axios.get(`${import.meta.env.VITE_WORLD_API_HTTP_URL}/smartassemblies/${id}}`);
+        response = await axios.get(`${import.meta.env.VITE_WORLD_API_HTTP_URL}/smartassemblies/${id}`);
 
         return resolve(response.data);
       } catch (error) {
