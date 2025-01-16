@@ -1,5 +1,4 @@
-import { DataList, Heading, HStack, Image, Spacer, Text, VStack } from '@chakra-ui/react';
-import { isOwner as eveworldIsOwner } from '@eveworld/utils';
+import { DataList, HStack, Image, Spacer, Text, VStack } from '@chakra-ui/react';
 import { randomString } from '@stablelib/random';
 import BigNumber from 'bignumber.js';
 import { cloneElement, type FC, type ReactElement, useMemo } from 'react';
@@ -26,6 +25,7 @@ import type { IContentProps } from './types';
 
 // utils
 import ellipseText from '@client/utils/ellipseText';
+import isOwner from '@client/utils/isOwner';
 
 const SmartStorageUnitContent: FC<IContentProps<'SmartStorageUnit'>> = ({ account, onEditMetadataClick, onToggleOnlineClick, smartAssembly }) => {
   const { t } = useTranslation();
@@ -51,12 +51,12 @@ const SmartStorageUnitContent: FC<IContentProps<'SmartStorageUnit'>> = ({ accoun
 
     return new BigNumber(String(smartAssembly.fuel.fuelAmount)).dividedBy(new BigNumber(String(smartAssembly.fuel.fuelMaxCapacity))).toNumber();
   }, [fuelItem, smartAssembly.fuel]);
-  const isOwner = useMemo(() => !!account && eveworldIsOwner(smartAssembly, account.address), [account, smartAssembly]);
+  const _isOwner = useMemo(() => !!account && isOwner(smartAssembly, account.address), [account, smartAssembly]);
   // renders
   const renderActions = () => {
     let buttons: ReactElement[] = [];
 
-    if (isOwner) {
+    if (_isOwner) {
       buttons = [
         ...buttons,
         (
@@ -123,7 +123,7 @@ const SmartStorageUnitContent: FC<IContentProps<'SmartStorageUnit'>> = ({ accoun
               {/*owner*/}
               <DataListItem
                 label={<Text fontWeight="600">{t('labels.owner').toUpperCase()}</Text>}
-                value={`${smartAssembly.ownerName}${isOwner && ` (${t('captions.you')})`}`}
+                value={`${smartAssembly.ownerName}${_isOwner && ` (${t('captions.you')})`}`}
               />
 
               {/*location*/}
@@ -170,7 +170,7 @@ const SmartStorageUnitContent: FC<IContentProps<'SmartStorageUnit'>> = ({ accoun
       >
         {/*ephemeral*/}
         <Card
-          borderRightWidth={isOwner ? 1 : 0}
+          borderRightWidth={_isOwner ? 1 : 0}
           h="50vh"
           p={0}
           subtitle={ephemeralInventory ? ephemeralInventory.ephemeralInventoryItems.length.toString() : '0'}
@@ -207,7 +207,7 @@ const SmartStorageUnitContent: FC<IContentProps<'SmartStorageUnit'>> = ({ accoun
           )}
         </Card>
 
-        {isOwner && (
+        {_isOwner && (
           <Card
             h="50vh"
             p={0}

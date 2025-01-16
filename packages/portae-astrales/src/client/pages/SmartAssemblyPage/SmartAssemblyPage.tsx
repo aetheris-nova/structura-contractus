@@ -43,10 +43,12 @@ const SmartAssemblyPage: FC = () => {
   const { fetchingSmartAssembly, fetchSmartAssemblyAction, smartAssembly, toggleSmartAssemblyOnlineAction } = useStore();
   // handlers
   const handleOnEditMetadataClick = () => onEditDetailsModalOpen();
-  const handleOnToggleOnlineClick = () => toggleSmartAssemblyOnlineAction({
-    t,
-    wagmiConfig,
-  });
+  const handleOnToggleOnlineClick = async () => {
+    await toggleSmartAssemblyOnlineAction({
+      t,
+      wagmiConfig,
+    });
+  };
   // renders
   const renderContent = () => {
     if (fetchingSmartAssembly) {
@@ -66,7 +68,7 @@ const SmartAssemblyPage: FC = () => {
             account={account}
             onEditMetadataClick={handleOnEditMetadataClick}
             onToggleOnlineClick={handleOnToggleOnlineClick}
-            smartAssembly={smartAssembly as SmartAssemblyType<'SmartGate'>}
+            smartAssembly={smartAssembly}
           />
         );
       }
@@ -77,7 +79,7 @@ const SmartAssemblyPage: FC = () => {
             account={account}
             onEditMetadataClick={handleOnEditMetadataClick}
             onToggleOnlineClick={handleOnToggleOnlineClick}
-            smartAssembly={smartAssembly as SmartAssemblyType<'SmartStorageUnit'>}
+            smartAssembly={smartAssembly}
           />
         );
       }

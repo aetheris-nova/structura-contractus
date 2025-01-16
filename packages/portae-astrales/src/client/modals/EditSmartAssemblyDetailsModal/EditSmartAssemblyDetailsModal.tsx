@@ -54,18 +54,24 @@ const EditSmartAssemblyDetailsModal: FC<IProps> = ({ onClose, open, smartAssembl
     }
   };
   const handleOnSubmitClick = async () => {
+    let result: boolean;
+
     // if there are no changes, no need to update
     if (dappURL === smartAssembly.dappUrl && description === smartAssembly.description && name === smartAssembly.name) {
       handleClose();
     }
 
-    await setSmartAssemblyMetadataAction({
+    result = await setSmartAssemblyMetadataAction({
       dappURL,
       description,
       name,
       t,
       wagmiConfig,
     });
+
+    if (result) {
+      handleClose();
+    }
   };
 
   return (

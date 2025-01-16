@@ -1,5 +1,4 @@
 import { DataList, HStack, Link as ChakraLink, Spacer, Text, VStack } from '@chakra-ui/react';
-import { isOwner as eveworldIsOwner } from '@eveworld/utils';
 import { randomString } from '@stablelib/random';
 import BigNumber from 'bignumber.js';
 import { cloneElement, type FC, type ReactElement, useMemo } from 'react';
@@ -27,6 +26,7 @@ import type { IContentProps } from './types';
 
 // utils
 import ellipseText from '@client/utils/ellipseText';
+import isOwner from '@client/utils/isOwner';
 import smartAssemblyIcon from '@client/utils/smartAssemblyIcon';
 
 const SmartGateContent: FC<IContentProps<'SmartGate'>> = ({ account, onEditMetadataClick, smartAssembly }) => {
@@ -46,12 +46,12 @@ const SmartGateContent: FC<IContentProps<'SmartGate'>> = ({ account, onEditMetad
 
     return new BigNumber(String(smartAssembly.fuel.fuelAmount)).dividedBy(new BigNumber(String(smartAssembly.fuel.fuelMaxCapacity))).toNumber();
   }, [fuelItem, smartAssembly.fuel]);
-  const isOwner = useMemo(() => !!account && eveworldIsOwner(smartAssembly, account.address), [account, smartAssembly]);
+  const _isOwner = useMemo(() => !!account && isOwner(smartAssembly, account.address), [account, smartAssembly]);
   // renders
   const renderActions = () => {
     let buttons: ReactElement[] = [];
 
-    if (isOwner) {
+    if (_isOwner) {
       buttons = [
         ...buttons,
         (
@@ -113,7 +113,7 @@ const SmartGateContent: FC<IContentProps<'SmartGate'>> = ({ account, onEditMetad
               {/*owner*/}
               <DataListItem
                 label={<Text fontWeight="600">{t('labels.owner').toUpperCase()}</Text>}
-                value={`${smartAssembly.ownerName}${isOwner && ` (${t('captions.you')})`}`}
+                value={`${smartAssembly.ownerName}${_isOwner && ` (${t('captions.you')})`}`}
               />
 
               {/*location*/}
@@ -184,7 +184,9 @@ const SmartGateContent: FC<IContentProps<'SmartGate'>> = ({ account, onEditMetad
       >
         {smartAssembly.gateLink.gatesInRange.length > 0 ? (
           <VStack overflow="scroll" w="full">
-            {smartAssembly.gateLink.gatesInRange.map((value, index) => (
+            {smartAssembly.gateLink.gatesInRange
+              .reduce((acc, value) => smartAssembly.gateLink.destinationGate && smartAssembly.gateLink.destinationGate === value.id ? [value, ...acc] : [...acc, value], [])
+              .map((value, index) => (
               <ListItem
                 icon={smartAssemblyIcon('SmartGate')}
                 key={`${context}__gates-in-range-item-${index}`}

@@ -1,9 +1,6 @@
-import { getTxUrl } from '@eveworld/utils';
-import { simulateContract, waitForTransactionReceipt, writeContract } from '@wagmi/core';
-import { getAbiItem, type Hash } from 'viem';
-
-// contracts
-import worldABI from '@dist/contracts/world/IWorld.sol/IWorld.abi.json';
+import { IWorldAbi as eveWorldABI } from '@eveworld/contracts';
+import { getSystemId, SYSTEM_IDS } from '@eveworld/utils';
+import { type Address, encodeFunctionData, getAbiItem } from 'viem';
 
 // errors
 import BaseError from '@client/errors/BaseError';
@@ -14,20 +11,21 @@ import WorldDataNotFoundError from '@client/errors/WorldDataNotFoundError';
 // types
 import type { IWorldInteractionOptions, TActionCreator } from '@client/types';
 
-const toggleSmartAssemblyOnlineAction: TActionCreator<IWorldInteractionOptions, Promise<void>> =
+// utils
+import postMetaTransaction from '@client/utils/postMetaTransaction';
+
+const toggleSmartAssemblyOnlineAction: TActionCreator<IWorldInteractionOptions, Promise<boolean>> =
   ({ getState, setState }) =>
   async ({ t, wagmiConfig }: IWorldInteractionOptions) => {
     const __function = 'toggleSmartAssemblyOnlineAction';
+    const account = getState().accounts[0] || null;
     const fetchSmartAssemblyAction = getState().fetchSmartAssemblyAction;
     const logger = getState().logger;
     const smartAssembly = getState().smartAssembly;
     const worldConfig = getState().worldConfig;
-    let functionName: 'eveworld__bringOffline' | 'eveworld__bringOnline';
-    let transactionHash: Hash;
-
-    if (!worldConfig || !smartAssembly) {
-      return;
-    }
+    let _systemID: Address | null;
+    let encodedFunctionData: Address;
+    let functionName: 'bringOffline' | 'bringOnline';
 
     try {
       if (!worldConfig) {
@@ -38,6 +36,13 @@ const toggleSmartAssemblyOnlineAction: TActionCreator<IWorldInteractionOptions, 
         throw new SmartAssemblyNotFoundError();
       }
 
+      _systemID =
+        getSystemId(worldConfig.systems, smartAssembly.isOnline ? SYSTEM_IDS.OFFLINE : SYSTEM_IDS.ONLINE) || null;
+
+      if (!_systemID) {
+        throw new WorldDataNotFoundError(`unable to find system id "${SYSTEM_IDS.UPDATE_METADATA}"`);
+      }
+
       setState((state) => ({
         ...state,
         loadingModalDetails: {
@@ -46,28 +51,33 @@ const toggleSmartAssemblyOnlineAction: TActionCreator<IWorldInteractionOptions, 
         },
       }));
 
-      functionName = smartAssembly.isOnline ? 'eveworld__bringOffline' : 'eveworld__bringOnline';
-      const { request } = await simulateContract(wagmiConfig, {
+      functionName = smartAssembly.isOnline ? 'bringOffline' : 'bringOnline';
+      encodedFunctionData = encodeFunctionData({
         abi: [
           getAbiItem({
-            abi: worldABI,
+            abi: eveWorldABI.abi,
             name: functionName,
           }),
         ],
-        address: worldConfig.contracts.world.address,
         args: [BigInt(smartAssembly.id)],
-        chainId: worldConfig.chainId,
         functionName,
       });
 
-      transactionHash = await writeContract(wagmiConfig, request);
-
-      await waitForTransactionReceipt(wagmiConfig, {
-        hash: transactionHash,
-      });
+      await postMetaTransaction(
+        {
+          fromAddress: account.address as Address,
+          encodedFunctionData: encodedFunctionData,
+          systemID: _systemID,
+          wagmiConfig,
+          worldConfig,
+        },
+        {
+          logger,
+        }
+      );
 
       logger.debug(
-        `${__function}: set assembly unit "${smartAssembly.id}" ${smartAssembly.isOnline ? 'offline' : 'online'} in transaction "${getTxUrl(worldConfig.blockExplorerUrl, transactionHash)}"`
+        `${__function}: set assembly unit "${smartAssembly.id}" ${smartAssembly.isOnline ? 'offline' : 'online'}`
       );
 
       setState((state) => ({
@@ -77,6 +87,8 @@ const toggleSmartAssemblyOnlineAction: TActionCreator<IWorldInteractionOptions, 
 
       // update the smart assembly details
       await fetchSmartAssemblyAction(smartAssembly.id);
+
+      return true;
     } catch (error) {
       logger.error(`${__function}:`, error);
 
@@ -93,6 +105,8 @@ const toggleSmartAssemblyOnlineAction: TActionCreator<IWorldInteractionOptions, 
         error: new UnknownError(error.message),
         loadingModalDetails: null,
       }));
+
+      return false;
     }
   };
 

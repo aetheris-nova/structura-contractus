@@ -1,7 +1,7 @@
 import type { Address } from 'viem';
 
 // types
-import type IWorldABIConfig from '../../../../../types/IWorldABIConfig';
+import type { IWorldABIConfig } from '@client/types';
 
 interface IWorldABIConfigResponse {
   base_dapp_url: string;

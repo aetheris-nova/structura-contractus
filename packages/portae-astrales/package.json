@@ -34,6 +34,7 @@
     "@chakra-ui/react": "^3.2.5",
     "@emotion/react": "^11.14.0",
     "@eveworld/common-constants": "0.0.13",
+    "@eveworld/contracts": "^0.1.0",
     "@eveworld/types": "^0.0.9",
     "@eveworld/utils": "^0.0.9",
     "@eveworld/world": "0.0.17",

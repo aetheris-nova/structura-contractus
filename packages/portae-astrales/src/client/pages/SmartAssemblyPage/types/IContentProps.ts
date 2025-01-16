@@ -1,13 +1,13 @@
-import type { SmartAssemblies, SmartAssemblyType } from '@eveworld/types';
+import type { SmartAssemblies } from '@eveworld/types';
 
 // types
-import type { TSmartCharacterWithExtendedProps } from '@client/types';
+import type { TSmartAssemblyWithAdditionalModules, TSmartCharacterWithExtendedProps } from '@client/types';
 
 interface IContentProps<Type extends SmartAssemblies> {
   account: TSmartCharacterWithExtendedProps | null;
   onEditMetadataClick: () => void | Promise<void>;
   onToggleOnlineClick: () => void | Promise<void>;
-  smartAssembly: SmartAssemblyType<Type>;
+  smartAssembly: TSmartAssemblyWithAdditionalModules<Type>;
 }
 
 export default IContentProps;

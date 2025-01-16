@@ -1,19 +1,25 @@
-import type { SmartAssemblies, SmartAssemblyType } from '@eveworld/types';
-import axios, { type AxiosError, AxiosResponse } from 'axios';
+import type { SmartAssemblies } from '@eveworld/types';
+import type { AxiosError } from 'axios';
 
 // errors
 import UnknownError from '@client/errors/UnknownError';
 
 // types
-import type { TActionCreator } from '@client/types';
+import type { TActionCreator, TSmartAssemblyWithAdditionalModules } from '@client/types';
 
-const fetchSmartAssemblyAction: TActionCreator<string, Promise<SmartAssemblyType<SmartAssemblies> | null>> =
+// utils
+import fetchSmartAssemblyByID from '@client/utils/fetchSmartAssemblyByID';
+
+const fetchSmartAssemblyAction: TActionCreator<
+  string,
+  Promise<TSmartAssemblyWithAdditionalModules<SmartAssemblies> | null>
+> =
   ({ getState, setState }) =>
   async (id) => {
     const __function = 'fetchSmartAssemblyAction';
     const fetching = getState().fetchingSmartAssembly;
     const logger = getState().logger;
-    let response: AxiosResponse<SmartAssemblyType<SmartAssemblies>>;
+    let result: TSmartAssemblyWithAdditionalModules<SmartAssemblies>;
 
     if (fetching) {
       return null;
@@ -25,17 +31,7 @@ const fetchSmartAssemblyAction: TActionCreator<string, Promise<SmartAssemblyType
     }));
 
     try {
-      response = await axios.get(`${import.meta.env.VITE_WORLD_API_HTTP_URL}/smartassemblies/${id}`);
-
-      logger.debug(`${__function}: found smart assembly:`, response.data);
-
-      setState((state) => ({
-        ...state,
-        fetchingSmartAssembly: false,
-        smartAssembly: response.data,
-      }));
-
-      return response.data;
+      result = await fetchSmartAssemblyByID(id);
     } catch (error) {
       logger.error(`${__function}: `, error);
 
@@ -58,6 +54,36 @@ const fetchSmartAssemblyAction: TActionCreator<string, Promise<SmartAssemblyType
 
       return null;
     }
+
+    // if we have smart gates, we need to get the locations for each gate too as they don't come with it
+    if (result.assemblyType === 'SmartGate') {
+      result.gateLink.gatesInRange = await Promise.all(
+        result.gateLink.gatesInRange.map(async (value, index) => {
+          try {
+            const { location } = await fetchSmartAssemblyByID<'SmartGate'>(value.id);
+
+            return {
+              ...value,
+              location,
+            };
+          } catch (error) {
+            logger.error(`${__function}: failed to get location for gate "${value.id}", ignoring`, error);
+
+            return value;
+          }
+        })
+      );
+    }
+
+    logger.debug(`${__function}: found smart assembly:`, result);
+
+    setState((state) => ({
+      ...state,
+      fetchingSmartAssembly: false,
+      smartAssembly: result,
+    }));
+
+    return result;
   };
 
 export default fetchSmartAssemblyAction;

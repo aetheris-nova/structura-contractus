@@ -1,12 +1,10 @@
+import { IWorldAbi as eveWorldABI } from '@eveworld/contracts';
 import type { ERC2771ForwardRequest } from '@eveworld/types';
 import { getBlock, signTypedData, simulateContract } from '@wagmi/core';
 import axios from 'axios';
 import { type Address, encodeFunctionData, getAbiItem, toHex } from 'viem';
 
 import { META_TRANSACTION_TIMEOUT } from '@client/constants';
-
-// contracts
-import worldABI from '@dist/contracts/world/IWorld.sol/IWorld.abi.json';
 
 // errors
 import UnknownError from '@client/errors/UnknownError';
@@ -24,7 +22,7 @@ export default async function postMetaTransaction(
   const encodedCallFromFunctionData = encodeFunctionData({
     abi: [
       getAbiItem({
-        abi: worldABI,
+        abi: eveWorldABI.abi,
         name: 'callFrom',
       }),
     ],

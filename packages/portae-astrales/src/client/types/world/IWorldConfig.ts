@@ -1,7 +1,7 @@
 import type { Address } from 'viem';
 
 // types
-import type INativeCurrency from './INativeCurrency';
+import type INativeCurrency from '../evm/INativeCurrency';
 import type IWorldContractConfig from './IWorldContractConfig';
 import type IWorldRPCURLConfig from './IWorldRPCURLConfig';
 

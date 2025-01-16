@@ -1,10 +1,8 @@
-import type { SmartAssembly } from '@eveworld/types';
-
 // types
-import type { IModalProps } from '@client/types';
+import type { IModalProps, ISmartAssembly } from '@client/types';
 
 interface IProps extends IModalProps {
-  smartAssembly: SmartAssembly;
+  smartAssembly: ISmartAssembly;
 }
 
 export default IProps;

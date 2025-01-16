@@ -71,6 +71,9 @@ importers:
       '@eveworld/common-constants':
         specifier: 0.0.13
         version: 0.0.13(@aws-sdk/client-kms@3.716.0)(asn1.js@5.4.1)(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.23.8)
+      '@eveworld/contracts':
+        specifier: ^0.1.0
+        version: 0.1.0
       '@eveworld/types':
         specifier: ^0.0.9
         version: 0.0.9(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -1650,6 +1653,9 @@ packages:
 
   '@eveworld/common-constants@0.0.13':
     resolution: {integrity: sha512-SI3RZhejBq7hNyLst32OCuhmpyKwrWg98EVnAQm8q/9yiLRSWIMe9xS3fflcfKrm+C7yE1lpESNgxI0gOi09ww==}
+
+  '@eveworld/contracts@0.1.0':
+    resolution: {integrity: sha512-UKefoBAGNAI3rH3JhK82Ku3PwzAcqU91AaPoHN0vhiKEc1HfRx7bVphg3+igv8pesY3foa61Fr1D6H265ykCEQ==}
 
   '@eveworld/smart-object-framework@0.0.8':
     resolution: {integrity: sha512-M+tj5F7ZSZKdQ6cbE9KW17AHQJi0duLSdiUKPJSk+tyBxocM3a8S9PUcm+tTTRRXtLUH6NQLLZdPOSV1DZFa5w==}
@@ -10792,6 +10798,8 @@ snapshots:
       - utf-8-validate
       - zod
 
+  '@eveworld/contracts@0.1.0': {}
+
   '@eveworld/smart-object-framework@0.0.8(@aws-sdk/client-kms@3.716.0)(asn1.js@5.4.1)(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.23.8)':
     dependencies:
       '@eveworld/common-constants': 0.0.13(@aws-sdk/client-kms@3.716.0)(asn1.js@5.4.1)(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -19430,7 +19438,7 @@ snapshots:
   sha.js@2.4.11:
     dependencies:
       inherits: 2.0.4
-      safe-buffer: 5.1.2
+      safe-buffer: 5.2.1
 
   shallow-clone@3.0.1:
     dependencies:

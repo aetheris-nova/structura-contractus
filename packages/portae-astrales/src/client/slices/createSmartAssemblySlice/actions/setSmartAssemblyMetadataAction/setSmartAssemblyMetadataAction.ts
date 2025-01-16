@@ -1,8 +1,6 @@
+import { IWorldAbi as eveWorldABI } from '@eveworld/contracts';
 import { getSystemId, SYSTEM_IDS } from '@eveworld/utils';
 import { type Address, encodeFunctionData, getAbiItem } from 'viem';
-
-// contracts
-import worldABI from '@dist/contracts/world/IWorld.sol/IWorld.abi.json';
 
 // errors
 import BaseError from '@client/errors/BaseError';
@@ -18,18 +16,18 @@ import type { IOptions } from './types';
 // utils
 import postMetaTransaction from '@client/utils/postMetaTransaction';
 
-const setSmartAssemblyMetadataAction: TActionCreator<IOptions, Promise<void>> =
+const setSmartAssemblyMetadataAction: TActionCreator<IOptions, Promise<boolean>> =
   ({ getState, setState }) =>
   async ({ dappURL, description, name, t, wagmiConfig }: IOptions) => {
     const __function = 'setSmartAssemblyMetadataAction';
     const account = getState().accounts[0] || null;
     const fetchSmartAssemblyAction = getState().fetchSmartAssemblyAction;
-    const setDeployableMetadataFunctionName = 'eveworld__setDeployableMetadata';
+    const functionName = 'setDeployableMetadata';
     const logger = getState().logger;
     const smartAssembly = getState().smartAssembly;
     const worldConfig = getState().worldConfig;
     let _systemID: Address | null;
-    let encodedSetDeployableMetadataFunctionData: Address;
+    let encodedFunctionData: Address;
 
     try {
       if (!worldConfig) {
@@ -58,21 +56,21 @@ const setSmartAssemblyMetadataAction: TActionCreator<IOptions, Promise<void>> =
         },
       }));
 
-      encodedSetDeployableMetadataFunctionData = encodeFunctionData({
+      encodedFunctionData = encodeFunctionData({
         abi: [
           getAbiItem({
-            abi: worldABI,
-            name: setDeployableMetadataFunctionName,
+            abi: eveWorldABI.abi,
+            name: functionName,
           }),
         ],
         args: [BigInt(smartAssembly.id), name, description, dappURL],
-        functionName: setDeployableMetadataFunctionName,
+        functionName,
       });
 
       await postMetaTransaction(
         {
           fromAddress: account.address as Address,
-          encodedFunctionData: encodedSetDeployableMetadataFunctionData,
+          encodedFunctionData: encodedFunctionData,
           systemID: _systemID,
           wagmiConfig,
           worldConfig,
@@ -82,6 +80,8 @@ const setSmartAssemblyMetadataAction: TActionCreator<IOptions, Promise<void>> =
         }
       );
 
+      logger.debug(`${__function}: updated metadata for smart assembly "${smartAssembly.id}"`);
+
       setState((state) => ({
         ...state,
         loadingModalDetails: null,
@@ -89,6 +89,8 @@ const setSmartAssemblyMetadataAction: TActionCreator<IOptions, Promise<void>> =
 
       // update the smart assembly details
       await fetchSmartAssemblyAction(smartAssembly.id);
+
+      return true;
     } catch (error) {
       logger.error(`${__function}:`, error);
 
@@ -105,6 +107,8 @@ const setSmartAssemblyMetadataAction: TActionCreator<IOptions, Promise<void>> =
         error: new UnknownError(error.message),
         loadingModalDetails: null,
       }));
+
+      return false;
     }
   };
 

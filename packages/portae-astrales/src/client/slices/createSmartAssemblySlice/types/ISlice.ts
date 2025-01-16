@@ -1,17 +1,17 @@
-import type { SmartAssemblies, SmartAssemblyType } from '@eveworld/types';
+import type { SmartAssemblies } from '@eveworld/types';
 
 // types
-import type { IWorldInteractionOptions } from '@client/types';
+import type { IWorldInteractionOptions, TSmartAssemblyWithAdditionalModules } from '@client/types';
 import type { IOptions as ISetSmartAssemblyMetadataActionOptions } from '../actions/setSmartAssemblyMetadataAction';
 
 interface ISlice {
   // state
-  smartAssembly: SmartAssemblyType<SmartAssemblies> | null;
+  smartAssembly: TSmartAssemblyWithAdditionalModules<SmartAssemblies> | null;
   fetchingSmartAssembly: boolean;
   // actions
-  fetchSmartAssemblyAction: (id: string) => Promise<SmartAssemblyType<SmartAssemblies> | null>;
-  setSmartAssemblyMetadataAction: (options: ISetSmartAssemblyMetadataActionOptions) => Promise<void>;
-  toggleSmartAssemblyOnlineAction: (options: IWorldInteractionOptions) => Promise<void>;
+  fetchSmartAssemblyAction: (id: string) => Promise<TSmartAssemblyWithAdditionalModules<SmartAssemblies> | null>;
+  setSmartAssemblyMetadataAction: (options: ISetSmartAssemblyMetadataActionOptions) => Promise<boolean>;
+  toggleSmartAssemblyOnlineAction: (options: IWorldInteractionOptions) => Promise<boolean>;
 }
 
 export default ISlice;

@@ -1,6 +1,6 @@
 // types
 import type ISmartCharacter from './ISmartCharacter';
-import type TWithLastUpdatedAt from './TWithLastUpdatedAt';
+import type TWithLastUpdatedAt from '../system/TWithLastUpdatedAt';
 
 type TSmartCharacterWithExtendedProps = TWithLastUpdatedAt<ISmartCharacter>;
 
