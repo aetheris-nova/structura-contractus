@@ -1,0 +1,8 @@
+.env
+.mud/
+cache/
+dependencies/
+deploys/
+dist/
+node_modules/
+worlds.json

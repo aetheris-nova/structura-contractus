@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false,
+    "alwaysStrict": true,
+    "baseUrl": ".",
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "paths": {
+      "@client/components/*": ["src/client/components/*"],
+      "@client/constants": ["src/client/constants"],
+      "@client/containers/*": ["src/client/containers/*"],
+      "@client/enums": ["src/client/enums"],
+      "@client/errors/*": ["src/client/errors/*"],
+      "@client/hooks/*": ["src/client/hooks/*"],
+      "@client/icons/*": ["src/client/icons/*"],
+      "@client/modals/*": ["src/client/modals/*"],
+      "@client/pages/*": ["src/client/pages/*"],
+      "@client/selectors": ["src/client/selectors"],
+      "@client/slices/*": ["src/client/slices/*"],
+      "@client/styles/*": ["src/client/styles/*"],
+      "@client/theme": ["src/client/theme.ts"],
+      "@client/translations": ["src/client/translations"],
+      "@client/types": ["src/client/types"],
+      "@client/utils/*": ["src/client/utils/*"],
+
+      "@dist/contracts/*": ["dist/contracts/*"]
+    },
+    "removeComments": false,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "strictBindCallApply": false,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": false,
+    "target": "ESNext"
+  }
+}

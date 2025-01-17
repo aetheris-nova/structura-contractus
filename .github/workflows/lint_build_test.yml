@@ -1,0 +1,81 @@
+name: "Lint, Build & Test"
+
+on:
+  workflow_call:
+    inputs:
+      package_name:
+        description: "The pnpm package name."
+        required: true
+        type: string
+      with_foundry:
+        default: false
+        description: "Whether foundry is used to build and run tests."
+        required: false
+        type: boolean
+
+jobs:
+  lint:
+    name: "Lint"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "🛎 Checkout"
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: "🔧 Setup"
+        uses: ./.github/actions/use-pnpm-dependencies
+      - name: "👕 Lint"
+        run: pnpm -F ${{ inputs.package_name }} run lint
+
+  build:
+    name: "Build"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "🛎 Checkout"
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: "🔧 Setup Foundry"
+        if: ${{ inputs.with_foundry == true }}
+        uses: foundry-rs/foundry-toolchain@v1
+      - name: "🔧 Setup Node"
+        uses: ./.github/actions/use-pnpm-dependencies
+      - name: "🏗️ Build"
+        run: |
+          pnpm -F ${{ inputs.package_name }} run build:dependencies
+          pnpm -F ${{ inputs.package_name }} run build
+
+  test:
+    if: ${{ inputs.with_foundry == false }}
+    name: "Test"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "🛎 Checkout"
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: "🔧 Setup Node"
+        uses: ./.github/actions/use-pnpm-dependencies
+      - name: "🧪 Test"
+        run: |
+          pnpm -F ${{ inputs.package_name }} run build:dependencies
+          pnpm -F ${{ inputs.package_name }} run test
+
+  test_with_anvil:
+    if: ${{ inputs.with_foundry == true }}
+    name: "Test With Foundry"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "🛎 Checkout"
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: "🔧 Setup Foundry"
+        uses: foundry-rs/foundry-toolchain@v1
+      - name: "🔧 Setup Node"
+        uses: ./.github/actions/use-pnpm-dependencies
+      - name: "🧪 Test"
+        run: |
+          pnpm -F ${{ inputs.package_name }} run build:dependencies
+          pnpm -F ${{ inputs.package_name }} run build
+          ./scripts/test_with_anvil.sh "${{ inputs.package_name }}"
