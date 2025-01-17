@@ -77,5 +77,4 @@ jobs:
       - name: "🧪 Test"
         run: |
           pnpm -F ${{ inputs.package_name }} run build:dependencies
-          pnpm -F ${{ inputs.package_name }} run build
           ./scripts/test_with_anvil.sh "${{ inputs.package_name }}"
