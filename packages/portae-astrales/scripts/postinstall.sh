@@ -13,6 +13,13 @@ source $(dirname "${BASH_SOURCE[0]}")/set_vars.sh
 function main {
   set_vars
 
+  if ! command -v forge &> /dev/null; then
+    printf "%b foundry not found, installing... \n" "${INFO_PREFIX}"
+    curl -L https://foundry.paradigm.xyz | bash
+    source ~/.bashrc
+    foundryup
+  fi
+
   # fetch solidity dependencies
   forge soldeer install
 
