@@ -1,6 +1,6 @@
 {
   "name": "@aetherisnova/portae-astrales",
-  "version": "1.0.0",
+  "version": "1.0.0-beta.1",
   "private": true,
   "description": "The Portae Astrales schema allows the construction of a great Porta of Aetheris Nova facilitating the safe traversal of the Aether.",
   "repository": {
