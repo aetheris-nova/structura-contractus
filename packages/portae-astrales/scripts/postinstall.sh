@@ -13,15 +13,14 @@ source $(dirname "${BASH_SOURCE[0]}")/set_vars.sh
 function main {
   set_vars
 
-  if ! command -v forge &> /dev/null; then
+  if [ ! -x "${HOME}/.foundry/bin/forge" ]; then
     printf "%b foundry not found, installing... \n" "${INFO_PREFIX}"
     curl -L https://foundry.paradigm.xyz | bash
-    source ~/.bashrc
-    foundryup
+    "${HOME}"/.foundry/bin/foundryup
   fi
 
   # fetch solidity dependencies
-  forge soldeer install
+  "${HOME}"/.foundry/bin/forge soldeer install
 
   # create a .env if none exist
   printf "%b creating .env, if necessary \n" "${INFO_PREFIX}"
