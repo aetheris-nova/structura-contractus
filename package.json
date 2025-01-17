@@ -7,8 +7,8 @@
     "url": "https://github.com/aetheris-nova/structura-contractus"
   },
   "engines": {
-    "node": ">=20.18.0",
-    "pnpm": ">=9"
+    "node": "20.x",
+    "pnpm": "9.x"
   },
   "scripts": {
     "prepare": "husky"

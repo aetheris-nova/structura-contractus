@@ -14,6 +14,8 @@
   The Structura Contractus of Aetheris Nova is the vault that houses the schemas used by the Ordo Aedificatorum.
 </p>
 
+---
+
 ### Table Of Contents
 
 * [1. Overview](#-1-overview)

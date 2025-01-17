@@ -5,24 +5,20 @@
 </div>
 
 <div align="center">
-  <h1 align="center">
-    Portae Astrales
-  </h1>
+
+[![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-brightgreen.svg)](./LICENSE)
+
 </div>
 
-<div align="center">
-  <a href="https://github.com/aetheris-nova/structura-contractus
-/blob/main/packages/portae-astrales/LICENSE">
-    <img alt="GitHub license badge" src="https://img.shields.io/github/license/aetheris-nova/structura-contractus/packages/portae-astrales
-">
-  </a>
-</div>
-
----
+<h1 align="center">
+  Structura Contractus - Portae Astrales
+</h1>
 
 <p align="center">
   The Portae Astrales schema allows the construction of a great Porta of Aetheris Nova, facilitating safe traversal of the Aether.
 </p>
+
+---
 
 ### Table Of Contents
 
