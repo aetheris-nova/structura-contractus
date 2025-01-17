@@ -1,5 +1,4 @@
 import { Spacer, Text, VStack, useDisclosure } from '@chakra-ui/react';
-import type { SmartAssemblyType } from '@eveworld/types';
 import { type FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -40,7 +39,7 @@ const SmartAssemblyPage: FC = () => {
   // selectors
   const account = useSelectSelectedAccount();
   // hooks
-  const { fetchingSmartAssembly, fetchSmartAssemblyAction, smartAssembly, toggleSmartAssemblyOnlineAction } = useStore();
+  const { fetchingSmartAssembly, fetchSmartAssemblyAction, smartAssembly, startPollingForSmartAssemblyAction, stopPollingForSmartAssemblyAction, toggleSmartAssemblyOnlineAction } = useStore();
   // handlers
   const handleOnEditMetadataClick = () => onEditDetailsModalOpen();
   const handleOnToggleOnlineClick = async () => {
@@ -51,7 +50,7 @@ const SmartAssemblyPage: FC = () => {
   };
   // renders
   const renderContent = () => {
-    if (fetchingSmartAssembly) {
+    if (!smartAssembly && fetchingSmartAssembly) {
       return (
         <VStack flex={1} gap={DEFAULT_GAP - 2} w="full">
           <Spacer />
@@ -106,6 +105,11 @@ const SmartAssemblyPage: FC = () => {
     );
   };
 
+  useEffect(() => {
+    startPollingForSmartAssemblyAction();
+
+    return () => stopPollingForSmartAssemblyAction();
+  }, []);
   useEffect(() => {
     (async () => id && (await fetchSmartAssemblyAction(id)))();
   }, [id]);

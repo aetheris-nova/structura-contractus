@@ -2,6 +2,7 @@ import { type FC, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
+import type { Address } from 'viem';
 import { useAccount, useConfig } from 'wagmi';
 
 // components
@@ -21,7 +22,7 @@ const Root: FC = () => {
   const { t } = useTranslation();
   const { addresses } = useAccount();
   const config = useConfig();
-  const { error, fetchingAccounts, fetchERC20TokenAction, fetchItemAction, fetchWorldConfigAction, loadingModalDetails, setAccountsAction, setErrorAction, subtitle, title } = useStore();
+  const { error, fetchERC20TokenAction, fetchItemAction, fetchWorldConfigAction, loadingModalDetails, selectedAccountAddress, setAccountsAction, setErrorAction, startPollingForSmartCharacterAction, stopPollingForSmartCharacterAction, subtitle, title } = useStore();
   // handlers
   const handleOnErrorModalClose = () => setErrorAction(null);
 
@@ -39,12 +40,16 @@ const Root: FC = () => {
           config,
         }),
       ]);
+
+      // start polling for smart character details
+      startPollingForSmartCharacterAction();
     })();
+
+    // stop polling if unmounted
+    return () => stopPollingForSmartCharacterAction();
   }, []);
   useEffect(() => {
-    if (addresses && !fetchingAccounts) {
-      (async () => await setAccountsAction(addresses.map((value) => value)))();
-    }
+    (async () => addresses && await setAccountsAction(addresses as Address[]))();
   }, [addresses]);
 
   return (

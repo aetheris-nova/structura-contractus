@@ -1,12 +1,18 @@
+import type { Address } from 'viem';
+
+// types
 import type { TSmartCharacterWithExtendedProps } from '@client/types';
 
 interface ISlice {
   // state
   accounts: TSmartCharacterWithExtendedProps[];
-  fetchingAccounts: boolean;
+  fetchingAccounts: Address[];
   selectedAccountAddress: string | null;
+  smartCharacterPollingInterval: number | null;
   // actions
-  setAccountsAction: (addresses: string[]) => Promise<TSmartCharacterWithExtendedProps[]>;
+  setAccountsAction: (addresses: Address[]) => Promise<TSmartCharacterWithExtendedProps[]>;
+  startPollingForSmartCharacterAction: (payload?: undefined) => void;
+  stopPollingForSmartCharacterAction: (payload?: undefined) => void;
 }
 
 export default ISlice;

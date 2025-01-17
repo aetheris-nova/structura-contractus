@@ -21,7 +21,7 @@ const setAccountsAction: TActionCreator<string[], Promise<TSmartCharacterWithExt
 
     setState((state) => ({
       ...state,
-      fetchingAccounts: true,
+      fetchingAccounts: accounts.map(({ address }) => address),
     }));
 
     for (let i = 0; i < addresses.length; i++) {
@@ -54,7 +54,7 @@ const setAccountsAction: TActionCreator<string[], Promise<TSmartCharacterWithExt
     setState((state) => ({
       ...state,
       accounts: _accounts,
-      fetchingAccounts: false,
+      fetchingAccounts: [],
       selectedAccountAddress: _accounts.find(({ address }) => address === state.selectedAccountAddress)
         ? state.selectedAccountAddress
         : _accounts[0]?.address || null,

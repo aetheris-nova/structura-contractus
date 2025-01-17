@@ -1,5 +1,5 @@
 import { Grid, GridItem, Heading, HStack, Link, Spinner, Text, VStack, useDisclosure } from '@chakra-ui/react';
-import { type FC } from 'react';
+import { type FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GrLinkPrevious } from 'react-icons/gr';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -99,7 +99,7 @@ const Header: FC = () => {
         <GridItem display="flex" colSpan={1}>
           <HStack gap={DEFAULT_GAP / 3} justify="flex-end" h="full" w="full">
             {isFetchingWorldConfig && (
-              <Spinner size="md" />
+              <Spinner pr={worldConfig ? (DEFAULT_GAP / 3) : 0} size="md" />
             )}
 
             {worldConfig && (

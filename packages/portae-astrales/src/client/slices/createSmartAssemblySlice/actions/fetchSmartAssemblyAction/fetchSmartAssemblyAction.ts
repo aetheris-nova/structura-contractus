@@ -1,6 +1,9 @@
 import type { SmartAssemblies } from '@eveworld/types';
 import type { AxiosError } from 'axios';
 
+// constants
+import { FETCH_SMART_ASSEMBLY_DELAY } from '@client/constants';
+
 // errors
 import UnknownError from '@client/errors/UnknownError';
 
@@ -9,7 +12,6 @@ import type { TActionCreator, TSmartAssemblyWithAdditionalModules } from '@clien
 
 // utils
 import fetchSmartAssemblyByID from '@client/utils/fetchSmartAssemblyByID';
-import { FETCH_SMART_ASSEMBLY_DELAY } from '@client/constants';
 
 const fetchSmartAssemblyAction: TActionCreator<
   string,
