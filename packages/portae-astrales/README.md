@@ -1,15 +1,27 @@
-<p align="center">
+<div align="center">
   <a href="https://aetherisnova.org">
-    <img alt="An ornate golden compass surrounded by orbs" src="../../.assets/aetheris_nova_emblem@128x128.png" style="padding-top: 15px" height="128" />
+    <img alt="An ornate golden compass surrounded by orbs" src="../../docs/images/emblem@128x128.png" height="128" />
   </a>
-</p>
+</div>
 
-<h1 align="center">
-  Structura Contractus - Portae Astrales
-</h1>
+<div align="center">
+  <h1 align="center">
+    Portae Astrales
+  </h1>
+</div>
+
+<div align="center">
+  <a href="https://github.com/aetheris-nova/structura-contractus
+/blob/main/packages/portae-astrales/LICENSE">
+    <img alt="GitHub license badge" src="https://img.shields.io/github/license/aetheris-nova/structura-contractus/packages/portae-astrales
+">
+  </a>
+</div>
+
+---
 
 <p align="center">
-  The Portae Astrales schema allows the construction of a great Porta of Aetheris Nova facilitating safe traversal of the Aether.
+  The Portae Astrales schema allows the construction of a great Porta of Aetheris Nova, facilitating safe traversal of the Aether.
 </p>
 
 ### Table Of Contents
