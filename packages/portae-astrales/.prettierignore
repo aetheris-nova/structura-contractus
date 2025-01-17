@@ -1,6 +1,8 @@
+.env
 .mud/
 cache/
 dependencies/
+deploys/
 dist/
-lib/
 node_modules/
+worlds.json

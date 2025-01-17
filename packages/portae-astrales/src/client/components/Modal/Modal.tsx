@@ -45,13 +45,13 @@ const Modal: FC<IProps> = ({ body, closeButton, footer, onClose, open, subtitle,
           borderColor={foregroundColor}
           borderTopWidth={1}
           gap={0}
-          h={BUTTON_HEIGHT}
           w="full"
         >
           {footer.map((value, index, array) => cloneElement(value, {
             borderColor: foregroundColor,
             flex: 1,
             key: `${context}__footer-${index}`,
+            variant: 'ghost',
             ...(index < array.length - 1 && {
               borderRightWidth: 1,
             })
@@ -66,11 +66,11 @@ const Modal: FC<IProps> = ({ body, closeButton, footer, onClose, open, subtitle,
         gap={0}
         w="full"
       >
-        {footer.map((value, index, array) => cloneElement(value, {
+        {footer.map((value, index) => cloneElement(value, {
           borderColor: foregroundColor,
           borderTopWidth: 1,
-          h: BUTTON_HEIGHT,
           key: `${context}__footer-${index}`,
+          variant: 'ghost',
         }))}
       </VStack>
     );
@@ -143,23 +143,7 @@ const Modal: FC<IProps> = ({ body, closeButton, footer, onClose, open, subtitle,
                 </VStack>
 
                 {/*footer*/}
-                {footer && footer.length > 0 && (
-                  <HStack
-                    borderColor={foregroundColor}
-                    borderTopWidth={1}
-                    gap={0}
-                    w="full"
-                  >
-                    {footer.map((value, index, array) => cloneElement(value, {
-                      borderColor: foregroundColor,
-                      flex: 1,
-                      key: `${context}__footer-${index}`,
-                      ...(index < array.length - 1 && {
-                        borderRightWidth: 1,
-                      })
-                    }))}
-                  </HStack>
-                )}
+                {renderFooter()}
               </VStack>
             </Flex>
           </Box>

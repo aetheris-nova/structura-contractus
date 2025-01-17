@@ -12,7 +12,9 @@ export default function isLocalStorageAvailable(): boolean {
     window.localStorage.removeItem(key);
 
     return true;
-  } catch (e) {
+    /* eslint-disable @typescript-eslint/no-unused-vars */
+  } catch (_) {
+    /* eslint-enable @typescript-eslint/no-unused-vars */
     return false;
   }
 }

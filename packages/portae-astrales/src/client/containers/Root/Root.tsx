@@ -22,7 +22,7 @@ const Root: FC = () => {
   const { t } = useTranslation();
   const { addresses } = useAccount();
   const config = useConfig();
-  const { error, fetchERC20TokenAction, fetchItemAction, fetchWorldConfigAction, loadingModalDetails, selectedAccountAddress, setAccountsAction, setErrorAction, startPollingForSmartCharacterAction, stopPollingForSmartCharacterAction, subtitle, title } = useStore();
+  const { error, fetchERC20TokenAction, fetchItemAction, fetchWorldConfigAction, loadingModalDetails, setAccountsAction, setErrorAction, startPollingForSmartCharacterAction, stopPollingForSmartCharacterAction, subtitle, title } = useStore();
   // handlers
   const handleOnErrorModalClose = () => setErrorAction(null);
 

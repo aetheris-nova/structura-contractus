@@ -1,5 +1,5 @@
 import { Grid, GridItem, Heading, HStack, Link, Spinner, Text, VStack, useDisclosure } from '@chakra-ui/react';
-import { type FC, useMemo } from 'react';
+import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GrLinkPrevious } from 'react-icons/gr';
 import { useLocation, useNavigate } from 'react-router-dom';

@@ -11,9 +11,6 @@ import { GrCheckmark, GrCopy } from 'react-icons/gr';
 import IconButton from '@client/components/IconButton';
 import InfoTip from '@client/components/InfoTip';
 
-// constants
-import { DEFAULT_GAP } from '@client/constants';
-
 // types
 import type { IProps } from './types';
 

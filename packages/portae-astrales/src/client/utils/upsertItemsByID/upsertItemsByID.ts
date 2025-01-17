@@ -1,5 +1,3 @@
-import type { Address } from 'viem';
-
 /**
  * Updates the items, if any exist, otherwise it adds the items and returns the updated items list. This function uses
  * the `id` as the index.
