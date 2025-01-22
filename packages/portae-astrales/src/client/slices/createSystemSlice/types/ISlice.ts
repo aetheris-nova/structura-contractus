@@ -1,5 +1,4 @@
-// types
-import type { ILogger } from '@client/types';
+import type { ILogger } from '@aetherisnova/types';
 
 interface ISlice {
   // state

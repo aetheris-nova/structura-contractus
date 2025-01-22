@@ -1,5 +1,4 @@
-// types
-import type ILogger from './ILogger';
+import type { ILogger } from '@aetherisnova/types';
 
 interface IFetchOptions {
   delay?: number;

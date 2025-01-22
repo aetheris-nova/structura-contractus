@@ -1,3 +1,4 @@
+import { createLogger } from '@aetherisnova/utils';
 import I18next, { type i18n } from 'i18next';
 import { createElement } from 'react';
 import { initReactI18next } from 'react-i18next';
@@ -8,9 +9,6 @@ import App from '@client/containers/App';
 
 // translations
 import { en } from '@client/translations';
-
-// utils
-import createLogger from '@client/utils/createLogger';
 
 export async function onDOMContentLoaded(): Promise<void> {
   const logger = createLogger(import.meta.env.DEV ? 'debug' : 'error');

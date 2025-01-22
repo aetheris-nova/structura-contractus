@@ -1,3 +1,4 @@
+import type { IUtilityOptions } from '@aetherisnova/types';
 import { IWorldAbi as eveWorldABI } from '@eveworld/contracts';
 import type { ERC2771ForwardRequest } from '@eveworld/types';
 import { getBlock, signTypedData, simulateContract } from '@wagmi/core';
@@ -11,7 +12,6 @@ import UnknownError from '@client/errors/UnknownError';
 import WorldDataNotFoundError from '@client/errors/WorldDataNotFoundError';
 
 // types
-import type { IUtilityOptions } from '@client/types';
 import type { IOptions } from './types';
 
 export default async function postMetaTransaction(

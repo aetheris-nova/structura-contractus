@@ -1,13 +1,12 @@
+import { Button, type IBaseComponentProps, IconButton } from '@aetherisnova/ui-components';
 import { Grid, GridItem, Heading, HStack, Link, Spinner, Text, VStack, useDisclosure } from '@chakra-ui/react';
-import { type FC } from 'react';
+import { type FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GrLinkPrevious } from 'react-icons/gr';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDisconnect } from 'wagmi';
 
 // components
-import Button from '@client/components/Button';
-import IconButton from '@client/components/IconButton';
 import ProfileHeader from '@client/components/ProfileHeader';
 
 // constants
@@ -34,11 +33,15 @@ const Header: FC = () => {
   const navigate = useNavigate();
   const { disconnectAsync } = useDisconnect();
   const { onClose: onWalletSelectDialogClose, onOpen: onWalletSelectDialogOpen, open: walletSelectDialogOpen } = useDisclosure();
-  const { inGame, isFetchingWorldConfig, setAccountsAction, subtitle, title, worldConfig } = useStore();
+  const { colorMode, inGame, isFetchingWorldConfig, setAccountsAction, subtitle, title, worldConfig } = useStore();
   // selectors
   const account = useSelectSelectedAccount();
   // hooks
   const foregroundColor = useForegroundColor();
+  // memos
+  const baseProps = useMemo<Partial<IBaseComponentProps>>(() => ({
+    colorMode,
+  }), [colorMode]);
   // handlers
   const handleOnConnectClick = () => onWalletSelectDialogOpen();
   const handleOnBackClick = () => navigate(-1);
@@ -62,6 +65,7 @@ const Header: FC = () => {
         <GridItem display="flex" colSpan={1}>
           {key !== 'default' && (
             <IconButton
+              {...baseProps}
               borderRightWidth={1}
               onClick={handleOnBackClick}
               scheme="secondary"
@@ -113,6 +117,7 @@ const Header: FC = () => {
                   />
                 ) : (
                   <Button
+                    {...baseProps}
                     borderColor={foregroundColor}
                     borderLeftWidth={1}
                     onClick={handleOnConnectClick}

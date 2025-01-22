@@ -1,3 +1,4 @@
+import { isLocalStorageAvailable } from '@aetherisnova/utils';
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 
@@ -15,9 +16,6 @@ import createWorldSlice from '@client/slices/createWorldSlice';
 
 // types
 import type { TState } from '@client/types';
-
-// utils
-import isLocalStorageAvailable from '@client/utils/isLocalStorageAvailable';
 
 const useStore = create<TState>()(
   devtools(

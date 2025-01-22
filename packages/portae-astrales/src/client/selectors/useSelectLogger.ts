@@ -1,5 +1,4 @@
-// types
-import type { ILogger } from '@client/types';
+import type { ILogger } from '@aetherisnova/types';
 
 // utils
 import useStore from '@client/utils/useStore';
