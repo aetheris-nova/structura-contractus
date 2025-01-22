@@ -1,13 +1,11 @@
-import { Box, DataList, Heading, HStack, Image, Spacer, Text, VStack } from '@chakra-ui/react';
+import { Card, DataList, DataListItem, EmptyState,  } from '@aetherisnova/ui-components';
+import { Box, Heading, HStack, Image, Spacer, Text, VStack } from '@chakra-ui/react';
 import { randomString } from '@stablelib/random';
 import { type FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatUnits } from 'viem';
 
 // components
-import Card from '@client/components/Card';
-import DataListItem from '@client/components/DataListItem';
-import EmptyState from '@client/components/EmptyState';
 import ListItem from '@client/components/ListItem';
 import Page from '@client/components/Page';
 
@@ -101,7 +99,7 @@ const CharacterPage: FC = () => {
                 </Heading>
               </HStack>
 
-              <DataList.Root gap={DEFAULT_GAP / 3} orientation="horizontal" w="full">
+              <DataList gap={DEFAULT_GAP / 3} orientation="horizontal" w="full">
                 {/*id*/}
                 <DataListItem
                   copyText={account.id}
@@ -121,7 +119,7 @@ const CharacterPage: FC = () => {
                     start: 5,
                   })}
                 />
-              </DataList.Root>
+              </DataList>
             </VStack>
           </Card>
 
@@ -135,7 +133,7 @@ const CharacterPage: FC = () => {
               p={DEFAULT_GAP / 2}
               w="full"
             >
-              <DataList.Root orientation="horizontal" w="full">
+              <DataList orientation="horizontal" w="full">
                 {/*eve token*/}
                 {eveToken && (
                   <DataListItem
@@ -151,7 +149,7 @@ const CharacterPage: FC = () => {
                     )}
                   />
                 )}
-              </DataList.Root>
+              </DataList>
             </VStack>
           </Card>
         </HStack>

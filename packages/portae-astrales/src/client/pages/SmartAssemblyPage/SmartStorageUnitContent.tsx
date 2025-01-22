@@ -1,14 +1,11 @@
-import { DataList, HStack, Image, Spacer, Text, VStack } from '@chakra-ui/react';
+import { Button, Card, DataList, DataListItem, EmptyState } from '@aetherisnova/ui-components';
+import { HStack, Image, Spacer, Text, VStack } from '@chakra-ui/react';
 import { randomString } from '@stablelib/random';
 import BigNumber from 'bignumber.js';
 import { cloneElement, type FC, type ReactElement, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
-import Button from '@client/components/Button';
-import Card from '@client/components/Card';
-import DataListItem from '@client/components/DataListItem';
-import EmptyState from '@client/components/EmptyState';
 import ListItem from '@client/components/ListItem';
 
 // constants
@@ -103,7 +100,7 @@ const SmartStorageUnitContent: FC<IContentProps<'SmartStorageUnit'>> = ({ accoun
         {/*details*/}
         <Card borderRightWidth={1} title={t('headings.terminalDetails')} w="full">
           <VStack p={DEFAULT_GAP / 2} w="full">
-            <DataList.Root gap={DEFAULT_GAP / 3} orientation="horizontal" w="full">
+            <DataList gap={DEFAULT_GAP / 3} orientation="horizontal" w="full">
               {/*name*/}
               <DataListItem
                 label={<Text fontWeight="600">{t('labels.name').toUpperCase()}</Text>}
@@ -152,7 +149,7 @@ const SmartStorageUnitContent: FC<IContentProps<'SmartStorageUnit'>> = ({ accoun
                 label={<Text fontWeight="600">{t('labels.fuelEstimatedDepletion').toUpperCase()}</Text>}
                 value={'-'}
               />
-            </DataList.Root>
+            </DataList>
           </VStack>
         </Card>
 

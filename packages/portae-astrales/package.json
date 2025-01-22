@@ -30,9 +30,9 @@
     "test:contracts": "shx cp .env.test .env && pnpm run deploy && forge test --fork-url http://127.0.0.1:8545 -vv"
   },
   "dependencies": {
-    "@aetherisnova/types": "^1.0.1",
-    "@aetherisnova/ui-components": "^1.0.1",
-    "@aetherisnova/utils": "^1.0.1",
+    "@aetherisnova/types": "^1.0.2-beta.1",
+    "@aetherisnova/ui-components": "^1.0.2-beta.1",
+    "@aetherisnova/utils": "^1.0.2-beta.1",
     "@chakra-ui/color-mode": "^2.2.0",
     "@chakra-ui/react": "^3.2.5",
     "@emotion/react": "^11.14.0",

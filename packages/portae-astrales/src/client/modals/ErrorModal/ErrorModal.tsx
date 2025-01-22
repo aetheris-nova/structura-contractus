@@ -1,3 +1,4 @@
+import { Modal } from '@aetherisnova/ui-components';
 import { Icon, Text, VStack } from '@chakra-ui/react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -5,9 +6,6 @@ import { GrStatusWarning } from 'react-icons/gr';
 
 // constants
 import { DEFAULT_GAP } from '@client/constants';
-
-// components
-import Modal from '@client/components/Modal';
 
 // types
 import type { IProps } from './types';

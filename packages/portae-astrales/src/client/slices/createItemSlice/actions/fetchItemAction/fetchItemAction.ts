@@ -1,3 +1,5 @@
+import { upsertItemsByKey } from '@aetherisnova/utils';
+
 // constants
 import { FETCH_ITEM_TIMEOUT } from '@client/constants';
 
@@ -6,7 +8,6 @@ import type { IItem, IItemWithExtendedProps, TActionCreator } from '@client/type
 
 // utils
 import fetchItemByID from '@client/utils/fetchItemByID';
-import upsertItemsByID from '@client/utils/upsertItemsByID';
 
 const fetchItemAction: TActionCreator<string, Promise<IItemWithExtendedProps | null>> =
   ({ getState, setState }) =>
@@ -49,7 +50,7 @@ const fetchItemAction: TActionCreator<string, Promise<IItemWithExtendedProps | n
       setState((state) => ({
         ...state,
         fetchingItems: fetchingItems.filter((value) => value !== id),
-        items: upsertItemsByID<IItemWithExtendedProps>(state.items, [_item]),
+        items: upsertItemsByKey<IItemWithExtendedProps>(state.items, [_item], 'id'),
       }));
 
       return _item;

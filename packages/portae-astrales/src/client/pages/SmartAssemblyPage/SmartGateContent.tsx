@@ -1,4 +1,5 @@
-import { DataList, HStack, Link as ChakraLink, Spacer, Text, VStack } from '@chakra-ui/react';
+import { Button, Card, DataList, DataListItem, EmptyState } from '@aetherisnova/ui-components';
+import { HStack, Link as ChakraLink, Spacer, Text, VStack } from '@chakra-ui/react';
 import { randomString } from '@stablelib/random';
 import BigNumber from 'bignumber.js';
 import { cloneElement, type FC, type ReactElement, useMemo } from 'react';
@@ -6,10 +7,6 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 // components
-import Button from '@client/components/Button';
-import Card from '@client/components/Card';
-import DataListItem from '@client/components/DataListItem';
-import EmptyState from '@client/components/EmptyState';
 import ListItem from '@client/components/ListItem';
 
 // constants
@@ -97,7 +94,7 @@ const SmartGateContent: FC<IContentProps<'SmartGate'>> = ({ account, onEditMetad
         {/*details*/}
         <Card borderRightWidth={1} title={t('headings.gateDetails')} w="full">
           <VStack p={DEFAULT_GAP / 2} w="full">
-            <DataList.Root gap={DEFAULT_GAP / 3} orientation="horizontal" w="full">
+            <DataList gap={DEFAULT_GAP / 3} orientation="horizontal" w="full">
               {/*name*/}
               <DataListItem
                 label={<Text fontWeight="600">{t('labels.name').toUpperCase()}</Text>}
@@ -168,7 +165,7 @@ const SmartGateContent: FC<IContentProps<'SmartGate'>> = ({ account, onEditMetad
                   copyText: smartAssembly.gateLink.destinationGate,
                 })}
               />
-            </DataList.Root>
+            </DataList>
           </VStack>
         </Card>
 
