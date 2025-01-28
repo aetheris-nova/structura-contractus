@@ -1,5 +1,5 @@
-import { Button, type IBaseComponentProps, IconButton } from '@aetherisnova/ui-components';
-import { HStack, Link, Spinner, useDisclosure, Spacer } from '@chakra-ui/react';
+import { Button, BUTTON_HEIGHT, DEFAULT_GAP, type IBaseComponentProps, IconButton } from '@aetherisnova/ui-components';
+import { HStack, Spinner, useDisclosure, Spacer } from '@chakra-ui/react';
 import { type FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GrLinkPrevious } from 'react-icons/gr';
@@ -8,9 +8,6 @@ import { useDisconnect } from 'wagmi';
 
 // components
 import ProfileHeader from '@client/components/ProfileHeader';
-
-// constants
-import { DEFAULT_GAP, BUTTON_HEIGHT } from '@client/constants';
 
 // hooks
 import useForegroundColor from '@client/hooks/useForegroundColor';
@@ -61,21 +58,26 @@ const Header: FC = () => {
         minH={BUTTON_HEIGHT}
         w="full"
       >
-        {key !== 'default' && (
-          <IconButton
-            {...baseProps}
-            borderRightWidth={1}
-            onClick={handleOnBackClick}
-            scheme="secondary"
-            variant="ghost"
-          >
-            <GrLinkPrevious />
-          </IconButton>
-        )}
+        {key === 'default' ? (
+          <PaLogo
+            fontSize="2xl"
+            ml={DEFAULT_GAP / 3}
+          />
+        ) : (
+          <>
+            <IconButton
+              {...baseProps}
+              borderRightWidth={1}
+              onClick={handleOnBackClick}
+              scheme="secondary"
+              variant="ghost"
+            >
+              <GrLinkPrevious />
+            </IconButton>
 
-        <Link href="/" ml={DEFAULT_GAP / 2}>
-          <PaLogo fontSize="2xl" />
-        </Link>
+            <PaLogo fontSize="2xl" />
+          </>
+        )}
 
         <Spacer />
 
