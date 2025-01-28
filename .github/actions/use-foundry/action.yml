@@ -7,6 +7,3 @@ runs:
   steps:
     - name: "🔧 Setup Foundry"
       uses: foundry-rs/foundry-toolchain@v1
-    - name: "📦 Install Dependencies"
-      run: forge soldeer install
-      shell: bash
