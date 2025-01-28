@@ -63,14 +63,11 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2
       '@aetherisnova/ui-components':
-        specifier: ^1.0.3-beta.1
-        version: 1.0.3-beta.1(@chakra-ui/react@3.2.5(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(@tanstack/react-query@5.63.0(react@18.3.1))(bufferutil@4.0.8)(react-dom@18.3.1(react@18.3.1))(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.18)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)(typescript@5.7.2)(utf-8-validate@5.0.10)(viem@2.22.5(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.23.8))(wagmi@2.14.7(@tanstack/query-core@5.64.2)(@tanstack/react-query@5.63.0(react@18.3.1))(@types/react@18.3.18)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.7.2)(utf-8-validate@5.0.10)(viem@2.22.5(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8))(zod@3.23.8)
+        specifier: ^1.1.0-beta.3
+        version: 1.1.0-beta.3(@chakra-ui/react@3.2.5(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(@tanstack/react-query@5.63.0(react@18.3.1))(bufferutil@4.0.8)(react-dom@18.3.1(react@18.3.1))(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.18)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)(typescript@5.7.2)(utf-8-validate@5.0.10)(viem@2.22.5(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.23.8))(wagmi@2.14.7(@tanstack/query-core@5.64.2)(@tanstack/react-query@5.63.0(react@18.3.1))(@types/react@18.3.18)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.7.2)(utf-8-validate@5.0.10)(viem@2.22.5(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8))(zod@3.23.8)
       '@aetherisnova/utils':
         specifier: ^1.0.2
         version: 1.0.2
-      '@chakra-ui/color-mode':
-        specifier: ^2.2.0
-        version: 2.2.0(react@18.3.1)
       '@chakra-ui/react':
         specifier: ^3.2.5
         version: 3.2.5(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -168,6 +165,9 @@ importers:
         specifier: ^5.0.3
         version: 5.0.3(@types/react@18.3.18)(react@18.3.1)(use-sync-external-store@1.4.0(react@18.3.1))
     devDependencies:
+      '@chakra-ui/color-mode':
+        specifier: ^2.2.0
+        version: 2.2.0(react@18.3.1)
       '@eslint/js':
         specifier: ^9.18.0
         version: 9.18.0
@@ -237,8 +237,8 @@ packages:
   '@aetherisnova/types@1.0.2':
     resolution: {integrity: sha512-OgtcR7Hk1dIn2ZoELxwMLTZpR/5siS+rNVfvmiyydkhm47SalTGfAV5Yj+z39cAItnDxx8cSmxIC2PECksi3MA==}
 
-  '@aetherisnova/ui-components@1.0.3-beta.1':
-    resolution: {integrity: sha512-/0G9q5Hh6s1b1iZ7WRgFr8xnzq9wmFJQIwwqc8oNTFBGGGA0fYCEDsRGAiAx2ZIsL7ZtJSoNO1jKRxqctILmjQ==}
+  '@aetherisnova/ui-components@1.1.0-beta.3':
+    resolution: {integrity: sha512-ojIKjW1PLNFZenVlKWlPDsF/BuYCb4OriLAJzd54FRjiwgmcTPBXzkG8My6irhE7r6DQIZzEqDkkFR62e4V5Ag==}
     peerDependencies:
       '@chakra-ui/react': 3.x
       '@emotion/react': '>=11.x'
@@ -8980,7 +8980,7 @@ snapshots:
 
   '@aetherisnova/types@1.0.2': {}
 
-  '@aetherisnova/ui-components@1.0.3-beta.1(@chakra-ui/react@3.2.5(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(@tanstack/react-query@5.63.0(react@18.3.1))(bufferutil@4.0.8)(react-dom@18.3.1(react@18.3.1))(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.18)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)(typescript@5.7.2)(utf-8-validate@5.0.10)(viem@2.22.5(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.23.8))(wagmi@2.14.7(@tanstack/query-core@5.64.2)(@tanstack/react-query@5.63.0(react@18.3.1))(@types/react@18.3.18)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.7.2)(utf-8-validate@5.0.10)(viem@2.22.5(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8))(zod@3.23.8)':
+  '@aetherisnova/ui-components@1.1.0-beta.3(@chakra-ui/react@3.2.5(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(@tanstack/react-query@5.63.0(react@18.3.1))(bufferutil@4.0.8)(react-dom@18.3.1(react@18.3.1))(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.18)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)(typescript@5.7.2)(utf-8-validate@5.0.10)(viem@2.22.5(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.23.8))(wagmi@2.14.7(@tanstack/query-core@5.64.2)(@tanstack/react-query@5.63.0(react@18.3.1))(@types/react@18.3.18)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.7.2)(utf-8-validate@5.0.10)(viem@2.22.5(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8))(zod@3.23.8)':
     dependencies:
       '@aetherisnova/types': 1.0.2
       '@chakra-ui/react': 3.2.5(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)

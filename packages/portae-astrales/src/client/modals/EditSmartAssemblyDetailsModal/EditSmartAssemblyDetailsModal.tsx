@@ -1,11 +1,16 @@
-import { Button, type IBaseComponentProps, Field, Input, Modal, Textarea } from '@aetherisnova/ui-components';
+import {
+  Button,
+  DEFAULT_GAP,
+  type IBaseComponentProps,
+  Field,
+  Input,
+  Modal,
+  Textarea,
+} from '@aetherisnova/ui-components';
 import { VStack } from '@chakra-ui/react';
 import { type ChangeEvent, type FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from 'wagmi';
-
-// constants
-import { DEFAULT_GAP } from '@client/constants';
 
 // selectors
 import { useSelectColorMode } from '@client/selectors';

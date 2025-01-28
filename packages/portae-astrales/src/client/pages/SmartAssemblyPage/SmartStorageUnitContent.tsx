@@ -5,7 +5,7 @@ import {
   DataListItem,
   DEFAULT_GAP,
   EmptyState,
-  // useTabletAndUp,
+  useTabletAndUp,
 } from '@aetherisnova/ui-components';
 import { HStack, Image, Spacer, Text, VStack } from '@chakra-ui/react';
 import { randomString } from '@stablelib/random';
@@ -18,7 +18,6 @@ import ListItem from '@client/components/ListItem';
 
 // hooks
 import useForegroundColor from '@client/hooks/useForegroundColor';
-import useTabletAndUp from '@client/hooks/useTabletAndUp';
 
 // selectors
 import { useSelectFuelItem } from '@client/selectors';

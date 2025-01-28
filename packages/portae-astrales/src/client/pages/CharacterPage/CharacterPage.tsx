@@ -4,7 +4,7 @@ import {
   DataListItem,
   DEFAULT_GAP,
   EmptyState,
-  // useTabletAndUp,
+  useTabletAndUp,
 } from '@aetherisnova/ui-components';
 import { Box, Heading, HStack, Image, Spacer, Text, VStack } from '@chakra-ui/react';
 import { randomString } from '@stablelib/random';
@@ -21,7 +21,6 @@ import { SMART_ASSEMBLY_ROUTE } from '@client/constants';
 
 // hooks
 import useForegroundColor from '@client/hooks/useForegroundColor';
-import useTabletAndUp from '@client/hooks/useTabletAndUp';
 
 // icons
 import EvEVEToken from '@client/icons/EvEVEToken';

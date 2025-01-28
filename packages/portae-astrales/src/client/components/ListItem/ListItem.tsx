@@ -1,6 +1,6 @@
 import {
   DEFAULT_GAP,
-  // useTabletAndUp,
+  useTabletAndUp,
 } from '@aetherisnova/ui-components';
 import { HStack, Icon, Link as ChakraLink, Spacer, Text, VStack } from '@chakra-ui/react';
 import { type FC } from 'react';
@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 
 // hooks
 import useForegroundColor from '@client/hooks/useForegroundColor';
-import useTabletAndUp from '@client/hooks/useTabletAndUp';
 
 // types
 import type { IProps } from './types';

@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@aetherisnova/types": "^1.0.2",
-    "@aetherisnova/ui-components": "^1.0.3-beta.1",
+    "@aetherisnova/ui-components": "^1.1.0-beta.3",
     "@aetherisnova/utils": "^1.0.2",
     "@chakra-ui/react": "^3.2.5",
     "@emotion/react": "^11.14.0",
