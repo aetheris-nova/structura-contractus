@@ -53,5 +53,6 @@ jobs:
     if: ${{ needs.changed_files.outputs.portae_astrales == 'true' }}
     uses: ./.github/workflows/lint_build_test.yml
     with:
+      package_dir: "portae-astrales"
       package_name: "@aetherisnova/portae-astrales"
       with_foundry: true

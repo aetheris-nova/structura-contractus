@@ -16,7 +16,6 @@ function main {
   if [ ! -x "${HOME}/.foundry/bin/forge" ]; then
     printf "%b foundry not found, installing... \n" "${INFO_PREFIX}"
     curl -L https://foundry.paradigm.xyz | bash
-    source "${HOME}"/.bashrc
     "${HOME}"/.foundry/bin/foundryup
   fi
 

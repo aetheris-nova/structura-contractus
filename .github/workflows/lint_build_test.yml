@@ -3,6 +3,10 @@ name: "Lint, Build & Test"
 on:
   workflow_call:
     inputs:
+      package_dir:
+        description: "The directory name of the package."
+        required: true
+        type: string
       package_name:
         description: "The pnpm package name."
         required: true
@@ -38,6 +42,8 @@ jobs:
       - name: "🔧 Setup Foundry"
         if: ${{ inputs.with_foundry == true }}
         uses: ./.github/actions/use-foundry
+        with:
+          package_dir: ${{ inputs.package_dir }}
       - name: "🔧 Setup Node"
         uses: ./.github/actions/use-pnpm-dependencies
       - name: "🏗️ Build"
@@ -72,6 +78,8 @@ jobs:
           submodules: recursive
       - name: "🔧 Setup Foundry"
         uses: ./.github/actions/use-foundry
+        with:
+          package_dir: ${{ inputs.package_dir }}
       - name: "🔧 Setup Node"
         uses: ./.github/actions/use-pnpm-dependencies
       - name: "🧪 Test"
