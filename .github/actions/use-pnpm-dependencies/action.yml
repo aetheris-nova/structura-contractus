@@ -13,5 +13,5 @@ runs:
         node-version: '20.18.0'
         cache: 'pnpm'
     - name: "📦 Install"
-      run: pnpm install --frozen-lockfile
+      run: pnpm install --frozen-lockfile --ignore-scripts
       shell: bash
