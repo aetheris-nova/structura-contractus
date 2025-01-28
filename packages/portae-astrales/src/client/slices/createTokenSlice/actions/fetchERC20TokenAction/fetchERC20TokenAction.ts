@@ -1,3 +1,4 @@
+import { upsertItemsByKey } from '@aetherisnova/utils';
 import { readContracts } from '@wagmi/core';
 import { ContractFunctionExecutionError } from 'viem';
 
@@ -7,9 +8,6 @@ import { FETCH_TOKEN_DETAILS_TIMEOUT } from '@client/constants';
 // types
 import type { IERC20Token, TActionCreator } from '@client/types';
 import type { IOptions } from './types';
-
-// utils
-import upsertItemsByAddress from '@client/utils/upsertItemsByAddress';
 
 const fetchERC20TokenAction: TActionCreator<IOptions, Promise<IERC20Token | null>> =
   ({ getState, setState }) =>
@@ -130,7 +128,7 @@ const fetchERC20TokenAction: TActionCreator<IOptions, Promise<IERC20Token | null
       setState((state) => ({
         ...state,
         fetchingTokens: fetchingTokens.filter((value) => value !== address),
-        tokens: upsertItemsByAddress<IERC20Token>(state.tokens, [_token]),
+        tokens: upsertItemsByKey<IERC20Token>(state.tokens, [_token], 'address'),
       }));
 
       return _token;

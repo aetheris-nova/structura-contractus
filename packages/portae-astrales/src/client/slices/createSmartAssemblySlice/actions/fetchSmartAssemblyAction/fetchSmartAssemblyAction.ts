@@ -8,14 +8,18 @@ import { FETCH_SMART_ASSEMBLY_DELAY } from '@client/constants';
 import UnknownError from '@client/errors/UnknownError';
 
 // types
-import type { TActionCreator, TSmartAssemblyWithAdditionalModules } from '@client/types';
+import type {
+  TActionCreator,
+  TSmartAssemblyWithAdditionalModules,
+  TSmartAssemblyWithExtendedProps,
+} from '@client/types';
 
 // utils
 import fetchSmartAssemblyByID from '@client/utils/fetchSmartAssemblyByID';
 
 const fetchSmartAssemblyAction: TActionCreator<
   string,
-  Promise<TSmartAssemblyWithAdditionalModules<SmartAssemblies> | null>
+  Promise<TSmartAssemblyWithExtendedProps<SmartAssemblies> | null>
 > =
   ({ getState, setState }) =>
   async (id) => {
@@ -23,6 +27,7 @@ const fetchSmartAssemblyAction: TActionCreator<
     const fetching = getState().fetchingSmartAssembly;
     const logger = getState().logger;
     let result: TSmartAssemblyWithAdditionalModules<SmartAssemblies>;
+    let smartAssembly: TSmartAssemblyWithExtendedProps<SmartAssemblies>;
 
     if (fetching) {
       return null;
@@ -80,15 +85,20 @@ const fetchSmartAssemblyAction: TActionCreator<
       );
     }
 
-    logger.debug(`${__function}: found smart assembly:`, result);
+    smartAssembly = {
+      ...result,
+      lastUpdatedAt: new Date().getTime(),
+    };
 
     setState((state) => ({
       ...state,
       fetchingSmartAssembly: false,
-      smartAssembly: result,
+      smartAssembly,
     }));
 
-    return result;
+    logger.debug(`${__function}: saved smart assembly:`, smartAssembly);
+
+    return smartAssembly;
   };
 
 export default fetchSmartAssemblyAction;

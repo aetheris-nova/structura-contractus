@@ -1,5 +1,5 @@
+import { AppProvider } from '@aetherisnova/ui-components';
 import { type FC } from 'react';
-import { I18nextProvider } from 'react-i18next';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 // constants
@@ -7,8 +7,6 @@ import { CHARACTER_ROUTE, SMART_ASSEMBLY_ROUTE } from '@client/constants';
 
 // containers
 import Root from '@client/containers/Root';
-import ThemeProvider from '@client/containers/ThemeProvider';
-import WalletConnectionProvider from '@client/containers/WalletConnectionProvider';
 
 // pages
 import CharacterPage from '@client/pages/CharacterPage';
@@ -42,13 +40,9 @@ const App: FC<IProps> = ({ i18n }) => {
   ]);
 
   return (
-    <I18nextProvider i18n={i18n}>
-      <ThemeProvider>
-        <WalletConnectionProvider>
-          <RouterProvider router={router} />
-        </WalletConnectionProvider>
-      </ThemeProvider>
-    </I18nextProvider>
+    <AppProvider i18n={i18n}>
+      <RouterProvider router={router} />
+    </AppProvider>
   );
 };
 

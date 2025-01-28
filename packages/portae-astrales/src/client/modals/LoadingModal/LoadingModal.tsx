@@ -1,12 +1,9 @@
+import { Modal, PulseLoader } from '@aetherisnova/ui-components';
 import { Text, VStack } from '@chakra-ui/react';
 import type { FC } from 'react';
 
 // constants
 import { DEFAULT_GAP } from '@client/constants';
-
-// components
-import Modal from '@client/components/Modal';
-import PulseLoader from '@client/components/PulseLoader';
 
 // types
 import type { IProps } from './types';

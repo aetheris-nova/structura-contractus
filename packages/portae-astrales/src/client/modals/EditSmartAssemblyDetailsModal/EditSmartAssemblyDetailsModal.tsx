@@ -1,19 +1,19 @@
+import {
+  Button,
+  DEFAULT_GAP,
+  type IBaseComponentProps,
+  Field,
+  Input,
+  Modal,
+  Textarea,
+} from '@aetherisnova/ui-components';
 import { VStack } from '@chakra-ui/react';
-import { type ChangeEvent, type FC, useEffect, useState } from 'react';
+import { type ChangeEvent, type FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from 'wagmi';
 
-// components
-import Button from '@client/components/Button';
-import Field from '@client/components/Field';
-import Input from '@client/components/Input';
-import Textarea from '@client/components/Textarea';
-
-// constants
-import { DEFAULT_GAP } from '@client/constants';
-
-// components
-import Modal from '@client/components/Modal';
+// selectors
+import { useSelectColorMode } from '@client/selectors';
 
 // types
 import type { IProps } from './types';
@@ -25,6 +25,12 @@ const EditSmartAssemblyDetailsModal: FC<IProps> = ({ onClose, open, smartAssembl
   const { t } = useTranslation();
   const wagmiConfig = useConfig();
   const { setSmartAssemblyMetadataAction }  = useStore();
+  // selectors
+  const colorMode = useSelectColorMode();
+  // memos
+  const baseProps = useMemo<Partial<IBaseComponentProps>>(() => ({
+    colorMode,
+  }), [colorMode]);
   // states
   const [dappURL, setDappURL] = useState(smartAssembly.dappUrl);
   const [description, setDescription] = useState(smartAssembly.description);
@@ -84,7 +90,7 @@ const EditSmartAssemblyDetailsModal: FC<IProps> = ({ onClose, open, smartAssembl
     <Modal
       body={(
         <VStack gap={DEFAULT_GAP / 3} w="full">
-          <Field label={t('labels.name').toUpperCase()}>
+          <Field {...baseProps} label={t('labels.name').toUpperCase()}>
             <Input
               onChange={handleOnChange('name')}
               type="text"

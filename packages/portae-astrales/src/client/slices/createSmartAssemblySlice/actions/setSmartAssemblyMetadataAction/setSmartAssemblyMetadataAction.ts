@@ -1,6 +1,6 @@
 import { IWorldAbi as eveWorldABI } from '@eveworld/contracts';
 import { getSystemId, SYSTEM_IDS } from '@eveworld/utils';
-import { type Address, encodeFunctionData, getAbiItem } from 'viem';
+import { type Address, encodeFunctionData, getAbiItem, ProviderRpcError, UserRejectedRequestError } from 'viem';
 
 // errors
 import BaseError from '@client/errors/BaseError';
@@ -100,6 +100,17 @@ const setSmartAssemblyMetadataAction: TActionCreator<IOptions, Promise<boolean>>
           error,
           loadingModalDetails: null,
         }));
+      }
+
+      // if the user rejected the sign request
+      if ((error as ProviderRpcError).code === UserRejectedRequestError.code) {
+        setState((state) => ({
+          ...state,
+          error: null,
+          loadingModalDetails: null,
+        }));
+
+        return false;
       }
 
       setState((state) => ({

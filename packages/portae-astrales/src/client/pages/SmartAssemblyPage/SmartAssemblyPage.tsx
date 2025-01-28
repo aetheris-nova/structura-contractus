@@ -1,3 +1,4 @@
+import { EmptyState, PulseLoader } from '@aetherisnova/ui-components';
 import { Spacer, Text, VStack, useDisclosure } from '@chakra-ui/react';
 import { type FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -5,9 +6,7 @@ import { useParams } from 'react-router-dom';
 import { useConfig } from 'wagmi';
 
 // components
-import EmptyState from '@client/components/EmptyState';
 import Page from '@client/components/Page';
-import PulseLoader from '@client/components/PulseLoader';
 import SmartGateContent from './SmartGateContent';
 import SmartStorageUnitContent from './SmartStorageUnitContent';
 

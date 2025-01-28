@@ -1,13 +1,9 @@
+import { Button, Modal, PulseLoader } from '@aetherisnova/ui-components';
 import { Text, VStack } from '@chakra-ui/react';
 import { randomString } from '@stablelib/random';
 import { FC, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { type Connector, useConnect } from 'wagmi';
-
-// components
-import Button from '@client/components/Button';
-import Modal from '@client/components/Modal';
-import PulseLoader from '@client/components/PulseLoader';
 
 // constants
 import { DEFAULT_GAP } from '@client/constants';

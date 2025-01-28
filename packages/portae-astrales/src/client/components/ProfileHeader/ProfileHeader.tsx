@@ -1,13 +1,11 @@
+import { type IBaseComponentProps, IconButton, Tooltip } from '@aetherisnova/ui-components';
+import { truncateText } from '@aetherisnova/utils';
 import { Heading, HStack, Text, VStack } from '@chakra-ui/react';
 import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GrPower, GrUserSettings } from 'react-icons/gr';
 import { useNavigate } from 'react-router-dom';
 import { formatUnits } from 'viem';
-
-// components
-import IconButton from '@client/components/IconButton';
-import Tooltip from '@client/components/Tooltip';
 
 // constants
 import { CHARACTER_ROUTE } from '@client/constants';
@@ -18,19 +16,26 @@ import useForegroundColor from '@client/hooks/useForegroundColor';
 // icons
 import EvGas from '@client/icons/EvGas';
 
+// selectors
+import { useSelectColorMode } from '@client/selectors';
+
 // types
 import type { IProps } from './types';
 
 // utils
 import ellipseText from '@client/utils/ellipseText';
-import truncateText from '@client/utils/truncateText';
 
 const ProfileHeader: FC<IProps> = ({ account, inGame, onDisconnectClick, worldConfig }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   // hooks
   const foregroundColor = useForegroundColor();
+  // selectors
+  const colorMode = useSelectColorMode();
   // memos
+  const baseProps = useMemo<Partial<IBaseComponentProps>>(() => ({
+    colorMode,
+  }), [colorMode]);
   const gasBalanceInStandardForm = useMemo(() => formatUnits(BigInt(account.gasBalanceWei), worldConfig.nativeCurrency.decimals), []);
   // handlers
   const handleOnCharacterDetailsClick = () => navigate(CHARACTER_ROUTE);
@@ -79,6 +84,7 @@ const ProfileHeader: FC<IProps> = ({ account, inGame, onDisconnectClick, worldCo
         {/*character details button*/}
         <Tooltip content={t('labels.characterDetails')}>
           <IconButton
+            {...baseProps}
             borderLeftWidth={1}
             onClick={handleOnCharacterDetailsClick}
             scheme="secondary"
@@ -92,6 +98,7 @@ const ProfileHeader: FC<IProps> = ({ account, inGame, onDisconnectClick, worldCo
         {!inGame && (
           <Tooltip content={t('labels.disconnect')}>
             <IconButton
+              {...baseProps}
               borderLeftWidth={1}
               onClick={handleOnDisconnectClick}
               scheme="secondary"

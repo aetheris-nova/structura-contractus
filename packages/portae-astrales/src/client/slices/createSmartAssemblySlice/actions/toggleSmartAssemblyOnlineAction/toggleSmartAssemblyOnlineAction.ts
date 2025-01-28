@@ -1,6 +1,6 @@
 import { IWorldAbi as eveWorldABI } from '@eveworld/contracts';
 import { getSystemId, SYSTEM_IDS } from '@eveworld/utils';
-import { type Address, encodeFunctionData, getAbiItem } from 'viem';
+import { type Address, encodeFunctionData, getAbiItem, ProviderRpcError, UserRejectedRequestError } from 'viem';
 
 // errors
 import BaseError from '@client/errors/BaseError';
@@ -47,7 +47,7 @@ const toggleSmartAssemblyOnlineAction: TActionCreator<IWorldInteractionOptions, 
         ...state,
         loadingModalDetails: {
           loading: true,
-          message: t(smartAssembly.isOnline ? 'captions.bringingUnitOnline' : 'captions.bringingUnitOffline'),
+          message: t(smartAssembly.isOnline ? 'captions.bringingUnitOffline' : 'captions.bringingUnitOnline'),
         },
       }));
 
@@ -98,6 +98,17 @@ const toggleSmartAssemblyOnlineAction: TActionCreator<IWorldInteractionOptions, 
           error,
           loadingModalDetails: null,
         }));
+      }
+
+      // if the user rejected the sign request
+      if ((error as ProviderRpcError).code === UserRejectedRequestError.code) {
+        setState((state) => ({
+          ...state,
+          error: null,
+          loadingModalDetails: null,
+        }));
+
+        return false;
       }
 
       setState((state) => ({

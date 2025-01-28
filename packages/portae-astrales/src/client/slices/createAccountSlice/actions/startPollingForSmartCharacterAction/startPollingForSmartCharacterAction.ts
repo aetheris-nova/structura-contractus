@@ -1,3 +1,5 @@
+import { upsertItemsByKey } from '@aetherisnova/utils';
+
 // constants
 import { FETCH_ACCOUNT_TIMEOUT, POLL_ACCOUNT_INTERVAL } from '@client/constants';
 
@@ -6,7 +8,6 @@ import type { ISmartCharacter, TActionCreator, TSmartCharacterWithExtendedProps 
 
 // utils
 import fetchSmartCharacterByAddress from '@client/utils/fetchSmartCharacterByAddress';
-import upsertItemsByAddress from '@client/utils/upsertItemsByAddress';
 
 const startPollingForSmartCharacterAction: TActionCreator<undefined, void> =
   ({ getState, setState }) =>
@@ -51,12 +52,16 @@ const startPollingForSmartCharacterAction: TActionCreator<undefined, void> =
 
       setState((state) => ({
         ...state,
-        accounts: upsertItemsByAddress<TSmartCharacterWithExtendedProps>(accounts, [
-          {
-            ...result,
-            lastUpdatedAt: now.getTime(),
-          },
-        ]),
+        accounts: upsertItemsByKey<TSmartCharacterWithExtendedProps>(
+          accounts,
+          [
+            {
+              ...result,
+              lastUpdatedAt: now.getTime(),
+            },
+          ],
+          'address'
+        ),
         fetchingAccounts: state.fetchingAccounts.filter((value) => value !== selectedAccount.address),
       }));
     }, POLL_ACCOUNT_INTERVAL);
