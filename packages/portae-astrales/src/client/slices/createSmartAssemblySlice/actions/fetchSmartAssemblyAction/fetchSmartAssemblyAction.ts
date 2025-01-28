@@ -85,7 +85,10 @@ const fetchSmartAssemblyAction: TActionCreator<
     setState((state) => ({
       ...state,
       fetchingSmartAssembly: false,
-      smartAssembly: result,
+      smartAssembly: {
+        ...result,
+        lastUpdatedAt: new Date().getTime(),
+      },
     }));
 
     return result;

@@ -1,5 +1,5 @@
 import { Button, type IBaseComponentProps, IconButton } from '@aetherisnova/ui-components';
-import { Grid, GridItem, Heading, HStack, Link, Spinner, Text, VStack, useDisclosure } from '@chakra-ui/react';
+import { HStack, Link, Spinner, useDisclosure, Spacer } from '@chakra-ui/react';
 import { type FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GrLinkPrevious } from 'react-icons/gr';
@@ -33,7 +33,7 @@ const Header: FC = () => {
   const navigate = useNavigate();
   const { disconnectAsync } = useDisconnect();
   const { onClose: onWalletSelectDialogClose, onOpen: onWalletSelectDialogOpen, open: walletSelectDialogOpen } = useDisclosure();
-  const { colorMode, inGame, isFetchingWorldConfig, setAccountsAction, subtitle, title, worldConfig } = useStore();
+  const { colorMode, inGame, isFetchingWorldConfig, setAccountsAction, worldConfig } = useStore();
   // selectors
   const account = useSelectSelectedAccount();
   // hooks
@@ -54,83 +54,61 @@ const Header: FC = () => {
     <>
       <WalletSelectModal onClose={onWalletSelectDialogClose} open={walletSelectDialogOpen} />
 
-      <Grid
+      <HStack
         as="header"
         borderColor={foregroundColor}
         borderBottomWidth={1}
         minH={BUTTON_HEIGHT}
-        templateColumns="repeat(3, 1fr)"
         w="full"
       >
-        <GridItem display="flex" colSpan={1}>
-          {key !== 'default' && (
-            <IconButton
-              {...baseProps}
-              borderRightWidth={1}
-              onClick={handleOnBackClick}
-              scheme="secondary"
-              variant="ghost"
-            >
-              <GrLinkPrevious />
-            </IconButton>
-          )}
+        {key !== 'default' && (
+          <IconButton
+            {...baseProps}
+            borderRightWidth={1}
+            onClick={handleOnBackClick}
+            scheme="secondary"
+            variant="ghost"
+          >
+            <GrLinkPrevious />
+          </IconButton>
+        )}
 
-          <Link href="/" ml={DEFAULT_GAP / 2}>
-            <PaLogo fontSize="2xl" />
-          </Link>
-        </GridItem>
+        <Link href="/" ml={DEFAULT_GAP / 2}>
+          <PaLogo fontSize="2xl" />
+        </Link>
 
-        {/*title/subtitle*/}
-        <GridItem display="flex" colSpan={1}>
-          <VStack flex={1} gap={0} justify="center" w="full">
-            {title && (
-              <>
-                <Heading>
-                  {title.toUpperCase()}
-                </Heading>
-
-                {subtitle && (
-                  <Text fontSize="sm">
-                    {subtitle}
-                  </Text>
-                )}
-              </>
-            )}
-          </VStack>
-        </GridItem>
+        <Spacer />
 
         {/*wallet connect*/}
-        <GridItem display="flex" colSpan={1}>
-          <HStack gap={DEFAULT_GAP / 3} justify="flex-end" h="full" w="full">
-            {isFetchingWorldConfig && (
-              <Spinner pr={worldConfig ? (DEFAULT_GAP / 3) : 0} size="md" />
-            )}
+        <HStack gap={DEFAULT_GAP / 3} justify="flex-end" h="full" w="full">
+          {isFetchingWorldConfig && (
+            <Spinner pr={worldConfig ? (DEFAULT_GAP / 3) : 0} size="md" />
+          )}
 
-            {worldConfig && (
-              <HStack gap={1} justify="flex-end" h="full">
-                {account ? (
-                  <ProfileHeader
-                    account={account}
-                    inGame={inGame}
-                    onDisconnectClick={handleOnDisconnectClick}
-                    worldConfig={worldConfig}
-                  />
-                ) : (
-                  <Button
-                    {...baseProps}
-                    borderColor={foregroundColor}
-                    borderLeftWidth={1}
-                    onClick={handleOnConnectClick}
-                    variant="ghost"
-                  >
-                    {t('labels.connect')}
-                  </Button>
-                )}
-              </HStack>
-            )}
-          </HStack>
-        </GridItem>
-      </Grid>
+          {worldConfig && (
+            <HStack gap={1} justify="flex-end" h="full">
+              {account ? (
+                <ProfileHeader
+                  account={account}
+                  inGame={inGame}
+                  onDisconnectClick={handleOnDisconnectClick}
+                  worldConfig={worldConfig}
+                />
+              ) : (
+                <Button
+                  {...baseProps}
+                  borderColor={foregroundColor}
+                  borderLeftWidth={1}
+                  onClick={handleOnConnectClick}
+                  variant="ghost"
+                >
+                  {t('labels.connect')}
+                </Button>
+              )}
+            </HStack>
+          )}
+        </HStack>
+      </HStack>
     </>
   );
 };

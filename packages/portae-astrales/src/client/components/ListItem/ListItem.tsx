@@ -1,12 +1,14 @@
-import { Heading, HStack, Icon, Link as ChakraLink, Spacer, Text, VStack } from '@chakra-ui/react';
+import {
+  DEFAULT_GAP,
+  // useTabletAndUp,
+} from '@aetherisnova/ui-components';
+import { HStack, Icon, Link as ChakraLink, Spacer, Text, VStack } from '@chakra-ui/react';
 import { type FC } from 'react';
 import { Link } from 'react-router-dom';
 
 // hooks
 import useForegroundColor from '@client/hooks/useForegroundColor';
-
-// constants
-import { DEFAULT_GAP } from '@client/constants';
+import useTabletAndUp from '@client/hooks/useTabletAndUp';
 
 // types
 import type { IProps } from './types';
@@ -14,10 +16,20 @@ import type { IProps } from './types';
 const ListItem: FC<IProps> = ({ icon, isExternalLink, link, title, secondarySubtitle, secondaryTitle, subtitle }) => {
   // hooks
   const foregroundColor = useForegroundColor();
+  const isTabletAndUp = useTabletAndUp();
   // renders
   const renderTitle = () => {
     const _title = (
-      <Text fontSize="md" fontWeight="semibold" w="full">
+      <Text
+        fontSize="md"
+        fontWeight="semibold"
+        maxW={200}
+        truncate={true}
+        w="full"
+        {...(isTabletAndUp && {
+          maxW: 'auto',
+        })}
+      >
         {title}
       </Text>
     );
@@ -46,11 +58,11 @@ const ListItem: FC<IProps> = ({ icon, isExternalLink, link, title, secondarySubt
       borderBottomWidth={1}
       borderColor={foregroundColor}
       justify="start"
-      p={DEFAULT_GAP / 2}
+      p={DEFAULT_GAP / 3}
       w="full"
     >
       {/*icon*/}
-      <Icon fontSize="3xl" color={foregroundColor}>
+      <Icon fontSize={!isTabletAndUp ? '2xl' : '3xl'} color={foregroundColor}>
         {icon}
       </Icon>
 
@@ -61,7 +73,7 @@ const ListItem: FC<IProps> = ({ icon, isExternalLink, link, title, secondarySubt
         justify="space-between"
         w="full"
         {...(icon && {
-          pl: DEFAULT_GAP / 2,
+          pl: DEFAULT_GAP / 3,
         })}
       >
         {/*title*/}
@@ -71,7 +83,14 @@ const ListItem: FC<IProps> = ({ icon, isExternalLink, link, title, secondarySubt
 
         {/*subtitle*/}
         {subtitle && (
-          <Text fontSize="sm" truncate={true}>
+          <Text
+            fontSize="sm"
+            maxW={200}
+            truncate={true}
+            {...(isTabletAndUp && {
+              maxW: 'auto',
+            })}
+          >
             {subtitle}
           </Text>
         )}
@@ -87,7 +106,13 @@ const ListItem: FC<IProps> = ({ icon, isExternalLink, link, title, secondarySubt
       >
         {/*secondary title*/}
         {secondaryTitle && (
-          <Text truncate={true}>
+          <Text
+            maxW={150}
+            truncate={true}
+            {...(isTabletAndUp && {
+              maxW: 'auto',
+            })}
+          >
             {secondaryTitle}
           </Text>
         )}
@@ -96,7 +121,14 @@ const ListItem: FC<IProps> = ({ icon, isExternalLink, link, title, secondarySubt
 
         {/*secondary subtitle*/}
         {secondarySubtitle && (
-          <Text fontSize="sm" truncate={true}>
+          <Text
+            fontSize="sm"
+            maxW={150}
+            truncate={true}
+            {...(isTabletAndUp && {
+              maxW: 'auto',
+            })}
+          >
             {secondarySubtitle}
           </Text>
         )}

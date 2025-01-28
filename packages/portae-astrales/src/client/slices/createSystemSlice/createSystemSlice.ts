@@ -15,7 +15,7 @@ const createSystemSlice: TStateCreator<ISlice> = (setState, getState) => {
     inGame: false,
     logger: createLogger(import.meta.env.DEV ? 'debug' : 'error'),
     // actions
-    setInGame: setInGameAction(api),
+    setInGameAction: setInGameAction(api),
   };
 };
 

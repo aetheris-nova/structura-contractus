@@ -1,3 +1,4 @@
+import { useCheckInGame } from '@aetherisnova/ui-components';
 import { type FC, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
@@ -7,9 +8,6 @@ import { useAccount, useConfig } from 'wagmi';
 
 // components
 import Layout from '@client/components/Layout';
-
-// hooks
-import useOnAnnounceProvider from '@client/hooks/useOnAnnounceProvider';
 
 // modals
 import ErrorModal from '@client/modals/ErrorModal';
@@ -22,17 +20,32 @@ const Root: FC = () => {
   const { t } = useTranslation();
   const { addresses } = useAccount();
   const config = useConfig();
-  const { error, fetchERC20TokenAction, fetchItemAction, fetchWorldConfigAction, loadingModalDetails, setAccountsAction, setErrorAction, startPollingForSmartCharacterAction, stopPollingForSmartCharacterAction, subtitle, title } = useStore();
+  const {
+    error,
+    fetchERC20TokenAction,
+    fetchItemAction,
+    fetchWorldConfigAction,
+    loadingModalDetails,
+    logger,
+    setAccountsAction,
+    setErrorAction,
+    setInGameAction,
+    startPollingForSmartCharacterAction,
+    stopPollingForSmartCharacterAction,
+    subtitle,
+    title,
+  } = useStore();
+  // hooks
+  const { inGame } = useCheckInGame({ logger });
   // handlers
   const handleOnErrorModalClose = () => setErrorAction(null);
 
-  useOnAnnounceProvider();
   useEffect(() => {
     (async () => {
       const worldConfig = await fetchWorldConfigAction();
 
       await Promise.all([
-        // fetch the salt fuel details
+        // fetch the fuel details
         fetchItemAction(worldConfig.itemTypeIDs.fuel.toString()),
         // fetch the eve token details
         fetchERC20TokenAction({
@@ -51,6 +64,7 @@ const Root: FC = () => {
   useEffect(() => {
     (async () => addresses && await setAccountsAction(addresses as Address[]))();
   }, [addresses]);
+  useEffect(() => setInGameAction(inGame), [inGame]);
 
   return (
     <>

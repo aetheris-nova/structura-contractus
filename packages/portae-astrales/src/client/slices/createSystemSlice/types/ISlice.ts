@@ -5,7 +5,7 @@ interface ISlice {
   inGame: boolean;
   logger: ILogger;
   // actions
-  setInGame: (inGame: boolean) => void;
+  setInGameAction: (inGame: boolean) => void;
 }
 
 export default ISlice;

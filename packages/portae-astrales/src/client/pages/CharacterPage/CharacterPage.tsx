@@ -209,7 +209,13 @@ const CharacterPage: FC = () => {
 
     return (
       <VStack flex={1} gap={0} w="full">
-        {isTabletAndUp ? (
+        {!isTabletAndUp ? (
+          <>
+            {characterDetailsNode}
+            {tokensNode}
+            {smartAssembliesNode}
+          </>
+        ) : (
           <>
             <HStack
               align="stretch"
@@ -225,12 +231,6 @@ const CharacterPage: FC = () => {
 
             </HStack>
 
-            {smartAssembliesNode}
-          </>
-        ) : (
-          <>
-            {characterDetailsNode}
-            {tokensNode}
             {smartAssembliesNode}
           </>
         )}
