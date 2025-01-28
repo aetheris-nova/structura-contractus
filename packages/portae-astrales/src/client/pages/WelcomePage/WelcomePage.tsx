@@ -1,3 +1,4 @@
+import { DEFAULT_GAP } from '@aetherisnova/ui-components';
 import { Heading, Spacer, Text, VStack } from '@chakra-ui/react';
 import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +18,7 @@ const WelcomePage: FC = () => {
     <Page>
       <Spacer />
 
-      <VStack w="full">
+      <VStack p={DEFAULT_GAP} w="full">
         <Heading fontSize="2xl">
           {account ? t('headings.welcomeWithCharacter', { name: account.name }) : t('headings.welcome')}
         </Heading>

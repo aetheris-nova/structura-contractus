@@ -17,9 +17,9 @@ const ListItem: FC<IProps> = ({ icon, isExternalLink, link, title, secondarySubt
   // renders
   const renderTitle = () => {
     const _title = (
-      <Heading fontSize="md" w="full">
+      <Text fontSize="md" fontWeight="semibold" w="full">
         {title}
-      </Heading>
+      </Text>
     );
 
     if (!link) {
@@ -27,7 +27,7 @@ const ListItem: FC<IProps> = ({ icon, isExternalLink, link, title, secondarySubt
     }
 
     return (
-      <ChakraLink asChild={true}>
+      <ChakraLink asChild={true} variant="underline">
         <Link
           to={link}
           {...(isExternalLink && {
@@ -56,8 +56,9 @@ const ListItem: FC<IProps> = ({ icon, isExternalLink, link, title, secondarySubt
 
       <VStack
         align="start"
-        h="full"
         gap={0}
+        h="full"
+        justify="space-between"
         w="full"
         {...(icon && {
           pl: DEFAULT_GAP / 2,
@@ -70,7 +71,7 @@ const ListItem: FC<IProps> = ({ icon, isExternalLink, link, title, secondarySubt
 
         {/*subtitle*/}
         {subtitle && (
-          <Text fontSize="sm">
+          <Text fontSize="sm" truncate={true}>
             {subtitle}
           </Text>
         )}
@@ -80,12 +81,13 @@ const ListItem: FC<IProps> = ({ icon, isExternalLink, link, title, secondarySubt
         align="end"
         gap={0}
         h="full"
-        pl={DEFAULT_GAP / 2}
+        justify="space-between"
+        pl={DEFAULT_GAP / 3}
         w="full"
       >
         {/*secondary title*/}
         {secondaryTitle && (
-          <Text>
+          <Text truncate={true}>
             {secondaryTitle}
           </Text>
         )}
@@ -94,7 +96,7 @@ const ListItem: FC<IProps> = ({ icon, isExternalLink, link, title, secondarySubt
 
         {/*secondary subtitle*/}
         {secondarySubtitle && (
-          <Text fontSize="sm">
+          <Text fontSize="sm" truncate={true}>
             {secondarySubtitle}
           </Text>
         )}
