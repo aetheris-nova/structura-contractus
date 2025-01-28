@@ -1,0 +1,12 @@
+name: "Setup Foundry"
+
+description: "Install Foundry tools including Soldeer dependencies."
+
+runs:
+  using: "composite"
+  steps:
+    - name: "🔧 Setup Foundry"
+      uses: foundry-rs/foundry-toolchain@v1
+    - name: "📦 Install Dependencies"
+      run: forge soldeer install
+      shell: bash

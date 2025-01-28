@@ -37,7 +37,7 @@ jobs:
           submodules: recursive
       - name: "🔧 Setup Foundry"
         if: ${{ inputs.with_foundry == true }}
-        uses: foundry-rs/foundry-toolchain@v1
+        uses: ./.github/actions/use-foundry
       - name: "🔧 Setup Node"
         uses: ./.github/actions/use-pnpm-dependencies
       - name: "🏗️ Build"
@@ -71,7 +71,7 @@ jobs:
         with:
           submodules: recursive
       - name: "🔧 Setup Foundry"
-        uses: foundry-rs/foundry-toolchain@v1
+        uses: ./.github/actions/use-foundry
       - name: "🔧 Setup Node"
         uses: ./.github/actions/use-pnpm-dependencies
       - name: "🧪 Test"
