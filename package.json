@@ -14,6 +14,7 @@
     "prepare": "husky"
   },
   "devDependencies": {
+    "@anolilab/semantic-release-pnpm": "1.1.8",
     "@commitlint/cli": "^19.6.0",
     "@commitlint/config-conventional": "^19.6.0",
     "@commitlint/types": "^19.5.0",
@@ -21,11 +22,9 @@
     "@semantic-release/commit-analyzer": "^13.0.0",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^11.0.1",
-    "@semantic-release/npm": "^12.0.1",
     "@semantic-release/release-notes-generator": "^14.0.1",
     "husky": "^9.1.7",
     "lint-staged": "^15.2.10",
-    "prettier": "^3.4.2",
     "prettier-plugin-solidity": "^1.4.1",
     "semantic-release": "^24.2.0",
     "semantic-release-monorepo": "^8.0.2"
