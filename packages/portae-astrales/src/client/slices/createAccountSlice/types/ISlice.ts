@@ -1,7 +1,5 @@
+import type { TSmartCharacterWithExtendedProps } from '@aetherisnova/types';
 import type { Address } from 'viem';
-
-// types
-import type { TSmartCharacterWithExtendedProps } from '@client/types';
 
 interface ISlice {
   // state

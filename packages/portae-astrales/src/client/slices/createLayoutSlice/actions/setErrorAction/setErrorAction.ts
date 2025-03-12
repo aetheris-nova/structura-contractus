@@ -1,5 +1,4 @@
-// errors
-import BaseError from '@client/errors/BaseError';
+import { BaseError } from '@aetherisnova/errors';
 
 // types
 import type { TActionCreator } from '@client/types';

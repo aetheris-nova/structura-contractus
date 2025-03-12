@@ -1,5 +1,6 @@
+import type { IERC20Token } from '@aetherisnova/types';
+
 // types
-import type { IERC20Token } from '@client/types';
 import type { IOptions as IFetchERC20TokenActionOptions } from '../actions/fetchERC20TokenAction';
 
 interface ISlice {

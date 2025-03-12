@@ -7,6 +7,7 @@ import {
   EmptyState,
   useTabletAndUp,
 } from '@aetherisnova/ui-components';
+import { calculateDistanceBetweenPoints, formatUnits, metersToLightYears } from '@aetherisnova/utils';
 import { HStack, Link as ChakraLink, Spacer, Text, VStack } from '@chakra-ui/react';
 import { randomString } from '@stablelib/random';
 import BigNumber from 'bignumber.js';
@@ -31,11 +32,8 @@ import type { IContentProps } from './types';
 
 // utils
 import ellipseText from '@client/utils/ellipseText';
-import formatUnit from '@client/utils/formatUnit';
 import isOwner from '@client/utils/isOwner';
 import smartAssemblyIcon from '@client/utils/smartAssemblyIcon';
-import calculateDistanceBetweenPoints from '@client/utils/calculateDistanceBetweenPoints';
-import metersToLightYears from '@client/utils/metersToLightYears';
 
 const SmartGateContent: FC<IContentProps<'SmartGate'>> = ({ account, onEditMetadataClick, smartAssembly }) => {
   const { t } = useTranslation();
@@ -214,7 +212,7 @@ const SmartGateContent: FC<IContentProps<'SmartGate'>> = ({ account, onEditMetad
                   link={`${SMART_ASSEMBLY_ROUTE}/${value.id}`}
                   secondarySubtitle={`${value.state.toString()}${destinationGate && destinationGate.id === value.id ? ' (Linked)' : ''}`}
                   secondaryTitle={value.ownerName}
-                  subtitle={`${value.solarSystem.solarSystemName.length > 0 ? value.solarSystem.solarSystemName : '-'}${distance ? ` ▪ ${formatUnit(metersToLightYears(distance))}ly` : ''}`}
+                  subtitle={`${value.solarSystem.solarSystemName.length > 0 ? value.solarSystem.solarSystemName : '-'}${distance ? ` ▪ ${formatUnits(metersToLightYears(distance))}ly` : ''}`}
                   title={
                     value.name?.length > 0
                       ? value.name

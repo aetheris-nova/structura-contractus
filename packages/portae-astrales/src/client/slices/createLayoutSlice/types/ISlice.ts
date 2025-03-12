@@ -1,7 +1,5 @@
+import { BaseError } from '@aetherisnova/errors';
 import { ColorMode } from '@chakra-ui/color-mode';
-
-// errors
-import BaseError from '@client/errors/BaseError';
 
 // types
 import type ILoadingModalDetails from './ILoadingModalDetails';

@@ -1,7 +1,5 @@
+import type { ISmartAssembly } from '@aetherisnova/types';
 import { type Address, getAddress } from 'viem';
-
-// types
-import type { ISmartAssembly } from '@client/types';
 
 /**
  * Convenience function that simply checks if an address is the owner of a smart assembly. If the owner is empty, then

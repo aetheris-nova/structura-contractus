@@ -30,6 +30,7 @@
     "test:contracts": "shx cp .env.test .env && pnpm run deploy && forge test --fork-url http://127.0.0.1:8545 -vv"
   },
   "dependencies": {
+    "@aetherisnova/errors": "catalog:",
     "@aetherisnova/types": "catalog:",
     "@aetherisnova/ui-components": "catalog:",
     "@aetherisnova/utils": "catalog:",

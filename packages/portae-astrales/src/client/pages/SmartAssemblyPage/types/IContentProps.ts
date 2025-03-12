@@ -1,7 +1,5 @@
+import type { TSmartAssemblyWithAdditionalModules, TSmartCharacterWithExtendedProps } from '@aetherisnova/types';
 import type { SmartAssemblies } from '@eveworld/types';
-
-// types
-import type { TSmartAssemblyWithAdditionalModules, TSmartCharacterWithExtendedProps } from '@client/types';
 
 interface IContentProps<Type extends SmartAssemblies> {
   account: TSmartCharacterWithExtendedProps | null;

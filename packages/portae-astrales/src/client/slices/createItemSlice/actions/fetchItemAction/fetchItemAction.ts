@@ -1,13 +1,11 @@
-import { upsertItemsByKey } from '@aetherisnova/utils';
+import type { IItem, IItemWithExtendedProps } from '@aetherisnova/types';
+import { fetchItemByID, upsertItemsByKey } from '@aetherisnova/utils';
 
 // constants
 import { FETCH_ITEM_TIMEOUT } from '@client/constants';
 
 // types
-import type { IItem, IItemWithExtendedProps, TActionCreator } from '@client/types';
-
-// utils
-import fetchItemByID from '@client/utils/fetchItemByID';
+import type { TActionCreator } from '@client/types';
 
 const fetchItemAction: TActionCreator<string, Promise<IItemWithExtendedProps | null>> =
   ({ getState, setState }) =>
@@ -19,7 +17,7 @@ const fetchItemAction: TActionCreator<string, Promise<IItemWithExtendedProps | n
     const logger = getState().logger;
     const now = new Date();
     let _item: IItemWithExtendedProps;
-    let result: IItem;
+    let result: IItem | null;
 
     // if we are already fetching the item or the was recently updated, skip
     if (
@@ -35,9 +33,9 @@ const fetchItemAction: TActionCreator<string, Promise<IItemWithExtendedProps | n
     }));
 
     try {
-      result = await fetchItemByID(id);
+      result = await fetchItemByID(import.meta.env.VITE_WORLD_API_HTTP_URL, id);
 
-      if (result.metadata.attributes.length <= 0) {
+      if (!result || result.metadata.attributes.length <= 0) {
         return null;
       }
 

@@ -1,5 +1,4 @@
-// types
-import type { IERC20Token } from '@client/types';
+import type { IERC20Token } from '@aetherisnova/types';
 
 // utils
 import useStore from '@client/utils/useStore';

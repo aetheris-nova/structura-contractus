@@ -1,21 +1,14 @@
+import { UnknownError } from '@aetherisnova/errors';
+import type { TSmartAssemblyWithAdditionalModules, TSmartAssemblyWithExtendedProps } from '@aetherisnova/types';
+import { fetchSmartAssemblyByID } from '@aetherisnova/utils';
 import type { SmartAssemblies } from '@eveworld/types';
 import type { AxiosError } from 'axios';
 
 // constants
 import { FETCH_SMART_ASSEMBLY_DELAY } from '@client/constants';
 
-// errors
-import UnknownError from '@client/errors/UnknownError';
-
 // types
-import type {
-  TActionCreator,
-  TSmartAssemblyWithAdditionalModules,
-  TSmartAssemblyWithExtendedProps,
-} from '@client/types';
-
-// utils
-import fetchSmartAssemblyByID from '@client/utils/fetchSmartAssemblyByID';
+import type { TActionCreator } from '@client/types';
 
 const fetchSmartAssemblyAction: TActionCreator<
   string,
@@ -26,7 +19,7 @@ const fetchSmartAssemblyAction: TActionCreator<
     const __function = 'fetchSmartAssemblyAction';
     const fetching = getState().fetchingSmartAssembly;
     const logger = getState().logger;
-    let result: TSmartAssemblyWithAdditionalModules<SmartAssemblies>;
+    let result: TSmartAssemblyWithAdditionalModules<SmartAssemblies> | null;
     let smartAssembly: TSmartAssemblyWithExtendedProps<SmartAssemblies>;
 
     if (fetching) {
@@ -39,7 +32,7 @@ const fetchSmartAssemblyAction: TActionCreator<
     }));
 
     try {
-      result = await fetchSmartAssemblyByID(id);
+      result = await fetchSmartAssemblyByID(import.meta.env.VITE_WORLD_API_HTTP_URL, id);
     } catch (error) {
       logger.error(`${__function}: `, error);
 
@@ -63,18 +56,30 @@ const fetchSmartAssemblyAction: TActionCreator<
       return null;
     }
 
+    if (!result) {
+      return null;
+    }
+
     // if we have smart gates, we need to get the locations for each gate too as they don't come with it
     if (result.assemblyType === 'SmartGate') {
       result.gateLink.gatesInRange = await Promise.all(
         result.gateLink.gatesInRange.map(async (value, index) => {
           try {
-            const { location } = await fetchSmartAssemblyByID<'SmartGate'>(value.id, {
-              delay: index * FETCH_SMART_ASSEMBLY_DELAY,
-            });
+            const _result = await fetchSmartAssemblyByID<'SmartGate'>(
+              import.meta.env.VITE_WORLD_API_HTTP_URL,
+              value.id,
+              {
+                delay: index * FETCH_SMART_ASSEMBLY_DELAY,
+              }
+            );
+
+            if (!_result) {
+              return value;
+            }
 
             return {
               ...value,
-              location,
+              location: _result.location,
             };
           } catch (error) {
             logger.error(`${__function}: failed to get location for gate "${value.id}", ignoring`, error);

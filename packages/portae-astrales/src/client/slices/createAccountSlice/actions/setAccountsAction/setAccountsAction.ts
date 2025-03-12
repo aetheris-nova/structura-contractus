@@ -1,11 +1,11 @@
+import type { ISmartCharacter, TSmartCharacterWithExtendedProps } from '@aetherisnova/types';
+import { fetchSmartCharacterByAddress } from '@aetherisnova/utils';
+
 // constants
 import { FETCH_ACCOUNT_DELAY, FETCH_ACCOUNT_TIMEOUT } from '@client/constants';
 
 // types
-import type { ISmartCharacter, TActionCreator, TSmartCharacterWithExtendedProps } from '@client/types';
-
-// utils
-import fetchSmartCharacterByAddress from '@client/utils/fetchSmartCharacterByAddress';
+import type { TActionCreator } from '@client/types';
 
 const setAccountsAction: TActionCreator<string[], Promise<TSmartCharacterWithExtendedProps[]>> =
   ({ getState, setState }) =>
@@ -17,7 +17,7 @@ const setAccountsAction: TActionCreator<string[], Promise<TSmartCharacterWithExt
     let _accounts: TSmartCharacterWithExtendedProps[] = [];
     let account: TSmartCharacterWithExtendedProps | null;
     let address: string;
-    let result: ISmartCharacter;
+    let result: ISmartCharacter | null;
 
     setState((state) => ({
       ...state,
@@ -36,10 +36,16 @@ const setAccountsAction: TActionCreator<string[], Promise<TSmartCharacterWithExt
       }
 
       try {
-        result = await fetchSmartCharacterByAddress(address, { delay: FETCH_ACCOUNT_DELAY * i });
+        result = await fetchSmartCharacterByAddress(import.meta.env.VITE_WORLD_API_HTTP_URL, address, {
+          delay: FETCH_ACCOUNT_DELAY * i,
+        });
       } catch (error) {
         logger.error(`${__function}:`, error);
 
+        continue;
+      }
+
+      if (!result) {
         continue;
       }
 

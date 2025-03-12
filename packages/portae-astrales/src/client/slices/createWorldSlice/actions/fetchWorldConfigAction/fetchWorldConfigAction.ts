@@ -1,10 +1,11 @@
+import type { IWorldConfig, IWorldConfigWithExtendedProps } from '@aetherisnova/types';
 import axios, { type AxiosResponse } from 'axios';
 
 // constants
 import { FETCH_WORLD_CONFIG_TIMEOUT } from '@client/constants';
 
 // types
-import type { IWorldConfig, IWorldConfigWithExtendedProps, TActionCreator } from '@client/types';
+import type { TActionCreator } from '@client/types';
 import type { IWorldABIConfigResponse } from './types';
 
 /**
