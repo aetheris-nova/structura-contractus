@@ -1,5 +1,4 @@
-// types
-import type { INativeCurrency } from '@client/types';
+import type { INativeCurrency } from '@aetherisnova/types';
 
 // utils
 import useStore from '@client/utils/useStore';

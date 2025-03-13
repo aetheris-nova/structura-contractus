@@ -1,3 +1,4 @@
+import { UnknownError, WorldDataNotFoundError } from '@aetherisnova/errors';
 import type { IUtilityOptions } from '@aetherisnova/types';
 import { IWorldAbi as eveWorldABI } from '@eveworld/contracts';
 import type { ERC2771ForwardRequest } from '@eveworld/types';
@@ -6,10 +7,6 @@ import axios from 'axios';
 import { type Address, encodeFunctionData, getAbiItem, toHex } from 'viem';
 
 import { META_TRANSACTION_TIMEOUT } from '@client/constants';
-
-// errors
-import UnknownError from '@client/errors/UnknownError';
-import WorldDataNotFoundError from '@client/errors/WorldDataNotFoundError';
 
 // types
 import type { IOptions } from './types';

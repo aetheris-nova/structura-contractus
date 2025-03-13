@@ -1,4 +1,5 @@
 import { upsertItemsByKey } from '@aetherisnova/utils';
+import type { IERC20Token } from '@aetherisnova/types';
 import { readContracts } from '@wagmi/core';
 import { ContractFunctionExecutionError } from 'viem';
 
@@ -6,7 +7,7 @@ import { ContractFunctionExecutionError } from 'viem';
 import { FETCH_TOKEN_DETAILS_TIMEOUT } from '@client/constants';
 
 // types
-import type { IERC20Token, TActionCreator } from '@client/types';
+import type { TActionCreator } from '@client/types';
 import type { IOptions } from './types';
 
 const fetchERC20TokenAction: TActionCreator<IOptions, Promise<IERC20Token | null>> =

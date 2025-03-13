@@ -20,7 +20,7 @@
 
 ---
 
-### Table Of Contents
+### Table of contents
 
 * [1. Overview](#-1-overview)
 * [2. Getting Started](#-2-getting-started)

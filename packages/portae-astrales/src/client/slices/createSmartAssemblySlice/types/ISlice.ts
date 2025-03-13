@@ -1,7 +1,8 @@
+import type { TSmartAssemblyWithExtendedProps } from '@aetherisnova/types';
 import type { SmartAssemblies } from '@eveworld/types';
 
 // types
-import type { IWorldInteractionOptions, TSmartAssemblyWithExtendedProps } from '@client/types';
+import type { IWorldInteractionOptions } from '@client/types';
 import type { IOptions as ISetSmartAssemblyMetadataActionOptions } from '../actions/setSmartAssemblyMetadataAction';
 
 interface ISlice {

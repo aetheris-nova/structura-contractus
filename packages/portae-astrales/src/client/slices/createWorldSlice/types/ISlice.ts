@@ -1,5 +1,4 @@
-// types
-import type { IWorldConfigWithExtendedProps } from '@client/types';
+import type { IWorldConfigWithExtendedProps } from '@aetherisnova/types';
 
 interface ISlice {
   // state

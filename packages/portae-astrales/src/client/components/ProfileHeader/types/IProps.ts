@@ -1,5 +1,4 @@
-// types
-import type { IWorldConfig, TSmartCharacterWithExtendedProps } from '@client/types';
+import type { IWorldConfig, TSmartCharacterWithExtendedProps } from '@aetherisnova/types';
 
 interface IProps {
   account: TSmartCharacterWithExtendedProps;

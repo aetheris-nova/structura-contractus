@@ -1,5 +1,4 @@
-// errors
-import BaseError from '@client/errors/BaseError';
+import { BaseError } from '@aetherisnova/errors';
 
 interface IProps {
   error?: BaseError | null;

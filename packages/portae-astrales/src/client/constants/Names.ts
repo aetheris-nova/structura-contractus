@@ -1,1 +1,1 @@
-export const STORE_NAME = 'aetherisnova';
+export const STORE_NAME = 'portaeastrales';

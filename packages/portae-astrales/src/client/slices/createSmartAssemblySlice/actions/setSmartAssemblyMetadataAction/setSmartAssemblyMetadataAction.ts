@@ -1,13 +1,13 @@
+import {
+  BaseError,
+  NoAccountConnectedError,
+  SmartAssemblyNotFoundError,
+  UnknownError,
+  WorldDataNotFoundError,
+} from '@aetherisnova/errors';
 import { IWorldAbi as eveWorldABI } from '@eveworld/contracts';
 import { getSystemId, SYSTEM_IDS } from '@eveworld/utils';
 import { type Address, encodeFunctionData, getAbiItem, ProviderRpcError, UserRejectedRequestError } from 'viem';
-
-// errors
-import BaseError from '@client/errors/BaseError';
-import NoAccountConnectedError from '@client/errors/NoAccountConnectedError';
-import SmartAssemblyNotFoundError from '@client/errors/SmartAssemblyNotFoundError';
-import UnknownError from '@client/errors/UnknownError';
-import WorldDataNotFoundError from '@client/errors/WorldDataNotFoundError';
 
 // types
 import type { TActionCreator } from '@client/types';

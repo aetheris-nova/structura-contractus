@@ -1,5 +1,4 @@
-// types
-import type { IItemWithExtendedProps } from '@client/types';
+import type { IItemWithExtendedProps } from '@aetherisnova/types';
 
 interface ISlice {
   // state

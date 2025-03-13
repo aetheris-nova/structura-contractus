@@ -1,5 +1,4 @@
-// types
-import type { TSmartCharacterWithExtendedProps } from '@client/types';
+import type { TSmartCharacterWithExtendedProps } from '@aetherisnova/types';
 
 // utils
 import useStore from '@client/utils/useStore';

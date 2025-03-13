@@ -1,13 +1,11 @@
-import { upsertItemsByKey } from '@aetherisnova/utils';
+import type { ISmartCharacter, TSmartCharacterWithExtendedProps } from '@aetherisnova/types';
+import { fetchSmartCharacterByAddress, upsertItemsByKey } from '@aetherisnova/utils';
 
 // constants
 import { FETCH_ACCOUNT_TIMEOUT, POLL_ACCOUNT_INTERVAL } from '@client/constants';
 
 // types
-import type { ISmartCharacter, TActionCreator, TSmartCharacterWithExtendedProps } from '@client/types';
-
-// utils
-import fetchSmartCharacterByAddress from '@client/utils/fetchSmartCharacterByAddress';
+import type { TActionCreator } from '@client/types';
 
 const startPollingForSmartCharacterAction: TActionCreator<undefined, void> =
   ({ getState, setState }) =>
@@ -38,7 +36,7 @@ const startPollingForSmartCharacterAction: TActionCreator<undefined, void> =
       }));
 
       try {
-        result = await fetchSmartCharacterByAddress(selectedAccount.address);
+        result = await fetchSmartCharacterByAddress(import.meta.env.VITE_WORLD_API_HTTP_URL, selectedAccount.address);
       } catch (error) {
         logger.error(`${__function}:`, error);
 
