@@ -1,5 +1,8 @@
-import { EmptyState, PulseLoader } from '@aetherisnova/ui-components';
+import type { TSmartAssemblyWithExtendedProps } from '@aetherisnova/types';
+import { DEFAULT_GAP, EmptyState, PulseLoader } from '@aetherisnova/ui-components';
+import { ellipseText } from '@aetherisnova/utils';
 import { Spacer, Text, VStack, useDisclosure } from '@chakra-ui/react';
+import type { SmartAssemblies } from '@eveworld/types';
 import { type FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -9,9 +12,6 @@ import { useConfig } from 'wagmi';
 import Page from '@client/components/Page';
 import SmartGateContent from './SmartGateContent';
 import SmartStorageUnitContent from './SmartStorageUnitContent';
-
-// constants
-import { DEFAULT_GAP } from '@client/constants';
 
 // modals
 import EditSmartAssemblyDetailsModal from '@client/modals/EditSmartAssemblyDetailsModal';
@@ -23,7 +23,6 @@ import { useSelectSelectedAccount } from '@client/selectors';
 import type { IParams } from './types';
 
 // utils
-import ellipseText from '@client/utils/ellipseText';
 import useStore from '@client/utils/useStore';
 
 const SmartAssemblyPage: FC = () => {
@@ -105,12 +104,21 @@ const SmartAssemblyPage: FC = () => {
   };
 
   useEffect(() => {
-    startPollingForSmartAssemblyAction();
+    (async () => {
+      let _smartAssembly: TSmartAssemblyWithExtendedProps<SmartAssemblies> | null;
 
-    return () => stopPollingForSmartAssemblyAction();
-  }, []);
-  useEffect(() => {
-    (async () => id && (await fetchSmartAssemblyAction(id)))();
+      if (!id) {
+        return;
+      }
+
+      _smartAssembly = await fetchSmartAssemblyAction(id);
+
+      if (_smartAssembly) {
+        startPollingForSmartAssemblyAction();
+      }
+
+      return () => stopPollingForSmartAssemblyAction();
+    })();
   }, [id]);
 
   return (

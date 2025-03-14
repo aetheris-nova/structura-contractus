@@ -2,8 +2,8 @@ import type { IWorldConfigWithExtendedProps } from '@aetherisnova/types';
 
 interface ISlice {
   // state
+  fetchingWorldConfig: boolean;
   worldConfig: IWorldConfigWithExtendedProps | null;
-  isFetchingWorldConfig: boolean;
   // actions
   fetchWorldConfigAction: (payload?: undefined) => Promise<IWorldConfigWithExtendedProps>;
 }

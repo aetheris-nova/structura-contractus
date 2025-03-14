@@ -6,7 +6,9 @@ const stopPollingForSmartAssemblyAction: TActionCreator<undefined, void> =
   () => {
     const interval = getState().smartAssemblyPollingInterval;
 
-    interval && window.clearInterval(interval);
+    if (interval) {
+      window.clearInterval(interval);
+    }
 
     setState((state) => ({
       ...state,

@@ -73,7 +73,7 @@ export default async function postMetaTransaction(
       },
     });
 
-    logger && logger.debug(`${__function}: signed forwarder request`);
+    logger?.debug(`${__function}: signed forwarder request`);
 
     const { request } = await simulateContract(wagmiConfig, {
       abi: forwarderABI.abi,
@@ -109,7 +109,7 @@ export default async function postMetaTransaction(
       value: Number(forwardRequest.value),
     });
   } catch (error) {
-    logger && logger.error(error);
+    logger?.error(error);
 
     throw error;
   }
