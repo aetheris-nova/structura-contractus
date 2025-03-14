@@ -2,7 +2,6 @@ import { UnknownError } from '@aetherisnova/errors';
 import type { TSmartAssemblyWithAdditionalModules, TSmartAssemblyWithExtendedProps } from '@aetherisnova/types';
 import { fetchSmartAssemblyByID } from '@aetherisnova/utils';
 import type { SmartAssemblies } from '@eveworld/types';
-import type { AxiosError } from 'axios';
 
 // constants
 import { FETCH_SMART_ASSEMBLY_DELAY } from '@client/constants';
@@ -36,17 +35,6 @@ const fetchSmartAssemblyAction: TActionCreator<
     } catch (error) {
       logger.error(`${__function}: `, error);
 
-      if ((error as AxiosError).isAxiosError) {
-        if ((error as AxiosError).status === 404) {
-          setState((state) => ({
-            ...state,
-            fetchingSmartAssembly: false,
-          }));
-
-          return null;
-        }
-      }
-
       setState((state) => ({
         ...state,
         error: new UnknownError(error.message),
@@ -57,6 +45,11 @@ const fetchSmartAssemblyAction: TActionCreator<
     }
 
     if (!result) {
+      setState((state) => ({
+        ...state,
+        fetchingSmartAssembly: false,
+      }));
+
       return null;
     }
 
@@ -92,6 +85,14 @@ const fetchSmartAssemblyAction: TActionCreator<
               })
             )
           : [],
+      };
+    }
+
+    if (result.assemblyType === 'SmartStorageUnit') {
+      result.inventory = {
+        ...result.inventory,
+        ephemeralInventoryList: result.inventory ? result.inventory.ephemeralInventoryList : [],
+        storageItems: result.inventory ? result.inventory.storageItems : [],
       };
     }
 

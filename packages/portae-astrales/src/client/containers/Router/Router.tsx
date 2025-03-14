@@ -15,6 +15,10 @@ const Router: FC = () => {
       children: [
         {
           element: <SmartAssemblyPage />,
+          path: '/',
+        },
+        {
+          element: <SmartAssemblyPage />,
           path: '/:id',
         },
       ],

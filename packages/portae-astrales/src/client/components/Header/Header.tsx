@@ -6,7 +6,7 @@ import {
   IconButton,
   Tooltip,
 } from '@aetherisnova/ui-components';
-import { truncateText } from '@aetherisnova/utils';
+import { ellipseText, truncateText } from '@aetherisnova/utils';
 import { HStack, Spinner, Spacer, VStack, Heading, Text } from '@chakra-ui/react';
 import { type FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -22,9 +22,6 @@ import PaLogo from '@client/icons/PaLogo';
 
 // types
 import { IProps } from './types';
-
-// utils
-import ellipseText from '@client/utils/ellipseText';
 
 const Header: FC<IProps> = ({ account, colorMode, fetchingWorldConfig, inGame, onConnectClick, onDisconnectClick, worldConfig }) => {
   const { t } = useTranslation();

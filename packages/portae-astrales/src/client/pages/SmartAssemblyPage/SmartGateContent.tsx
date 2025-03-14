@@ -8,7 +8,7 @@ import {
   ListItem,
   useTabletAndUp,
 } from '@aetherisnova/ui-components';
-import { calculateDistanceBetweenPoints, formatUnits, metersToLightYears } from '@aetherisnova/utils';
+import { calculateDistanceBetweenPoints, ellipseText, formatUnits, isOwner, metersToLightYears } from '@aetherisnova/utils';
 import { HStack, Link as ChakraLink, Spacer, Text, VStack } from '@chakra-ui/react';
 import { randomString } from '@stablelib/random';
 import BigNumber from 'bignumber.js';
@@ -26,8 +26,6 @@ import { useSelectFuelItem } from '@client/selectors';
 import type { IContentProps } from './types';
 
 // utils
-import ellipseText from '@client/utils/ellipseText';
-import isOwner from '@client/utils/isOwner';
 import smartAssemblyIcon from '@client/utils/smartAssemblyIcon';
 
 const SmartGateContent: FC<IContentProps<'SmartGate'>> = ({ account, onEditMetadataClick, smartAssembly }) => {

@@ -8,6 +8,7 @@ import {
   ListItem,
   useTabletAndUp,
 } from '@aetherisnova/ui-components';
+import { ellipseText, isOwner } from '@aetherisnova/utils';
 import { HStack, Image, Spacer, Text, VStack } from '@chakra-ui/react';
 import { randomString } from '@stablelib/random';
 import BigNumber from 'bignumber.js';
@@ -22,10 +23,6 @@ import { useSelectFuelItem } from '@client/selectors';
 
 // types
 import type { IContentProps } from './types';
-
-// utils
-import ellipseText from '@client/utils/ellipseText';
-import isOwner from '@client/utils/isOwner';
 
 const SmartStorageUnitContent: FC<IContentProps<'SmartStorageUnit'>> = ({ account, onEditMetadataClick, onToggleOnlineClick, smartAssembly }) => {
   const { t } = useTranslation();

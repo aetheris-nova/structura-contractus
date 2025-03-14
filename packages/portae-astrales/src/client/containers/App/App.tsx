@@ -15,7 +15,6 @@ import useStore from '@client/utils/useStore';
 const App: FC<IProps> = ({ i18n }) => {
   // selectors
   const {
-    fetchERC20TokenAction,
     fetchItemAction,
     fetchWorldConfigAction,
     logger,
@@ -75,19 +74,6 @@ const App: FC<IProps> = ({ i18n }) => {
     // stop polling if unmounted
     return () => stopPollingForSmartCharacterAction();
   }, []);
-  useEffect(() => {
-    if (!worldConfig || !wagmiConfig) {
-      return;
-    }
-
-    // fetch the eve token details
-    (async () => {
-      await fetchERC20TokenAction({
-        address: worldConfig.contracts.eveToken.address,
-        config: wagmiConfig,
-      });
-    })();
-  }, [worldConfig, wagmiConfig]);
   useEffect(() => setInGameAction(inGame), [inGame]);
 
   return (

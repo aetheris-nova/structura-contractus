@@ -36,6 +36,11 @@ const fetchItemAction: TActionCreator<string, Promise<IItemWithExtendedProps | n
       result = await fetchItemByID(import.meta.env.VITE_WORLD_API_HTTP_URL, id);
 
       if (!result || result.metadata.attributes.length <= 0) {
+        setState((state) => ({
+          ...state,
+          fetchingItems: fetchingItems.filter((value) => value !== id),
+        }));
+
         return null;
       }
 
