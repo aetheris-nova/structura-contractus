@@ -6,7 +6,9 @@ const stopPollingForSmartCharacterAction: TActionCreator<undefined, void> =
   () => {
     const interval = getState().smartCharacterPollingInterval;
 
-    interval && window.clearInterval(interval);
+    if (interval) {
+      window.clearInterval(interval);
+    }
 
     setState((state) => ({
       ...state,

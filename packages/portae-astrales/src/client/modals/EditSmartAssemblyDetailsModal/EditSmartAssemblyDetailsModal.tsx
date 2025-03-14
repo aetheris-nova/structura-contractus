@@ -41,7 +41,7 @@ const EditSmartAssemblyDetailsModal: FC<IProps> = ({ onClose, open, smartAssembl
     setDescription(smartAssembly.description);
     setName(smartAssembly.name);
 
-    onClose && onClose();
+    onClose?.();
   };
   const handleOnCancelClick = () => handleClose();
   const handleOnChange = (field: string) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
