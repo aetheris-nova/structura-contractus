@@ -1,19 +1,10 @@
 import { AppProvider, useCheckInGame } from '@aetherisnova/ui-components';
 import { type FC, useEffect, useMemo } from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { type Chain, http } from 'viem';
 import { createConfig } from 'wagmi';
 
-// constants
-import { CHARACTER_ROUTE, SMART_ASSEMBLY_ROUTE } from '@client/constants';
-
 // containers
-import Root from '@client/containers/Root';
-
-// pages
-import CharacterPage from '@client/pages/CharacterPage';
-import SmartAssemblyPage from '@client/pages/SmartAssemblyPage';
-import WelcomePage from '@client/pages/WelcomePage';
+import Router from '@client/containers/Router';
 
 // types
 import type { IProps } from './types';
@@ -36,26 +27,6 @@ const App: FC<IProps> = ({ i18n }) => {
   // hooks
   const { inGame } = useCheckInGame({ logger });
   // memos
-  const router = useMemo(() => createBrowserRouter([
-    {
-      children: [
-        {
-          element: <WelcomePage />,
-          path: '/',
-        },
-        {
-          element: <CharacterPage />,
-          path: CHARACTER_ROUTE,
-        },
-        {
-          element: <SmartAssemblyPage />,
-          path: `${SMART_ASSEMBLY_ROUTE}/:id`,
-        },
-      ],
-      element: <Root />,
-      path: '/',
-    },
-  ]), []);
   const wagmiConfig = useMemo(() => {
     let chain: Chain;
 
@@ -121,7 +92,7 @@ const App: FC<IProps> = ({ i18n }) => {
 
   return (
     <AppProvider i18n={i18n} {...(wagmiConfig && { wagmiConfig })}>
-      <RouterProvider router={router} />
+      <Router />
     </AppProvider>
   );
 };

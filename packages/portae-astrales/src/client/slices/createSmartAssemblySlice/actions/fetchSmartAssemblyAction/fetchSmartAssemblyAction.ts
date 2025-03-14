@@ -62,32 +62,37 @@ const fetchSmartAssemblyAction: TActionCreator<
 
     // if we have smart gates, we need to get the locations for each gate too as they don't come with it
     if (result.assemblyType === 'SmartGate') {
-      result.gateLink.gatesInRange = await Promise.all(
-        result.gateLink.gatesInRange.map(async (value, index) => {
-          try {
-            const _result = await fetchSmartAssemblyByID<'SmartGate'>(
-              import.meta.env.VITE_WORLD_API_HTTP_URL,
-              value.id,
-              {
-                delay: index * FETCH_SMART_ASSEMBLY_DELAY,
-              }
-            );
+      result.gateLink = {
+        ...result.gateLink,
+        gatesInRange: result.gateLink
+          ? await Promise.all(
+              result.gateLink.gatesInRange.map(async (value, index) => {
+                try {
+                  const _result = await fetchSmartAssemblyByID<'SmartGate'>(
+                    import.meta.env.VITE_WORLD_API_HTTP_URL,
+                    value.id,
+                    {
+                      delay: index * FETCH_SMART_ASSEMBLY_DELAY,
+                    }
+                  );
 
-            if (!_result) {
-              return value;
-            }
+                  if (!_result) {
+                    return value;
+                  }
 
-            return {
-              ...value,
-              location: _result.location,
-            };
-          } catch (error) {
-            logger.error(`${__function}: failed to get location for gate "${value.id}", ignoring`, error);
+                  return {
+                    ...value,
+                    location: _result.location,
+                  };
+                } catch (error) {
+                  logger.error(`${__function}: failed to get location for gate "${value.id}", ignoring`, error);
 
-            return value;
-          }
-        })
-      );
+                  return value;
+                }
+              })
+            )
+          : [],
+      };
     }
 
     smartAssembly = {

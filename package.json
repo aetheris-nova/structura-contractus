@@ -7,7 +7,7 @@
     "url": "https://github.com/aetheris-nova/structura-contractus"
   },
   "engines": {
-    "node": "20.x"
+    "node": ">=20.x"
   },
   "packageManager": "pnpm@10.3.0",
   "scripts": {

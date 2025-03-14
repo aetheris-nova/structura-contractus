@@ -5,6 +5,7 @@ import {
   DataListItem,
   DEFAULT_GAP,
   EmptyState,
+  ListItem,
   useTabletAndUp,
 } from '@aetherisnova/ui-components';
 import { HStack, Image, Spacer, Text, VStack } from '@chakra-ui/react';
@@ -12,9 +13,6 @@ import { randomString } from '@stablelib/random';
 import BigNumber from 'bignumber.js';
 import { cloneElement, type FC, type ReactElement, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-
-// components
-import ListItem from '@client/components/ListItem';
 
 // hooks
 import useForegroundColor from '@client/hooks/useForegroundColor';

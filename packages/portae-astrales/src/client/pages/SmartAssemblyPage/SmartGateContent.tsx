@@ -5,6 +5,7 @@ import {
   DataListItem,
   DEFAULT_GAP,
   EmptyState,
+  ListItem,
   useTabletAndUp,
 } from '@aetherisnova/ui-components';
 import { calculateDistanceBetweenPoints, formatUnits, metersToLightYears } from '@aetherisnova/utils';
@@ -14,12 +15,6 @@ import BigNumber from 'bignumber.js';
 import { cloneElement, type FC, type ReactElement, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-
-// components
-import ListItem from '@client/components/ListItem';
-
-// constants
-import { SMART_ASSEMBLY_ROUTE } from '@client/constants';
 
 // hooks
 import useForegroundColor from '@client/hooks/useForegroundColor';
@@ -164,7 +159,7 @@ const SmartGateContent: FC<IContentProps<'SmartGate'>> = ({ account, onEditMetad
             value={
               destinationGate ? (
                 <ChakraLink asChild={true} variant="underline">
-                  <Link to={`${SMART_ASSEMBLY_ROUTE}/${destinationGate.id}`}>
+                  <Link to={`/${destinationGate.id}`}>
                     {destinationGate.name?.length > 0
                       ? destinationGate.name
                       : ellipseText(destinationGate.id, {
@@ -199,6 +194,12 @@ const SmartGateContent: FC<IContentProps<'SmartGate'>> = ({ account, onEditMetad
           {smartAssembly.gateLink.gatesInRange
             .sort((a, b) => calculateDistanceBetweenPoints(smartAssembly.location, a.location).minus(calculateDistanceBetweenPoints(smartAssembly.location, b.location)).toNumber())
             .map((value, index) => {
+              const title = value.name?.length > 0
+                ? value.name
+                : ellipseText(value.id, {
+                  end: 5,
+                  start: 5,
+                });
               let distance: BigNumber | null = null;
 
               if (value.location && smartAssembly.location) {
@@ -209,18 +210,15 @@ const SmartGateContent: FC<IContentProps<'SmartGate'>> = ({ account, onEditMetad
                 <ListItem
                   icon={smartAssemblyIcon('SmartGate')}
                   key={`${context}__gates-in-range-item-${index}`}
-                  link={`${SMART_ASSEMBLY_ROUTE}/${value.id}`}
+                  link={() => (
+                    <Link to={`/${value.id}`}>
+                      {title}
+                    </Link>
+                  )}
                   secondarySubtitle={`${value.state.toString()}${destinationGate && destinationGate.id === value.id ? ' (Linked)' : ''}`}
                   secondaryTitle={value.ownerName}
                   subtitle={`${value.solarSystem.solarSystemName.length > 0 ? value.solarSystem.solarSystemName : '-'}${distance ? ` ▪ ${formatUnits(metersToLightYears(distance))}ly` : ''}`}
-                  title={
-                    value.name?.length > 0
-                      ? value.name
-                      : ellipseText(value.id, {
-                        end: 5,
-                        start: 5,
-                      })
-                  }
+                  title={title}
                 />
               );
             })}

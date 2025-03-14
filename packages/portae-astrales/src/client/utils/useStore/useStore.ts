@@ -11,7 +11,6 @@ import createItemSlice from '@client/slices/createItemSlice';
 import createLayoutSlice from '@client/slices/createLayoutSlice';
 import createSmartAssemblySlice from '@client/slices/createSmartAssemblySlice';
 import createSystemSlice from '@client/slices/createSystemSlice';
-import createTokenSlice from '@client/slices/createTokenSlice';
 import createWorldSlice from '@client/slices/createWorldSlice';
 
 // types
@@ -26,16 +25,14 @@ const useStore = create<TState>()(
         ...createLayoutSlice(...api),
         ...createSmartAssemblySlice(...api),
         ...createSystemSlice(...api),
-        ...createTokenSlice(...api),
         ...createWorldSlice(...api),
       }),
       {
         name: STORE_NAME,
-        partialize: ({ accounts, colorMode, items, tokens, worldConfig }) => ({
+        partialize: ({ accounts, colorMode, items, worldConfig }) => ({
           accounts,
           colorMode,
           items,
-          tokens,
           worldConfig,
         }),
         storage: createJSONStorage(() => (isLocalStorageAvailable() ? window.localStorage : window.sessionStorage)),
