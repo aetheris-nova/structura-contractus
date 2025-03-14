@@ -1,3 +1,10 @@
+# [@aetherisnova/portae-astrales-v1.1.0-beta.2](https://github.com/aetheris-nova/structura-contractus/compare/@aetherisnova/portae-astrales-v1.1.0-beta.1...@aetherisnova/portae-astrales-v1.1.0-beta.2) (2025-03-14)
+
+
+### Features
+
+* **portale-astrales:** remove character page and simplify ([#4](https://github.com/aetheris-nova/structura-contractus/issues/4)) ([381f66b](https://github.com/aetheris-nova/structura-contractus/commit/381f66b754893999a36f7f53205ec1d48eaa944e))
+
 # [@aetherisnova/portae-astrales-v1.1.0-beta.1](https://github.com/aetheris-nova/structura-contractus/compare/@aetherisnova/portae-astrales-v1.0.0...@aetherisnova/portae-astrales-v1.1.0-beta.1) (2025-01-28)
 
 
